@@ -7,9 +7,9 @@ truth; this file is a readable mirror for planning and offline review.
 **Project board:** https://github.com/users/Abooubaker/projects/1  
 **Issues:** 65 (2 completed, 63 open)
 
-> **Board blocker:** the GitHub CLI token currently lacks the `project` scope. Issues,
-> milestones, and labels can be created, but project fields/items cannot until
-> `gh auth refresh -s project` is completed. See [Project board configuration](#project-board-configuration).
+> **Board status:** configured and verified. All 65 issues are on the project with
+> Status, Priority, Estimated Effort, and Development Area set. See
+> [Project board configuration](#project-board-configuration).
 
 ## Counts by milestone
 
@@ -49,8 +49,8 @@ truth; this file is a readable mirror for planning and offline review.
 
 ## Initial status labels
 
-Status labels are set at creation and are a fallback when the Project board is unavailable.
-The board status field is authoritative once configured.
+Status labels are set at creation and mirror the board's initial state. The board Status
+field is authoritative; labels remain useful for filtering outside the project.
 
 | Status | Issues |
 | --- | ---: |
@@ -148,6 +148,9 @@ The board status field is authoritative once configured.
 
 Target project: https://github.com/users/Abooubaker/projects/1
 
+Fields are created and synchronized by [`scripts/setup_project.py`](../scripts/setup_project.py).
+The script is idempotent and uses the same issue definitions as the backlog.
+
 ### Fields
 
 | Field | Type | Options |
@@ -160,34 +163,37 @@ Target project: https://github.com/users/Abooubaker/projects/1
 
 ### Views
 
-1. **Board** — group by Status, columns in the order above.
-2. **Roadmap** — group by Milestone, sorted M1-M10.
-3. **Table** — all fields, filterable by area/priority.
-4. **Blocked** — filter Status = Blocked and Dependencies not empty.
+The project provides five views. GitHub does not expose project view mutations, so layout,
+grouping, and filters are adjusted in the UI.
 
-### Setup after authorizing the project scope
+1. **Backlog** — board layout.
+2. **Priority board** — board layout grouped by priority.
+3. **Team items** — table layout.
+4. **Roadmap** — roadmap layout; group by Milestone and sort M1-M10.
+5. **My items** — table layout.
+
+Useful filters: `Status = Blocked`, `Development Area = ...`, `Priority = P0 Critical`,
+and `Milestone = M3`.
+
+### Reproducing the configuration
 
 ```bash
-gh auth refresh -s project
-
-# Add every issue to the existing project
-gh issue list --repo Abooubaker/robocraft --state all --limit 200 --json number \
-  --jq '.[].number' | while read -r n; do
-  gh project item-add 1 --owner Abooubaker \
-    --url "https://github.com/Abooubaker/robocraft/issues/$n";
-done
+gh auth refresh --hostname github.com -s project,read:project
+python3 scripts/setup_project.py --dry-run
+python3 scripts/setup_project.py
 ```
 
-Then create the single-select fields and set values in the Project UI (or via GraphQL).
-The issue labels already carry area, priority, effort, and an initial status, so a GraphQL
-sync can map them directly.
+The script normalizes the single-select options, preserves existing option IDs where possible,
+adds missing project items, and writes Status, Priority, Estimated Effort, and Development Area
+for every issue.
 
-### Why this is blocked
+### Status mapping
 
-`gh auth status` reports scopes `gist`, `read:org`, `repo`, and `workflow` but not `project`.
-`gh project list` therefore fails with `missing required scopes [read:project]`. The empty
-project exists, but this environment cannot read or mutate it. The Markdown backlog and
-label taxonomy keep planning usable until the scope is granted.
+- Completed foundation issues → **Done**.
+- Issues with at least one open dependency → **Blocked**.
+- Everything else → **Ready**.
+
+Board status is updated by maintainers as work starts, enters review, or completes.
 
 ## Working agreement
 
