@@ -1,0 +1,631 @@
+{
+  "$defs": {
+    "BillOfMaterialsItem": {
+      "additionalProperties": false,
+      "description": "A required component slot, optionally resolved to a concrete candidate.",
+      "properties": {
+        "alternatives": {
+          "items": {
+            "$ref": "#/$defs/ComponentCandidate"
+          },
+          "title": "Alternatives",
+          "type": "array"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "quantity": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Quantity",
+          "type": "integer"
+        },
+        "rationale": {
+          "default": "",
+          "title": "Rationale",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "role": {
+          "description": "e.g. \"left drive motor\", \"main controller\".",
+          "title": "Role",
+          "type": "string"
+        },
+        "selection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ComponentCandidate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "role",
+        "category"
+      ],
+      "title": "BillOfMaterialsItem",
+      "type": "object"
+    },
+    "ComponentCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "default": "unknown",
+          "title": "Availability",
+          "type": "string"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "compatibility_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Compatibility Notes",
+          "type": "array"
+        },
+        "manufacturer": {
+          "default": "",
+          "title": "Manufacturer",
+          "type": "string"
+        },
+        "model_number": {
+          "default": "",
+          "title": "Model Number",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "price_usd": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Price Usd"
+        },
+        "score": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Score",
+          "type": "number"
+        },
+        "specs": {
+          "additionalProperties": true,
+          "title": "Specs",
+          "type": "object"
+        },
+        "supplier": {
+          "default": "",
+          "title": "Supplier",
+          "type": "string"
+        },
+        "supplier_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supplier Url"
+        }
+      },
+      "required": [
+        "name",
+        "category"
+      ],
+      "title": "ComponentCandidate",
+      "type": "object"
+    },
+    "ComponentResearchOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "bill_of_materials": {
+          "items": {
+            "$ref": "#/$defs/BillOfMaterialsItem"
+          },
+          "title": "Bill Of Materials",
+          "type": "array"
+        },
+        "compatibility_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Compatibility Notes",
+          "type": "array"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "total_estimated_usd": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Estimated Usd"
+        },
+        "unresolved_requirements": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unresolved Requirements",
+          "type": "array"
+        }
+      },
+      "title": "ComponentResearchOutput",
+      "type": "object"
+    },
+    "Difficulty": {
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "title": "Difficulty",
+      "type": "string"
+    },
+    "Dimensions": {
+      "additionalProperties": false,
+      "properties": {
+        "height_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height Mm"
+        },
+        "length_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Length Mm"
+        },
+        "width_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width Mm"
+        }
+      },
+      "title": "Dimensions",
+      "type": "object"
+    },
+    "DriveType": {
+      "enum": [
+        "differential",
+        "mecanum",
+        "omni",
+        "tank",
+        "servo_arm",
+        "none"
+      ],
+      "title": "DriveType",
+      "type": "string"
+    },
+    "ElectricalConnection": {
+      "additionalProperties": false,
+      "properties": {
+        "from_pin": {
+          "title": "From Pin",
+          "type": "string"
+        },
+        "from_ref": {
+          "title": "From Ref",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "signal": {
+          "default": "",
+          "title": "Signal",
+          "type": "string"
+        },
+        "to_pin": {
+          "title": "To Pin",
+          "type": "string"
+        },
+        "to_ref": {
+          "title": "To Ref",
+          "type": "string"
+        },
+        "voltage_v": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Voltage V"
+        }
+      },
+      "required": [
+        "from_ref",
+        "from_pin",
+        "to_ref",
+        "to_pin"
+      ],
+      "title": "ElectricalConnection",
+      "type": "object"
+    },
+    "ElectricalNode": {
+      "additionalProperties": false,
+      "properties": {
+        "current_ma": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Current Ma"
+        },
+        "kind": {
+          "default": "other",
+          "enum": [
+            "controller",
+            "motor",
+            "driver",
+            "sensor",
+            "power",
+            "other"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "ref": {
+          "description": "Stable reference, e.g. U1, M1, BAT1.",
+          "title": "Ref",
+          "type": "string"
+        },
+        "voltage_v": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Voltage V"
+        }
+      },
+      "required": [
+        "ref",
+        "label"
+      ],
+      "title": "ElectricalNode",
+      "type": "object"
+    },
+    "ElectricalPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "connections": {
+          "items": {
+            "$ref": "#/$defs/ElectricalConnection"
+          },
+          "title": "Connections",
+          "type": "array"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/ElectricalNode"
+          },
+          "title": "Nodes",
+          "type": "array"
+        },
+        "pin_map": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Pin Map",
+          "type": "object"
+        },
+        "power_budget": {
+          "$ref": "#/$defs/PowerBudget"
+        },
+        "safety_checks": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Safety Checks",
+          "type": "array"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        },
+        "wiring_steps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Wiring Steps",
+          "type": "array"
+        }
+      },
+      "title": "ElectricalPlan",
+      "type": "object"
+    },
+    "PowerBudget": {
+      "additionalProperties": false,
+      "properties": {
+        "margin_percent": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Margin Percent"
+        },
+        "peak_current_ma": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Peak Current Ma"
+        },
+        "recommended_supply_ma": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recommended Supply Ma"
+        },
+        "supply_voltage_v": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supply Voltage V"
+        }
+      },
+      "title": "PowerBudget",
+      "type": "object"
+    },
+    "RobotSpecificationDraft": {
+      "additionalProperties": false,
+      "description": "Structured, buildable interpretation of the user's request.",
+      "properties": {
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "constraints": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Constraints",
+          "type": "array"
+        },
+        "difficulty": {
+          "$ref": "#/$defs/Difficulty",
+          "default": "beginner"
+        },
+        "dimensions": {
+          "$ref": "#/$defs/Dimensions"
+        },
+        "drive_type": {
+          "$ref": "#/$defs/DriveType",
+          "default": "none"
+        },
+        "environment": {
+          "default": "indoor",
+          "title": "Environment",
+          "type": "string"
+        },
+        "open_questions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Open Questions",
+          "type": "array"
+        },
+        "payload_capacity_kg": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Payload Capacity Kg"
+        },
+        "power_source": {
+          "default": "",
+          "title": "Power Source",
+          "type": "string"
+        },
+        "requirements": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requirements",
+          "type": "array"
+        },
+        "robot_type": {
+          "$ref": "#/$defs/RobotType",
+          "default": "custom"
+        },
+        "success_criteria": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Success Criteria",
+          "type": "array"
+        },
+        "summary": {
+          "description": "One-paragraph description of the robot.",
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        },
+        "target_platform": {
+          "$ref": "#/$defs/TargetPlatform",
+          "default": "undecided"
+        },
+        "use_case": {
+          "default": "",
+          "description": "What the robot must do and where.",
+          "title": "Use Case",
+          "type": "string"
+        }
+      },
+      "required": [
+        "summary"
+      ],
+      "title": "RobotSpecificationDraft",
+      "type": "object"
+    },
+    "RobotType": {
+      "enum": [
+        "line_follower",
+        "obstacle_avoider",
+        "rover",
+        "robot_arm",
+        "drone",
+        "balancing_bot",
+        "custom"
+      ],
+      "title": "RobotType",
+      "type": "string"
+    },
+    "TargetPlatform": {
+      "enum": [
+        "arduino",
+        "esp32",
+        "raspberry_pi",
+        "other",
+        "undecided"
+      ],
+      "title": "TargetPlatform",
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "component_research": {
+      "$ref": "#/$defs/ComponentResearchOutput"
+    },
+    "electrical": {
+      "$ref": "#/$defs/ElectricalPlan"
+    },
+    "specification": {
+      "$ref": "#/$defs/RobotSpecificationDraft"
+    }
+  },
+  "required": [
+    "specification",
+    "component_research",
+    "electrical"
+  ],
+  "title": "ProgrammingInput",
+  "type": "object"
+}

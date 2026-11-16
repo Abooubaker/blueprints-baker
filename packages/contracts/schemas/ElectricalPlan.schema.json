@@ -1,0 +1,224 @@
+{
+  "$defs": {
+    "ElectricalConnection": {
+      "additionalProperties": false,
+      "properties": {
+        "from_pin": {
+          "title": "From Pin",
+          "type": "string"
+        },
+        "from_ref": {
+          "title": "From Ref",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "signal": {
+          "default": "",
+          "title": "Signal",
+          "type": "string"
+        },
+        "to_pin": {
+          "title": "To Pin",
+          "type": "string"
+        },
+        "to_ref": {
+          "title": "To Ref",
+          "type": "string"
+        },
+        "voltage_v": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Voltage V"
+        }
+      },
+      "required": [
+        "from_ref",
+        "from_pin",
+        "to_ref",
+        "to_pin"
+      ],
+      "title": "ElectricalConnection",
+      "type": "object"
+    },
+    "ElectricalNode": {
+      "additionalProperties": false,
+      "properties": {
+        "current_ma": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Current Ma"
+        },
+        "kind": {
+          "default": "other",
+          "enum": [
+            "controller",
+            "motor",
+            "driver",
+            "sensor",
+            "power",
+            "other"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "ref": {
+          "description": "Stable reference, e.g. U1, M1, BAT1.",
+          "title": "Ref",
+          "type": "string"
+        },
+        "voltage_v": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Voltage V"
+        }
+      },
+      "required": [
+        "ref",
+        "label"
+      ],
+      "title": "ElectricalNode",
+      "type": "object"
+    },
+    "PowerBudget": {
+      "additionalProperties": false,
+      "properties": {
+        "margin_percent": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Margin Percent"
+        },
+        "peak_current_ma": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Peak Current Ma"
+        },
+        "recommended_supply_ma": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recommended Supply Ma"
+        },
+        "supply_voltage_v": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supply Voltage V"
+        }
+      },
+      "title": "PowerBudget",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "connections": {
+      "items": {
+        "$ref": "#/$defs/ElectricalConnection"
+      },
+      "title": "Connections",
+      "type": "array"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/ElectricalNode"
+      },
+      "title": "Nodes",
+      "type": "array"
+    },
+    "pin_map": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Pin Map",
+      "type": "object"
+    },
+    "power_budget": {
+      "$ref": "#/$defs/PowerBudget"
+    },
+    "safety_checks": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Safety Checks",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    },
+    "wiring_steps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Wiring Steps",
+      "type": "array"
+    }
+  },
+  "title": "ElectricalPlan",
+  "type": "object"
+}

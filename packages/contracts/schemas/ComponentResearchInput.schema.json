@@ -1,0 +1,273 @@
+{
+  "$defs": {
+    "Budget": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "default": "USD",
+          "maxLength": 3,
+          "minLength": 3,
+          "title": "Currency",
+          "type": "string"
+        },
+        "max_usd": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Upper budget bound.",
+          "title": "Max Usd"
+        },
+        "min_usd": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Lower budget bound.",
+          "title": "Min Usd"
+        }
+      },
+      "title": "Budget",
+      "type": "object"
+    },
+    "Difficulty": {
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "title": "Difficulty",
+      "type": "string"
+    },
+    "Dimensions": {
+      "additionalProperties": false,
+      "properties": {
+        "height_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height Mm"
+        },
+        "length_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Length Mm"
+        },
+        "width_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width Mm"
+        }
+      },
+      "title": "Dimensions",
+      "type": "object"
+    },
+    "DriveType": {
+      "enum": [
+        "differential",
+        "mecanum",
+        "omni",
+        "tank",
+        "servo_arm",
+        "none"
+      ],
+      "title": "DriveType",
+      "type": "string"
+    },
+    "RobotSpecificationDraft": {
+      "additionalProperties": false,
+      "description": "Structured, buildable interpretation of the user's request.",
+      "properties": {
+        "confidence": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "constraints": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Constraints",
+          "type": "array"
+        },
+        "difficulty": {
+          "$ref": "#/$defs/Difficulty",
+          "default": "beginner"
+        },
+        "dimensions": {
+          "$ref": "#/$defs/Dimensions"
+        },
+        "drive_type": {
+          "$ref": "#/$defs/DriveType",
+          "default": "none"
+        },
+        "environment": {
+          "default": "indoor",
+          "title": "Environment",
+          "type": "string"
+        },
+        "open_questions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Open Questions",
+          "type": "array"
+        },
+        "payload_capacity_kg": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Payload Capacity Kg"
+        },
+        "power_source": {
+          "default": "",
+          "title": "Power Source",
+          "type": "string"
+        },
+        "requirements": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Requirements",
+          "type": "array"
+        },
+        "robot_type": {
+          "$ref": "#/$defs/RobotType",
+          "default": "custom"
+        },
+        "success_criteria": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Success Criteria",
+          "type": "array"
+        },
+        "summary": {
+          "description": "One-paragraph description of the robot.",
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        },
+        "target_platform": {
+          "$ref": "#/$defs/TargetPlatform",
+          "default": "undecided"
+        },
+        "use_case": {
+          "default": "",
+          "description": "What the robot must do and where.",
+          "title": "Use Case",
+          "type": "string"
+        }
+      },
+      "required": [
+        "summary"
+      ],
+      "title": "RobotSpecificationDraft",
+      "type": "object"
+    },
+    "RobotType": {
+      "enum": [
+        "line_follower",
+        "obstacle_avoider",
+        "rover",
+        "robot_arm",
+        "drone",
+        "balancing_bot",
+        "custom"
+      ],
+      "title": "RobotType",
+      "type": "string"
+    },
+    "TargetPlatform": {
+      "enum": [
+        "arduino",
+        "esp32",
+        "raspberry_pi",
+        "other",
+        "undecided"
+      ],
+      "title": "TargetPlatform",
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "budget": {
+      "$ref": "#/$defs/Budget"
+    },
+    "preferred_suppliers": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Preferred Suppliers",
+      "type": "array"
+    },
+    "region": {
+      "default": "global",
+      "title": "Region",
+      "type": "string"
+    },
+    "specification": {
+      "$ref": "#/$defs/RobotSpecificationDraft"
+    }
+  },
+  "required": [
+    "specification"
+  ],
+  "title": "ComponentResearchInput",
+  "type": "object"
+}

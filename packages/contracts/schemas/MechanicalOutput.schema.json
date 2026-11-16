@@ -1,0 +1,187 @@
+{
+  "$defs": {
+    "AssemblyStep": {
+      "additionalProperties": false,
+      "properties": {
+        "instructions": {
+          "title": "Instructions",
+          "type": "string"
+        },
+        "order": {
+          "minimum": 1,
+          "title": "Order",
+          "type": "integer"
+        },
+        "parts": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Parts",
+          "type": "array"
+        },
+        "safety_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Safety Notes",
+          "type": "array"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tools",
+          "type": "array"
+        }
+      },
+      "required": [
+        "order",
+        "title",
+        "instructions"
+      ],
+      "title": "AssemblyStep",
+      "type": "object"
+    },
+    "Dimensions": {
+      "additionalProperties": false,
+      "properties": {
+        "height_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height Mm"
+        },
+        "length_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Length Mm"
+        },
+        "width_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width Mm"
+        }
+      },
+      "title": "Dimensions",
+      "type": "object"
+    },
+    "MechanicalPart": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "default": "structure",
+          "title": "Category",
+          "type": "string"
+        },
+        "dimensions_mm": {
+          "$ref": "#/$defs/Dimensions"
+        },
+        "material": {
+          "default": "",
+          "title": "Material",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "quantity": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Quantity",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "MechanicalPart",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "assembly_steps": {
+      "items": {
+        "$ref": "#/$defs/AssemblyStep"
+      },
+      "title": "Assembly Steps",
+      "type": "array"
+    },
+    "chassis": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MechanicalPart"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "drawings": {
+      "description": "References/paths, not CAD payloads.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Drawings",
+      "type": "array"
+    },
+    "manufacturing_notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Manufacturing Notes",
+      "type": "array"
+    },
+    "parts": {
+      "items": {
+        "$ref": "#/$defs/MechanicalPart"
+      },
+      "title": "Parts",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "title": "MechanicalOutput",
+  "type": "object"
+}

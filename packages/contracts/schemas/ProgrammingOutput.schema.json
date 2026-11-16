@@ -1,0 +1,108 @@
+{
+  "$defs": {
+    "CodeFile": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "title": "Content",
+          "type": "string"
+        },
+        "explanation": {
+          "default": "",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "language": {
+          "title": "Language",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "language",
+        "content"
+      ],
+      "title": "CodeFile",
+      "type": "object"
+    },
+    "TargetPlatform": {
+      "enum": [
+        "arduino",
+        "esp32",
+        "raspberry_pi",
+        "other",
+        "undecided"
+      ],
+      "title": "TargetPlatform",
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "files": {
+      "items": {
+        "$ref": "#/$defs/CodeFile"
+      },
+      "title": "Files",
+      "type": "array"
+    },
+    "framework": {
+      "default": "",
+      "title": "Framework",
+      "type": "string"
+    },
+    "language": {
+      "default": "",
+      "title": "Language",
+      "type": "string"
+    },
+    "libraries": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Libraries",
+      "type": "array"
+    },
+    "pin_assignments": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Pin Assignments",
+      "type": "object"
+    },
+    "platform": {
+      "$ref": "#/$defs/TargetPlatform"
+    },
+    "setup_steps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Setup Steps",
+      "type": "array"
+    },
+    "upload_steps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Upload Steps",
+      "type": "array"
+    },
+    "validation_notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Validation Notes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "platform"
+  ],
+  "title": "ProgrammingOutput",
+  "type": "object"
+}

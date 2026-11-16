@@ -1,0 +1,271 @@
+{
+  "$defs": {
+    "BillOfMaterialsItem": {
+      "additionalProperties": false,
+      "description": "A required component slot, optionally resolved to a concrete candidate.",
+      "properties": {
+        "alternatives": {
+          "items": {
+            "$ref": "#/$defs/ComponentCandidate"
+          },
+          "title": "Alternatives",
+          "type": "array"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "quantity": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Quantity",
+          "type": "integer"
+        },
+        "rationale": {
+          "default": "",
+          "title": "Rationale",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "role": {
+          "description": "e.g. \"left drive motor\", \"main controller\".",
+          "title": "Role",
+          "type": "string"
+        },
+        "selection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ComponentCandidate"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "role",
+        "category"
+      ],
+      "title": "BillOfMaterialsItem",
+      "type": "object"
+    },
+    "Budget": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "default": "USD",
+          "maxLength": 3,
+          "minLength": 3,
+          "title": "Currency",
+          "type": "string"
+        },
+        "max_usd": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Upper budget bound.",
+          "title": "Max Usd"
+        },
+        "min_usd": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Lower budget bound.",
+          "title": "Min Usd"
+        }
+      },
+      "title": "Budget",
+      "type": "object"
+    },
+    "ComponentCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "default": "unknown",
+          "title": "Availability",
+          "type": "string"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "compatibility_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Compatibility Notes",
+          "type": "array"
+        },
+        "manufacturer": {
+          "default": "",
+          "title": "Manufacturer",
+          "type": "string"
+        },
+        "model_number": {
+          "default": "",
+          "title": "Model Number",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "price_usd": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Price Usd"
+        },
+        "score": {
+          "default": 0.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Score",
+          "type": "number"
+        },
+        "specs": {
+          "additionalProperties": true,
+          "title": "Specs",
+          "type": "object"
+        },
+        "supplier": {
+          "default": "",
+          "title": "Supplier",
+          "type": "string"
+        },
+        "supplier_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supplier Url"
+        }
+      },
+      "required": [
+        "name",
+        "category"
+      ],
+      "title": "ComponentCandidate",
+      "type": "object"
+    },
+    "ComponentResearchOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "bill_of_materials": {
+          "items": {
+            "$ref": "#/$defs/BillOfMaterialsItem"
+          },
+          "title": "Bill Of Materials",
+          "type": "array"
+        },
+        "compatibility_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Compatibility Notes",
+          "type": "array"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "total_estimated_usd": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Estimated Usd"
+        },
+        "unresolved_requirements": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unresolved Requirements",
+          "type": "array"
+        }
+      },
+      "title": "ComponentResearchOutput",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "budget": {
+      "$ref": "#/$defs/Budget"
+    },
+    "component_research": {
+      "$ref": "#/$defs/ComponentResearchOutput"
+    },
+    "quantity_multiplier": {
+      "default": 1.0,
+      "exclusiveMinimum": 0,
+      "maximum": 100,
+      "title": "Quantity Multiplier",
+      "type": "number"
+    },
+    "region": {
+      "default": "global",
+      "title": "Region",
+      "type": "string"
+    }
+  },
+  "required": [
+    "component_research"
+  ],
+  "title": "CostInput",
+  "type": "object"
+}
