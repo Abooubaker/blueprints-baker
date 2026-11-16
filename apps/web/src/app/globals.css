@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #06090a;
+  --color-surface: #0a0f11;
+  --color-elevated: #10171a;
+  --color-raised: #151e22;
+  --color-line: #223034;
+  --color-line-soft: #182326;
+  --color-ink: #edf2ee;
+  --color-muted: #94a29c;
+  --color-faint: #5f6e68;
+  --color-signal: #c9f75a;
+  --color-signal-dim: #9fce3a;
+  --color-signal-ink: #131a05;
+  --color-aqua: #5cdbd3;
+  --color-warn: #f5b544;
+  --color-danger: #f26d6d;
+
+  --font-sans: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Code", "Roboto Mono", Menlo, monospace;
+
+  --radius-panel: 1rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line-soft);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-signal) 32%, transparent);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-canvas);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #263438;
+    border: 2px solid var(--color-canvas);
+    border-radius: 999px;
+  }
+}
+
+@layer utilities {
+  .bg-blueprint {
+    background-image:
+      linear-gradient(to right, rgba(201, 247, 90, 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(201, 247, 90, 0.055) 1px, transparent 1px);
+    background-size: 46px 46px;
+  }
+
+  .bg-dot-grid {
+    background-image: radial-gradient(rgba(237, 242, 238, 0.1) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  }
+
+  .mask-fade-edges {
+    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  }
+
+  .panel-sheen {
+    background:
+      radial-gradient(120% 120% at 0% 0%, rgba(201, 247, 90, 0.06) 0%, transparent 45%),
+      var(--color-surface);
+  }
+
+  .text-gradient {
+    background: linear-gradient(100deg, #f4f8f2 20%, #c9f75a 60%, #5cdbd3 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .glow-signal {
+    box-shadow:
+      0 0 0 1px rgba(201, 247, 90, 0.25),
+      0 12px 48px -12px rgba(201, 247, 90, 0.35);
+  }
+
+  .fade-up {
+    animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .fade-in {
+    animation: fade-in 0.5s ease-out both;
+  }
+
+  .pulse-dot {
+    animation: pulse-dot 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(201, 247, 90, 0.45);
+  }
+  50% {
+    opacity: 0.75;
+    box-shadow: 0 0 0 5px rgba(201, 247, 90, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
