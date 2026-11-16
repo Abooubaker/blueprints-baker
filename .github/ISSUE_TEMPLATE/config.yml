@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Project board
+    url: https://github.com/users/Abooubaker/projects/1
+    about: Browse milestones, priorities, and work in progress.
+  - name: Documentation
+    url: https://github.com/Abooubaker/robocraft/tree/main/docs
+    about: Architecture, API, database, AI agents, and development setup.
+  - name: Security report
+    url: https://github.com/Abooubaker
+    about: Please report vulnerabilities privately, not as a public issue.

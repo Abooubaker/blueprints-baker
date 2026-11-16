@@ -1,0 +1,25 @@
+# Local development database. The API and web app are run with uv/npm for fast
+# reload; this file intentionally does not containerize them (see docs/development.md).
+name: robocraft
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: robocraft-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-robocraft}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-robocraft}
+      POSTGRES_DB: ${POSTGRES_DB:-robocraft}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - robocraft-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-robocraft} -d ${POSTGRES_DB:-robocraft}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  robocraft-pgdata:

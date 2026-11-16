@@ -1,0 +1,60 @@
+name: Bug report
+description: Report something that is broken or behaves unexpectedly
+title: "fix: "
+labels: ["bug", "status:ready"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not report security vulnerabilities here. Contact the maintainer privately instead.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: One or two sentences describing the bug.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start the API and web app
+        2. Create a project with ...
+        3. Click ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include console output, API responses, or screenshots.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Frontend
+        - Backend
+        - AI agents
+        - Database
+        - DevOps
+        - Documentation
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, browser, Node/Python versions, database.
+      placeholder: Omarchy Linux, Chromium 140, Node 22.14, Python 3.12, PostgreSQL 16
+    validations:
+      required: true
