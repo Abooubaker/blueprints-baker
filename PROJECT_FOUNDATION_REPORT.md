@@ -1,7 +1,7 @@
 # RoboCraft foundation report
 
 - **Date:** 2026-11-16
-- **Repository:** https://github.com/Abooubaker/robocraft (private)
+- **Repository:** https://github.com/Abooubaker/robocraft (public)
 - **Project board:** https://github.com/users/Abooubaker/projects/1
 - **Branch:** `main`
 - **Status:** foundation complete and verified; product modules are intentionally placeholders.

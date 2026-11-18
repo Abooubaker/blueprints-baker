@@ -3,8 +3,8 @@
 The repository publishes a read-only demo to GitHub Pages. It is the same Next.js app,
 built in demo mode against precomputed fixtures instead of a live API.
 
-Live site: `https://<owner>.github.io/robocraft/` (project sites) — the workflow resolves
-the base path automatically.
+Live site: <https://abooubaker.github.io/robocraft/> — the workflow derives the base path from
+the repository name, so a project site is served from `/<repository>/`.
 
 ## What the demo is
 
@@ -98,14 +98,15 @@ fails if the committed fixtures drift.
 
 ### Repository requirements
 
-GitHub Pages must be available for the repository:
+This repository is public and Pages is enabled with **Source: GitHub Actions**. The workflow
+also supports forks:
 
 - **Public repository:** Pages is free; enable it once with **Source: GitHub Actions**.
 - **Private repository:** requires a GitHub plan that includes Pages for private repositories,
   and Pages must still be enabled with the GitHub Actions source.
 
-Until then the workflow still builds and scans the static export, prints a notice, and skips
-the deploy job instead of failing. It does not silently publish anything.
+Until Pages is available the workflow still builds and scans the static export, prints a
+notice, and skips the deploy job instead of failing. It does not silently publish anything.
 
 The deploy job intentionally has no custom domain or CORS configuration: the demo is entirely
 static and must never call a live API.

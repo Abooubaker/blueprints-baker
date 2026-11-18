@@ -11,6 +11,9 @@ firmware, a mechanical plan, and a realistic budget.
 > are scheduled in the [roadmap](docs/roadmap.md) and tracked on the
 > [GitHub Project board](https://github.com/users/Abooubaker/projects/1).
 
+> **Live demo:** <https://abooubaker.github.io/robocraft/> — a read-only Pages build generated
+> by the same deterministic engine. See [docs/demo-site.md](docs/demo-site.md).
+
 ---
 
 ## Why RoboCraft
