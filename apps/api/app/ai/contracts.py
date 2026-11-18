@@ -184,9 +184,44 @@ class PowerBudget(ContractModel):
     estimated_runtime_min: float | None = Field(default=None, ge=0)
 
 
+class PinDestination(ContractModel):
+    """Where one physical pin terminates, including the wire it travels on."""
+
+    ref: str
+    pin: str
+    net: str = ""
+    signal: str = ""
+    kind: str = "signal"
+    connector: str = ""
+
+
+class ElectricalPinoutEntry(ContractModel):
+    """One row of the every-pin wiring table.
+
+    A pin can fan out (for example a battery positive feeding a regulator and a
+    motor driver), so destinations is a list rather than a single endpoint.
+    Unconnected pins are still present with ``connected=False`` so the table is
+    a complete inventory of the physical part.
+    """
+
+    ref: str
+    part: str
+    role: str = ""
+    pin: str
+    pin_kind: str = ""
+    voltage_v: float | None = Field(default=None, ge=0)
+    net: str = ""
+    signal: str = ""
+    connected: bool = False
+    destinations: list[PinDestination] = Field(default_factory=list)
+    wire_color: str = ""
+    wire_gauge_awg: int | None = Field(default=None, ge=1, le=40)
+
+
 class ElectricalPlan(ContractModel):
     nodes: list[ElectricalNode] = Field(default_factory=list)
     connections: list[ElectricalConnection] = Field(default_factory=list)
+    pinout: list[ElectricalPinoutEntry] = Field(default_factory=list)
     power_budget: PowerBudget = Field(default_factory=PowerBudget)
     power_rails: list[PowerRail] = Field(default_factory=list)
     pin_map: dict[str, str] = Field(default_factory=dict)

@@ -134,7 +134,7 @@ class PlaceholderAgent(BaseAgent):
         """
         schema = json.dumps(self.output_model.model_json_schema(), indent=2)
         return (
-            f"You are the RoboCraft {self.display_name}.\n"
+            f"You are the Blueprints Baker {self.display_name}.\n"
             f"{self.description}\n"
             f"Project: {context.project_name} ({context.robot_type.value}).\n"
             f"Description: {context.description}\n"
@@ -157,7 +157,7 @@ class LLMBackedAgent(BaseAgent):
         return [
             LLMMessage(
                 role="system",
-                content=self.system_prompt or f"You are the RoboCraft {self.display_name}.",
+                content=self.system_prompt or f"You are the Blueprints Baker {self.display_name}.",
             ),
             LLMMessage(role="user", content=self.build_user_prompt(request)),
         ]

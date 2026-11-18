@@ -1,6 +1,6 @@
 # Electrical & wiring system
 
-RoboCraft turns an approved bill of materials into a deterministic wiring plan: every
+Blueprints Baker turns an approved bill of materials into a deterministic wiring plan: every
 component gets a reference designator, every physical pin is allocated, nets are named,
 the power tree is budgeted, and safety rules are checked before the plan is returned.
 
@@ -16,6 +16,7 @@ the API, the web workspace, and every exporter:
 | --- | --- |
 | `nodes` | Every part with reference designator, role, voltage, current, and pins |
 | `connections` | Point-to-point wiring with net name, signal, kind, wire color, and gauge |
+| `pinout` | One row per physical pin, including spare pins and every exact destination |
 | `pin_map` | Controller pin → net assignment |
 | `power_budget` | Pack voltage, peak/typical current, recommended supply, runtime |
 | `power_rails` | Named rails (`GND`, `VBAT`, `5V_CTRL`, `3V3_CTRL`, `DRIVER_LOGIC`, regulator output) |
@@ -70,7 +71,8 @@ All routes are under `/api/v1/projects/{project_id}/electrical`.
 | `GET` | `/` | Return the latest persisted artifact. `404` when no plan exists. |
 | `GET` | `/export/{format}` | Download an export as an attachment. |
 
-Formats: `json`, `wiring-csv`, `bom-csv`, `kicad-netlist`, `svg`, `markdown`.
+Formats: `json`, `wiring-csv`, `pinout-csv`, `bom-csv`, `kicad-netlist`, `kicad-schematic`,
+`svg`, `markdown`.
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/projects/$PROJECT_ID/electrical
@@ -85,34 +87,42 @@ The artifact stores the `agent_run_id` so the plan can be traced to the audit re
 | --- | --- | --- |
 | `json` | `electrical-plan.json` | Raw contract for other tools and tests |
 | `wiring-csv` | `wiring.csv` | Spreadsheet review of every net |
+| `pinout-csv` | `pinout.csv` | Every physical pin with its net, signal, and exact destination(s) |
 | `bom-csv` | `bill-of-materials.csv` | Purchasing list with quantities and prices |
-| `kicad-netlist` | `robocraft.net` | KiCad S-expression netlist |
-| `svg` | `wiring.svg` | Print-ready connection overview |
-| `markdown` | `build-guide.md` | Pin map, safety checks, ordered wiring steps |
+| `kicad-netlist` | `blueprints-baker.net` | KiCad S-expression netlist |
+| `kicad-schematic` | `blueprints-baker.kicad_sch` | Self-contained KiCad schematic, one labelled wire per pin |
+| `svg` | `wiring.svg` | Blueprint-style pin-level schematic with destinations |
+| `markdown` | `build-guide.md` | Full pinout, safety checks, ordered wiring steps |
 
-**EasyEDA:** the `.net` file is a KiCad S-expression netlist. EasyEDA Pro can import that
-format; KiCad imports it natively. The export is deliberately honest about what it is —
-RoboCraft does not emit an undocumented EasyEDA-native JSON format, and imported symbols
-must be reviewed before layout. The netlist carries net names, component references, and
-pin connections, which is enough to seed a schematic.
+**EasyEDA:** the `.net` file is a KiCad S-expression netlist and the `.kicad_sch` file is a
+KiCad 8 schematic with embedded library symbols. EasyEDA Pro can import both KiCad formats;
+KiCad opens them natively. The export is deliberately honest about what it is — Blueprints
+Baker does not emit an undocumented EasyEDA-native JSON format, and imported symbols must be
+reviewed before layout. Every physical pin in the schematic has a short wire and a global
+label, so unconnected pins explicitly appear as `NC_<ref>_<pin>` instead of disappearing.
+The generators are covered by structural tests (balanced S-expressions, a symbol and wire per
+pin, a label per net), not by an automated KiCad/EasyEDA round-trip; run ERC after import.
 
 ## Engine layers
 
 ```text
 app/electrical/library.py    curated profiles, reference BOMs, controller selection
 app/electrical/engine.py     pin allocation, net naming, wiring, power budget, validation
-app/electrical/exporters.py  CSV / netlist / SVG / Markdown / JSON serializers
+app/electrical/exporters.py  CSV / KiCad netlist + schematic / SVG / Markdown / JSON
 app/services/electrical_service.py  orchestrates agents and persists the artifact
 app/api/v1/endpoints/electrical.py  HTTP surface
 ```
 
 `apps/web/src/components/projects/wiring-workspace.tsx` renders the same contract:
-interactive diagram, filterable connection table, pin map, power/rails panel, severity
-grouped validation, wiring steps, and export buttons.
+a pin-level schematic where every row names its pin and destination, a searchable full pinout
+(including spare pins), a filterable net table, a power/rails panel, severity-grouped
+validation, wiring steps, and one consolidated export menu.
 
 ## Limits
 
 - The library is finite and deliberately curated; unknown parts do not get invented pins.
 - Prices are planning estimates, not live supplier quotes.
-- The netlist is structural (nets and pins), not a routed PCB layout.
+- The netlist and schematic are structural (symbols, nets, pins), not a routed PCB layout.
+- Symbol geometry is generated for readability; verify footprints and symbol pin mappings
+  against the manufacturer datasheet before manufacturing.
 - The engine validates declared electrical limits; it does not simulate the circuit.

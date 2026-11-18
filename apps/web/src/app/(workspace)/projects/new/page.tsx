@@ -21,7 +21,7 @@ export default function NewProjectPage() {
       <PageHeader
         eyebrow="New robot project"
         title="What do you want to build?"
-        description="Start with intent. RoboCraft will keep the specification, components, wiring, code, and budget aligned as the project grows."
+        description="Start with intent. Blueprints Baker will keep the specification, components, wiring, code, and budget aligned as the project grows."
       />
       {DEMO_MODE ? (
         <div className="rounded-panel border-signal/20 bg-signal/[0.05] max-w-2xl border px-5 py-4">
@@ -31,10 +31,10 @@ export default function NewProjectPage() {
           <p className="text-muted mt-2 text-xs leading-relaxed">
             This GitHub Pages build is a read-only demo generated from precomputed engine output.
             Open the demo project to explore a real specification, bill of materials, and validated
-            wiring plan, including the netlist and build-guide exports.
+            schematic, including the KiCad schematic, netlist, and full-pinout exports.
           </p>
           <ButtonLink href={`/projects/${DEMO_PROJECT_ID}/wiring`} size="sm" className="mt-4">
-            Open the wiring demo <ArrowRight className="size-3.5" />
+            Open the schematic demo <ArrowRight className="size-3.5" />
           </ButtonLink>
         </div>
       ) : (

@@ -1,0 +1,52 @@
+ref,part,role,pin,pin_kind,pin_voltage_v,net,signal,connected,destination_count,destinations,wire_color,wire_gauge_awg
+U1,ESP32 DevKit V1,controller,VIN,power,,+5V,Regulated 5 V logic supply,yes,1,VR1.OUT+,red,18
+U1,ESP32 DevKit V1,controller,3V3,power,3.3,,,no,0,,,
+U1,ESP32 DevKit V1,controller,GND,ground,0,GND,Common ground,yes,1,BT1.NEG,black,18
+U1,ESP32 DevKit V1,controller,GPIO4,gpio,3.3,MOTOR_1_PWM,Motor 1 speed,yes,1,U2.PWMA,yellow,24
+U1,ESP32 DevKit V1,controller,GPIO5,gpio,3.3,MOTOR_1_DIR1,Motor 1 direction 1,yes,1,U2.AIN1,yellow,24
+U1,ESP32 DevKit V1,controller,GPIO13,gpio,3.3,MOTOR_1_DIR2,Motor 1 direction 2,yes,1,U2.AIN2,yellow,24
+U1,ESP32 DevKit V1,controller,GPIO14,gpio,3.3,MOTOR_2_PWM,Motor 2 speed,yes,1,U2.PWMB,yellow,24
+U1,ESP32 DevKit V1,controller,GPIO15,gpio,3.3,MOTOR_2_DIR1,Motor 2 direction 1,yes,1,U2.BIN1,yellow,24
+U1,ESP32 DevKit V1,controller,GPIO16,gpio,3.3,MOTOR_2_DIR2,Motor 2 direction 2,yes,1,U2.BIN2,yellow,24
+U1,ESP32 DevKit V1,controller,GPIO17,gpio,3.3,ULTRASONIC_TRIG,Ultrasonic trigger,yes,1,S1.TRIG,yellow,24
+U1,ESP32 DevKit V1,controller,GPIO18,gpio,3.3,ULTRASONIC_ECHO,Ultrasonic echo,yes,1,S1.ECHO,yellow,24
+U1,ESP32 DevKit V1,controller,GPIO19,gpio,3.3,SERVO_1_SIG,Servo 1 signal,yes,1,M3.SIG,yellow,24
+U1,ESP32 DevKit V1,controller,GPIO21,i2c_sda,3.3,,,no,0,,,
+U1,ESP32 DevKit V1,controller,GPIO22,i2c_scl,3.3,,,no,0,,,
+U1,ESP32 DevKit V1,controller,GPIO23,gpio,3.3,,,no,0,,,
+U1,ESP32 DevKit V1,controller,GPIO25,gpio,3.3,,,no,0,,,
+U1,ESP32 DevKit V1,controller,GPIO26,gpio,3.3,,,no,0,,,
+U1,ESP32 DevKit V1,controller,GPIO27,gpio,3.3,,,no,0,,,
+U1,ESP32 DevKit V1,controller,GPIO32,gpio,3.3,,,no,0,,,
+U1,ESP32 DevKit V1,controller,GPIO33,gpio,3.3,,,no,0,,,
+BT1,"2S LiPo battery (7.4 V, 2200 mAh)",battery,POS,power,,VBAT,Battery input to regulator,yes,2,VR1.IN+; U2.VM,red,18
+BT1,"2S LiPo battery (7.4 V, 2200 mAh)",battery,NEG,ground,0,GND,Common ground,yes,6,U1.GND; VR1.IN-; VR1.OUT-; U2.GND; M3.GND; S1.GND,black,18
+VR1,5 V 3 A buck converter,regulator,IN+,power,,VBAT,Battery input to regulator,yes,1,BT1.POS,red,18
+VR1,5 V 3 A buck converter,regulator,IN-,ground,0,GND,Common ground,yes,1,BT1.NEG,black,18
+VR1,5 V 3 A buck converter,regulator,OUT+,power,,+5V,Regulated 5 V logic supply,yes,5,U1.VIN; U2.VCC; U2.STBY; S1.VCC; M3.VCC,red,18
+VR1,5 V 3 A buck converter,regulator,OUT-,ground,0,GND,Common ground,yes,1,BT1.NEG,black,18
+U2,TB6612FNG dual motor driver,motor_driver,VM,power,,VBAT,Motor supply,yes,1,BT1.POS,red,18
+U2,TB6612FNG dual motor driver,motor_driver,VCC,power,,+5V,Driver logic supply,yes,1,VR1.OUT+,red,18
+U2,TB6612FNG dual motor driver,motor_driver,GND,ground,0,GND,Common ground,yes,1,BT1.NEG,black,18
+U2,TB6612FNG dual motor driver,motor_driver,STBY,gpio,,+5V,Driver standby (tied high),yes,1,VR1.OUT+,yellow,24
+U2,TB6612FNG dual motor driver,motor_driver,AIN1,gpio,,MOTOR_1_DIR1,Motor 1 direction 1,yes,1,U1.GPIO5,yellow,24
+U2,TB6612FNG dual motor driver,motor_driver,AIN2,gpio,,MOTOR_1_DIR2,Motor 1 direction 2,yes,1,U1.GPIO13,yellow,24
+U2,TB6612FNG dual motor driver,motor_driver,PWMA,gpio,,MOTOR_1_PWM,Motor 1 speed,yes,1,U1.GPIO4,yellow,24
+U2,TB6612FNG dual motor driver,motor_driver,BIN1,gpio,,MOTOR_2_DIR1,Motor 2 direction 1,yes,1,U1.GPIO15,yellow,24
+U2,TB6612FNG dual motor driver,motor_driver,BIN2,gpio,,MOTOR_2_DIR2,Motor 2 direction 2,yes,1,U1.GPIO16,yellow,24
+U2,TB6612FNG dual motor driver,motor_driver,PWMB,gpio,,MOTOR_2_PWM,Motor 2 speed,yes,1,U1.GPIO14,yellow,24
+U2,TB6612FNG dual motor driver,motor_driver,AO1,motor_out,,MOTOR_1_A,Motor 1 phase A,yes,1,M1.M+,orange,18
+U2,TB6612FNG dual motor driver,motor_driver,AO2,motor_out,,MOTOR_1_B,Motor 1 phase B,yes,1,M1.M-,orange,18
+U2,TB6612FNG dual motor driver,motor_driver,BO1,motor_out,,MOTOR_2_A,Motor 2 phase A,yes,1,M2.M+,orange,18
+U2,TB6612FNG dual motor driver,motor_driver,BO2,motor_out,,MOTOR_2_B,Motor 2 phase B,yes,1,M2.M-,orange,18
+M3,SG90 micro servo,servo,VCC,power,,+5V,Servo supply,yes,1,VR1.OUT+,red,18
+M3,SG90 micro servo,servo,GND,ground,0,GND,Common ground,yes,1,BT1.NEG,black,18
+M3,SG90 micro servo,servo,SIG,gpio,,SERVO_1_SIG,Servo 1 signal,yes,1,U1.GPIO19,yellow,24
+M1,N20 gear motor (6 V),drive_motor,M+,motor_in,,MOTOR_1_A,Motor 1 phase A,yes,1,U2.AO1,orange,18
+M1,N20 gear motor (6 V),drive_motor,M-,motor_in,,MOTOR_1_B,Motor 1 phase B,yes,1,U2.AO2,orange,18
+M2,N20 gear motor (6 V),drive_motor,M+,motor_in,,MOTOR_2_A,Motor 2 phase A,yes,1,U2.BO1,orange,18
+M2,N20 gear motor (6 V),drive_motor,M-,motor_in,,MOTOR_2_B,Motor 2 phase B,yes,1,U2.BO2,orange,18
+S1,HC-SR04 ultrasonic rangefinder,distance_sensor,VCC,power,,+5V,Sensor supply,yes,1,VR1.OUT+,red,18
+S1,HC-SR04 ultrasonic rangefinder,distance_sensor,TRIG,gpio,,ULTRASONIC_TRIG,Ultrasonic trigger,yes,1,U1.GPIO17,yellow,24
+S1,HC-SR04 ultrasonic rangefinder,distance_sensor,ECHO,gpio,,ULTRASONIC_ECHO,Ultrasonic echo,yes,1,U1.GPIO18,yellow,24
+S1,HC-SR04 ultrasonic rangefinder,distance_sensor,GND,ground,0,GND,Common ground,yes,1,BT1.NEG,black,18

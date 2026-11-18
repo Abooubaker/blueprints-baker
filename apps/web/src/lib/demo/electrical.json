@@ -782,6 +782,1180 @@
         "notes": ""
       }
     ],
+    "pinout": [
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "VIN",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Regulated 5 V logic supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "OUT+",
+            "net": "+5V",
+            "signal": "Regulated 5 V logic supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "3V3",
+        "pin_kind": "power",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GND",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO4",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_1_PWM",
+        "signal": "Motor 1 speed",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "PWMA",
+            "net": "MOTOR_1_PWM",
+            "signal": "Motor 1 speed",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO5",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_1_DIR1",
+        "signal": "Motor 1 direction 1",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "AIN1",
+            "net": "MOTOR_1_DIR1",
+            "signal": "Motor 1 direction 1",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO13",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_1_DIR2",
+        "signal": "Motor 1 direction 2",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "AIN2",
+            "net": "MOTOR_1_DIR2",
+            "signal": "Motor 1 direction 2",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO14",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_2_PWM",
+        "signal": "Motor 2 speed",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "PWMB",
+            "net": "MOTOR_2_PWM",
+            "signal": "Motor 2 speed",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO15",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_2_DIR1",
+        "signal": "Motor 2 direction 1",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "BIN1",
+            "net": "MOTOR_2_DIR1",
+            "signal": "Motor 2 direction 1",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO16",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_2_DIR2",
+        "signal": "Motor 2 direction 2",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "BIN2",
+            "net": "MOTOR_2_DIR2",
+            "signal": "Motor 2 direction 2",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO17",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "ULTRASONIC_TRIG",
+        "signal": "Ultrasonic trigger",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "S1",
+            "pin": "TRIG",
+            "net": "ULTRASONIC_TRIG",
+            "signal": "Ultrasonic trigger",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO18",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "ULTRASONIC_ECHO",
+        "signal": "Ultrasonic echo",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "S1",
+            "pin": "ECHO",
+            "net": "ULTRASONIC_ECHO",
+            "signal": "Ultrasonic echo",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO19",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "SERVO_1_SIG",
+        "signal": "Servo 1 signal",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "M3",
+            "pin": "SIG",
+            "net": "SERVO_1_SIG",
+            "signal": "Servo 1 signal",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO21",
+        "pin_kind": "i2c_sda",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO22",
+        "pin_kind": "i2c_scl",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO23",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO25",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO26",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO27",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO32",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO33",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "BT1",
+        "part": "2S LiPo battery (7.4 V, 2200 mAh)",
+        "role": "battery",
+        "pin": "POS",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "VBAT",
+        "signal": "Battery input to regulator",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "IN+",
+            "net": "VBAT",
+            "signal": "Battery input to regulator",
+            "kind": "power",
+            "connector": ""
+          },
+          {
+            "ref": "U2",
+            "pin": "VM",
+            "net": "VBAT",
+            "signal": "Motor supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "BT1",
+        "part": "2S LiPo battery (7.4 V, 2200 mAh)",
+        "role": "battery",
+        "pin": "NEG",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GND",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          },
+          {
+            "ref": "VR1",
+            "pin": "IN-",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          },
+          {
+            "ref": "VR1",
+            "pin": "OUT-",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          },
+          {
+            "ref": "U2",
+            "pin": "GND",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          },
+          {
+            "ref": "M3",
+            "pin": "GND",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          },
+          {
+            "ref": "S1",
+            "pin": "GND",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "VR1",
+        "part": "5 V 3 A buck converter",
+        "role": "regulator",
+        "pin": "IN+",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "VBAT",
+        "signal": "Battery input to regulator",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "POS",
+            "net": "VBAT",
+            "signal": "Battery input to regulator",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "VR1",
+        "part": "5 V 3 A buck converter",
+        "role": "regulator",
+        "pin": "IN-",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "VR1",
+        "part": "5 V 3 A buck converter",
+        "role": "regulator",
+        "pin": "OUT+",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Regulated 5 V logic supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "VIN",
+            "net": "+5V",
+            "signal": "Regulated 5 V logic supply",
+            "kind": "power",
+            "connector": ""
+          },
+          {
+            "ref": "U2",
+            "pin": "VCC",
+            "net": "+5V",
+            "signal": "Driver logic supply",
+            "kind": "power",
+            "connector": ""
+          },
+          {
+            "ref": "U2",
+            "pin": "STBY",
+            "net": "+5V",
+            "signal": "Driver standby (tied high)",
+            "kind": "signal",
+            "connector": ""
+          },
+          {
+            "ref": "S1",
+            "pin": "VCC",
+            "net": "+5V",
+            "signal": "Sensor supply",
+            "kind": "power",
+            "connector": ""
+          },
+          {
+            "ref": "M3",
+            "pin": "VCC",
+            "net": "+5V",
+            "signal": "Servo supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "VR1",
+        "part": "5 V 3 A buck converter",
+        "role": "regulator",
+        "pin": "OUT-",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "VM",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "VBAT",
+        "signal": "Motor supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "POS",
+            "net": "VBAT",
+            "signal": "Motor supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "VCC",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Driver logic supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "OUT+",
+            "net": "+5V",
+            "signal": "Driver logic supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "GND",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "STBY",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Driver standby (tied high)",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "OUT+",
+            "net": "+5V",
+            "signal": "Driver standby (tied high)",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "AIN1",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_1_DIR1",
+        "signal": "Motor 1 direction 1",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO5",
+            "net": "MOTOR_1_DIR1",
+            "signal": "Motor 1 direction 1",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "AIN2",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_1_DIR2",
+        "signal": "Motor 1 direction 2",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO13",
+            "net": "MOTOR_1_DIR2",
+            "signal": "Motor 1 direction 2",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "PWMA",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_1_PWM",
+        "signal": "Motor 1 speed",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO4",
+            "net": "MOTOR_1_PWM",
+            "signal": "Motor 1 speed",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "BIN1",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_2_DIR1",
+        "signal": "Motor 2 direction 1",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO15",
+            "net": "MOTOR_2_DIR1",
+            "signal": "Motor 2 direction 1",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "BIN2",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_2_DIR2",
+        "signal": "Motor 2 direction 2",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO16",
+            "net": "MOTOR_2_DIR2",
+            "signal": "Motor 2 direction 2",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "PWMB",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_2_PWM",
+        "signal": "Motor 2 speed",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO14",
+            "net": "MOTOR_2_PWM",
+            "signal": "Motor 2 speed",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "AO1",
+        "pin_kind": "motor_out",
+        "voltage_v": null,
+        "net": "MOTOR_1_A",
+        "signal": "Motor 1 phase A",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "M1",
+            "pin": "M+",
+            "net": "MOTOR_1_A",
+            "signal": "Motor 1 phase A",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "AO2",
+        "pin_kind": "motor_out",
+        "voltage_v": null,
+        "net": "MOTOR_1_B",
+        "signal": "Motor 1 phase B",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "M1",
+            "pin": "M-",
+            "net": "MOTOR_1_B",
+            "signal": "Motor 1 phase B",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "BO1",
+        "pin_kind": "motor_out",
+        "voltage_v": null,
+        "net": "MOTOR_2_A",
+        "signal": "Motor 2 phase A",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "M2",
+            "pin": "M+",
+            "net": "MOTOR_2_A",
+            "signal": "Motor 2 phase A",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "BO2",
+        "pin_kind": "motor_out",
+        "voltage_v": null,
+        "net": "MOTOR_2_B",
+        "signal": "Motor 2 phase B",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "M2",
+            "pin": "M-",
+            "net": "MOTOR_2_B",
+            "signal": "Motor 2 phase B",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M3",
+        "part": "SG90 micro servo",
+        "role": "servo",
+        "pin": "VCC",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Servo supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "OUT+",
+            "net": "+5V",
+            "signal": "Servo supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M3",
+        "part": "SG90 micro servo",
+        "role": "servo",
+        "pin": "GND",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M3",
+        "part": "SG90 micro servo",
+        "role": "servo",
+        "pin": "SIG",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "SERVO_1_SIG",
+        "signal": "Servo 1 signal",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO19",
+            "net": "SERVO_1_SIG",
+            "signal": "Servo 1 signal",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "M1",
+        "part": "N20 gear motor (6 V)",
+        "role": "drive_motor",
+        "pin": "M+",
+        "pin_kind": "motor_in",
+        "voltage_v": null,
+        "net": "MOTOR_1_A",
+        "signal": "Motor 1 phase A",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "AO1",
+            "net": "MOTOR_1_A",
+            "signal": "Motor 1 phase A",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M1",
+        "part": "N20 gear motor (6 V)",
+        "role": "drive_motor",
+        "pin": "M-",
+        "pin_kind": "motor_in",
+        "voltage_v": null,
+        "net": "MOTOR_1_B",
+        "signal": "Motor 1 phase B",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "AO2",
+            "net": "MOTOR_1_B",
+            "signal": "Motor 1 phase B",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M2",
+        "part": "N20 gear motor (6 V)",
+        "role": "drive_motor",
+        "pin": "M+",
+        "pin_kind": "motor_in",
+        "voltage_v": null,
+        "net": "MOTOR_2_A",
+        "signal": "Motor 2 phase A",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "BO1",
+            "net": "MOTOR_2_A",
+            "signal": "Motor 2 phase A",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M2",
+        "part": "N20 gear motor (6 V)",
+        "role": "drive_motor",
+        "pin": "M-",
+        "pin_kind": "motor_in",
+        "voltage_v": null,
+        "net": "MOTOR_2_B",
+        "signal": "Motor 2 phase B",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "BO2",
+            "net": "MOTOR_2_B",
+            "signal": "Motor 2 phase B",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "S1",
+        "part": "HC-SR04 ultrasonic rangefinder",
+        "role": "distance_sensor",
+        "pin": "VCC",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Sensor supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "OUT+",
+            "net": "+5V",
+            "signal": "Sensor supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "S1",
+        "part": "HC-SR04 ultrasonic rangefinder",
+        "role": "distance_sensor",
+        "pin": "TRIG",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "ULTRASONIC_TRIG",
+        "signal": "Ultrasonic trigger",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO17",
+            "net": "ULTRASONIC_TRIG",
+            "signal": "Ultrasonic trigger",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "S1",
+        "part": "HC-SR04 ultrasonic rangefinder",
+        "role": "distance_sensor",
+        "pin": "ECHO",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "ULTRASONIC_ECHO",
+        "signal": "Ultrasonic echo",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO18",
+            "net": "ULTRASONIC_ECHO",
+            "signal": "Ultrasonic echo",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "S1",
+        "part": "HC-SR04 ultrasonic rangefinder",
+        "role": "distance_sensor",
+        "pin": "GND",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      }
+    ],
     "power_budget": {
       "supply_voltage_v": 7.4,
       "peak_current_ma": 2330.0,
@@ -954,7 +2128,7 @@
             "electrical_notes": "3.3 V logic. Power VIN from a regulated 5 V rail; inputs are not 5 V tolerant."
           },
           "price_usd": "9.50",
-          "supplier": "RoboCraft curated library",
+          "supplier": "Blueprints Baker curated library",
           "supplier_url": null,
           "availability": "in_stock",
           "compatibility_notes": [
@@ -1005,7 +2179,7 @@
             "electrical_notes": "1.2 A continuous per channel; heatsink above 0.8 A. STBY must be pulled high."
           },
           "price_usd": "6.20",
-          "supplier": "RoboCraft curated library",
+          "supplier": "Blueprints Baker curated library",
           "supplier_url": null,
           "availability": "in_stock",
           "compatibility_notes": [
@@ -1043,7 +2217,7 @@
             "electrical_notes": "Stall current is much higher than the no-load rating. Never connect directly to a controller pin."
           },
           "price_usd": "5.40",
-          "supplier": "RoboCraft curated library",
+          "supplier": "Blueprints Baker curated library",
           "supplier_url": null,
           "availability": "in_stock",
           "compatibility_notes": [
@@ -1083,7 +2257,7 @@
             "electrical_notes": "ECHO is a 5 V output. Use a divider or level shifter with 3.3 V logic."
           },
           "price_usd": "2.30",
-          "supplier": "RoboCraft curated library",
+          "supplier": "Blueprints Baker curated library",
           "supplier_url": null,
           "availability": "in_stock",
           "compatibility_notes": [
@@ -1122,7 +2296,7 @@
             "electrical_notes": "Power servos from a separate 5 V rail, not the controller's regulator. Add a bulk capacitor."
           },
           "price_usd": "3.40",
-          "supplier": "RoboCraft curated library",
+          "supplier": "Blueprints Baker curated library",
           "supplier_url": null,
           "availability": "in_stock",
           "compatibility_notes": [
@@ -1160,7 +2334,7 @@
             "electrical_notes": "Nominal 7.4 V, 8.4 V full charge. Use a fused XT30/JST connector and a low-voltage alarm."
           },
           "price_usd": "18.00",
-          "supplier": "RoboCraft curated library",
+          "supplier": "Blueprints Baker curated library",
           "supplier_url": null,
           "availability": "in_stock",
           "compatibility_notes": [
@@ -1200,7 +2374,7 @@
             "electrical_notes": "Set the output to 5.0 V before connecting logic. Verify with a meter under load."
           },
           "price_usd": "4.20",
-          "supplier": "RoboCraft curated library",
+          "supplier": "Blueprints Baker curated library",
           "supplier_url": null,
           "availability": "in_stock",
           "compatibility_notes": [
@@ -1220,11 +2394,32 @@
     ],
     "total_estimated_usd": "54.40",
     "sources": [
-      "RoboCraft curated component library v1.0"
+      "Blueprints Baker curated component library v1.0"
     ]
   },
   "total_estimated_usd": 54.4,
   "export_formats": [
+    {
+      "format": "kicad-schematic",
+      "label": "KiCad schematic",
+      "filename": "blueprints-baker.kicad_sch",
+      "media_type": "text/plain; charset=utf-8",
+      "description": "Self-contained KiCad schematic, one labelled wire per pin."
+    },
+    {
+      "format": "kicad-netlist",
+      "label": "KiCad / EasyEDA netlist",
+      "filename": "blueprints-baker.net",
+      "media_type": "text/plain; charset=utf-8",
+      "description": "KiCad S-expression netlist for EasyEDA Pro or KiCad import."
+    },
+    {
+      "format": "pinout-csv",
+      "label": "Full pinout",
+      "filename": "pinout.csv",
+      "media_type": "text/csv; charset=utf-8",
+      "description": "Every physical pin with its exact destination and wire."
+    },
     {
       "format": "wiring-csv",
       "label": "Wiring table",
@@ -1233,25 +2428,18 @@
       "description": "Every net as a spreadsheet row."
     },
     {
-      "format": "kicad-netlist",
-      "label": "KiCad / EasyEDA netlist",
-      "filename": "robocraft.net",
-      "media_type": "text/plain; charset=utf-8",
-      "description": "KiCad S-expression netlist for EasyEDA Pro or KiCad import."
-    },
-    {
       "format": "svg",
-      "label": "Wiring diagram",
+      "label": "Pin-level schematic",
       "filename": "wiring.svg",
       "media_type": "image/svg+xml; charset=utf-8",
-      "description": "Printable connection overview with net colors."
+      "description": "Blueprint-style schematic with every pin and destination."
     },
     {
       "format": "markdown",
       "label": "Build guide",
       "filename": "build-guide.md",
       "media_type": "text/markdown; charset=utf-8",
-      "description": "Pin map, safety checks, and ordered wiring steps."
+      "description": "Full pinout, safety checks, and ordered wiring steps."
     },
     {
       "format": "bom-csv",

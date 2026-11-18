@@ -183,7 +183,7 @@ export function CreateProjectForm() {
                       "flex flex-col items-start rounded-lg border px-3 py-3 text-left transition-colors",
                       selected
                         ? "border-signal/40 bg-signal/[0.07]"
-                        : "border-line bg-canvas/40 hover:border-[#334549]",
+                        : "border-line bg-canvas/40 hover:border-[#2d6894]",
                     )}
                   >
                     <div className="flex w-full items-center justify-between">

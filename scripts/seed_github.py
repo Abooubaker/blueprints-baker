@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Seed the RoboCraft GitHub backlog.
+"""Seed the Blueprints Baker GitHub backlog.
 
 Creates labels, milestones M1-M10, and the issue plan, then writes docs/backlog.md.
 The script is idempotent by issue title and safe to re-run.
@@ -20,7 +20,7 @@ from collections import Counter
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
-REPO = "Abooubaker/robocraft"
+REPO = "Abooubaker/blueprints-baker"
 OWNER = "Abooubaker"
 PROJECT_NUMBER = 1
 ROOT = Path(__file__).resolve().parents[1]

@@ -1,7 +1,7 @@
-# RoboCraft foundation report
+# Blueprints Baker foundation report
 
 - **Date:** 2026-11-16
-- **Repository:** https://github.com/Abooubaker/robocraft (public)
+- **Repository:** https://github.com/Abooubaker/blueprints-baker (public)
 - **Project board:** https://github.com/users/Abooubaker/projects/1
 - **Branch:** `main`
 - **Status:** foundation complete and verified; product modules are intentionally placeholders.
@@ -144,7 +144,7 @@ The production build serves `/`, `/dashboard`, `/projects/new`, `/projects/[id]`
 
 Workflow: [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
-Final run [`43951602732`](https://github.com/Abooubaker/robocraft/actions/runs/43951602732) is
+Final run [`43951602732`](https://github.com/Abooubaker/blueprints-baker/actions/runs/43951602732) is
 **success** with all four jobs green:
 
 - Backend quality and tests
@@ -236,7 +236,7 @@ Details and the adoption map: [`docs/prototype-review.md`](docs/prototype-review
 
 ### 6.1 Repository and commits
 
-`main` was pushed to https://github.com/Abooubaker/robocraft. Foundation commits:
+`main` was pushed to https://github.com/Abooubaker/blueprints-baker. Foundation commits:
 
 | Commit | Contents |
 | --- | --- |

@@ -22,7 +22,7 @@ export function DemoBanner() {
           href={`/projects/${DEMO_PROJECT_ID}/wiring`}
           className="text-signal ml-auto shrink-0 hover:underline"
         >
-          Open the wiring plan
+          Open the schematic
         </Link>
       </div>
     </div>

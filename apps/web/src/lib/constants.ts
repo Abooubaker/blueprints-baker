@@ -108,9 +108,9 @@ export const CAPABILITIES: Capability[] = [
   {
     id: "electrical",
     number: "02",
-    title: "Wiring assistant",
+    title: "Schematic assistant",
     description:
-      "Get pin maps, power budgets, and step-by-step wiring with electrical compatibility checks before anything is powered on.",
+      "Get every pin and its destination, power budgets, and step-by-step wiring with electrical compatibility checks before anything is powered on.",
     icon: CircuitBoard,
     milestone: "M5",
     accent: "aqua",
@@ -173,7 +173,7 @@ export const AGENTS: AgentMeta[] = [
   {
     name: "electrical_engineering",
     label: "Electrical Engineering",
-    short: "BOM → wiring and power plan",
+    short: "BOM → schematic and pinout",
     icon: CircuitBoard,
     dependsOn: ["robot_planner", "component_research"],
   },
@@ -228,8 +228,8 @@ export const PROJECT_MODULES: ProjectModule[] = [
   },
   {
     slug: "wiring",
-    label: "Wiring",
-    description: "Pin map, power budget, connection validation, and wiring steps.",
+    label: "Schematic & pinout",
+    description: "Every pin and destination, power budget, validation, and KiCad/EasyEDA exports.",
     milestone: "M5",
     icon: CircuitBoard,
     available: true,

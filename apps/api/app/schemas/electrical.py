@@ -11,7 +11,16 @@ from pydantic import Field
 from app.ai.contracts import ComponentResearchOutput, ElectricalPlan
 from app.schemas.common import APIModel
 
-ExportFormatName = Literal["json", "wiring-csv", "bom-csv", "kicad-netlist", "svg", "markdown"]
+ExportFormatName = Literal[
+    "json",
+    "wiring-csv",
+    "pinout-csv",
+    "bom-csv",
+    "kicad-netlist",
+    "kicad-schematic",
+    "svg",
+    "markdown",
+]
 
 
 class ExportFormatRead(APIModel):

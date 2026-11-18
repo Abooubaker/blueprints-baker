@@ -1,6 +1,6 @@
 # Roadmap
 
-Ten milestones take RoboCraft from a verified foundation to a production-ready build assistant. Each
+Ten milestones take Blueprints Baker from a verified foundation to a production-ready build assistant. Each
 milestone produces a usable slice; no milestone depends on a later one. Issue-level work is tracked
 on the [GitHub Project board](https://github.com/users/Abooubaker/projects/1) and mirrored in
 [backlog.md](backlog.md).
@@ -110,9 +110,10 @@ settings, list filtering/search in the UI, and first-run onboarding.
 **Scope**
 
 - Electrical agent and deterministic validation rules.
-- Pin map, bus/interface map, shared ground, level shifting, driver requirements.
+- Full pinout (every physical pin and its exact destination), bus/interface map, shared ground,
+  level shifting, driver requirements.
 - Power budget with peak/continuous current and margin.
-- Wiring diagram renderer (node/connection graph first).
+- Pin-level schematic renderer plus KiCad netlist and schematic exports.
 - Ordered wiring steps, safety warnings, and checklist.
 - Validation fixtures for known-good and known-bad configurations.
 
@@ -125,9 +126,10 @@ settings, list filtering/search in the UI, and first-run onboarding.
 
 **Delivered (deterministic):** curated library and reference designs, pin allocation, named nets,
 power rails and budget, severity-classified validation (`motor_overvoltage`, `logic_level_mismatch`,
-`pin_conflict`, `missing_ground`, current headroom), wiring steps, and CSV/SVG/Markdown/JSON plus
-KiCad-netlist exports. The web wiring workspace and the static demo are live. Remaining M5 work is
-the model-backed electrical agent, richer interface/bus planning, and schematic-layout handoff.
+`pin_conflict`, `missing_ground`, current headroom), wiring steps, a full per-pin pinout, and
+CSV/SVG/Markdown/JSON plus KiCad netlist and schematic exports. The web schematic workspace and the
+static demo are live. Remaining M5 work is the model-backed electrical agent, richer interface/bus
+planning, and footprint assignment for layout.
 
 ## M6 — Programming and firmware
 
@@ -210,7 +212,7 @@ the model-backed electrical agent, richer interface/bus planning, and schematic-
 
 ## M10 — Production readiness
 
-**Goal:** operate RoboCraft safely and measure it.
+**Goal:** operate Blueprints Baker safely and measure it.
 
 **Scope**
 

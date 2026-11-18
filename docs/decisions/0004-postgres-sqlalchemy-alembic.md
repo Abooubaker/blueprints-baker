@@ -2,11 +2,11 @@
 
 - **Status:** Accepted
 - **Date:** 2026-11-16
-- **Deciders:** RoboCraft maintainers
+- **Deciders:** Blueprints Baker maintainers
 
 ## Context
 
-RoboCraft stores a project aggregate with strict relationships, commercial snapshots, evolving
+Blueprints Baker stores a project aggregate with strict relationships, commercial snapshots, evolving
 engineering JSON, and an append-only agent audit log. The API is async because model and supplier
 calls will be I/O-bound.
 

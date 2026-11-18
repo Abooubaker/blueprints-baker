@@ -1,7 +1,7 @@
 [project]
-name = "robocraft-api"
+name = "blueprints-baker-api"
 version = "0.1.0"
-description = "RoboCraft API — AI-powered robotics building assistant"
+description = "Blueprints Baker API — AI-powered robotics building assistant"
 readme = "README.md"
 requires-python = ">=3.12,<3.15"
 license = { text = "MIT" }

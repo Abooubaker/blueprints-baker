@@ -103,11 +103,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get the latest wiring plan */
+        /** Get the latest electrical plan */
         get: operations["get_electrical_api_v1_projects__project_id__electrical_get"];
         put?: never;
         /**
-         * Generate the wiring plan
+         * Generate the electrical plan
          * @description Runs the deterministic planner, component research, and electrical agents, then returns the validated plan, bill of materials, and export formats.
          */
         post: operations["generate_electrical_api_v1_projects__project_id__electrical_post"];
@@ -124,7 +124,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Download a wiring export */
+        /** Download an export */
         get: operations["export_electrical_api_v1_projects__project_id__electrical_export__export_format__get"];
         put?: never;
         post?: never;
@@ -710,6 +710,59 @@ export interface components {
             /** Voltage V */
             voltage_v?: number | null;
         };
+        /**
+         * ElectricalPinoutEntry
+         * @description One row of the every-pin wiring table.
+         *
+         *     A pin can fan out (for example a battery positive feeding a regulator and a
+         *     motor driver), so destinations is a list rather than a single endpoint.
+         *     Unconnected pins are still present with ``connected=False`` so the table is
+         *     a complete inventory of the physical part.
+         */
+        ElectricalPinoutEntry: {
+            /**
+             * Connected
+             * @default false
+             */
+            connected: boolean;
+            /** Destinations */
+            destinations?: components["schemas"]["PinDestination"][];
+            /**
+             * Net
+             * @default
+             */
+            net: string;
+            /** Part */
+            part: string;
+            /** Pin */
+            pin: string;
+            /**
+             * Pin Kind
+             * @default
+             */
+            pin_kind: string;
+            /** Ref */
+            ref: string;
+            /**
+             * Role
+             * @default
+             */
+            role: string;
+            /**
+             * Signal
+             * @default
+             */
+            signal: string;
+            /** Voltage V */
+            voltage_v?: number | null;
+            /**
+             * Wire Color
+             * @default
+             */
+            wire_color: string;
+            /** Wire Gauge Awg */
+            wire_gauge_awg?: number | null;
+        };
         /** ElectricalPlan */
         ElectricalPlan: {
             /** Connections */
@@ -729,6 +782,8 @@ export interface components {
             pin_map?: {
                 [key: string]: string;
             };
+            /** Pinout */
+            pinout?: components["schemas"]["ElectricalPinoutEntry"][];
             power_budget?: components["schemas"]["PowerBudget"];
             /** Power Rails */
             power_rails?: components["schemas"]["PowerRail"][];
@@ -749,7 +804,7 @@ export interface components {
              * Format
              * @enum {string}
              */
-            format: "json" | "wiring-csv" | "bom-csv" | "kicad-netlist" | "svg" | "markdown";
+            format: "json" | "wiring-csv" | "pinout-csv" | "bom-csv" | "kicad-netlist" | "kicad-schematic" | "svg" | "markdown";
             /** Label */
             label: string;
             /** Media Type */
@@ -861,6 +916,36 @@ export interface components {
             /** Items */
             items: components["schemas"]["ProjectSummary"][];
             meta: components["schemas"]["PageMeta"];
+        };
+        /**
+         * PinDestination
+         * @description Where one physical pin terminates, including the wire it travels on.
+         */
+        PinDestination: {
+            /**
+             * Connector
+             * @default
+             */
+            connector: string;
+            /**
+             * Kind
+             * @default signal
+             */
+            kind: string;
+            /**
+             * Net
+             * @default
+             */
+            net: string;
+            /** Pin */
+            pin: string;
+            /** Ref */
+            ref: string;
+            /**
+             * Signal
+             * @default
+             */
+            signal: string;
         };
         /** PowerBudget */
         PowerBudget: {
@@ -1615,7 +1700,7 @@ export interface operations {
             header?: never;
             path: {
                 project_id: string;
-                export_format: "json" | "wiring-csv" | "bom-csv" | "kicad-netlist" | "svg" | "markdown";
+                export_format: "json" | "wiring-csv" | "pinout-csv" | "bom-csv" | "kicad-netlist" | "kicad-schematic" | "svg" | "markdown";
             };
             cookie?: never;
         };

@@ -45,19 +45,19 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: robocraft
-          POSTGRES_PASSWORD: robocraft
-          POSTGRES_DB: robocraft
+          POSTGRES_USER: blueprints
+          POSTGRES_PASSWORD: blueprints
+          POSTGRES_DB: blueprints
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U robocraft -d robocraft"
+          --health-cmd "pg_isready -U blueprints -d blueprints"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
     env:
       ENVIRONMENT: test
-      DATABASE_URL: postgresql+asyncpg://robocraft:robocraft@localhost:5432/robocraft
+      DATABASE_URL: postgresql+asyncpg://blueprints:blueprints@localhost:5432/blueprints
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -147,7 +147,7 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: "1"
           NEXT_PUBLIC_DEMO_MODE: "true"
-          NEXT_PUBLIC_BASE_PATH: /robocraft
+          NEXT_PUBLIC_BASE_PATH: /blueprints-baker
           NEXT_PUBLIC_API_URL: ""
       - name: Scan for credential-shaped strings
         run: bash scripts/scan_secrets.sh

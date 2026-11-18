@@ -10,9 +10,11 @@
   ],
   "exports": [
     "bill-of-materials.csv",
+    "blueprints-baker.kicad_sch",
+    "blueprints-baker.net",
     "build-guide.md",
     "electrical-plan.json",
-    "robocraft.net",
+    "pinout.csv",
     "wiring.csv",
     "wiring.svg"
   ],

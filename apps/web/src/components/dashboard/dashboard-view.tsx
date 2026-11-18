@@ -9,7 +9,6 @@ import {
   FolderKanban,
   Layers,
   Plus,
-  RefreshCw,
   Search,
   Sparkles,
   TriangleAlert,
@@ -148,27 +147,15 @@ export function DashboardView() {
                 <span className="text-faint font-mono text-[10px]">{total}</span>
               ) : null}
             </div>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search className="text-faint absolute top-1/2 left-3 size-3.5 -translate-y-1/2" />
-                <Input
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
-                  placeholder="Filter projects…"
-                  className="h-9 w-[190px] pl-8 text-xs"
-                  aria-label="Filter projects"
-                />
-              </div>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => void reload()}
-                aria-label="Refresh projects"
-                title="Refresh projects"
-              >
-                <RefreshCw className={cn("size-4", loading && "animate-spin")} />
-              </Button>
+            <div className="relative">
+              <Search className="text-faint absolute top-1/2 left-3 size-3.5 -translate-y-1/2" />
+              <Input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Filter projects…"
+                className="h-9 w-[190px] pl-8 text-xs"
+                aria-label="Filter projects"
+              />
             </div>
           </div>
 
@@ -219,7 +206,7 @@ export function DashboardView() {
             <EmptyState
               icon={<Sparkles className="size-4" />}
               title="Describe your first robot"
-              description="RoboCraft starts with a sentence, not a parts list. Create a project and tell us what you want to build."
+              description="Blueprints Baker starts with a sentence, not a parts list. Create a project and tell us what you want to build."
               action={
                 <ButtonLink href="/projects/new" size="sm">
                   <Plus className="size-3.5" /> New robot project
@@ -242,7 +229,7 @@ export function DashboardView() {
                 { label: "Project API & database", done: true, icon: Layers },
                 { label: "Agent contracts & audit trail", done: true, icon: Bot },
                 { label: "Component catalog", done: false, icon: Layers },
-                { label: "Wiring & firmware modules", done: false, icon: CircuitBoard },
+                { label: "Schematic & firmware modules", done: false, icon: CircuitBoard },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-2.5 text-xs">
                   <span
@@ -292,7 +279,7 @@ export function DashboardView() {
           </Card>
 
           <a
-            href="https://github.com/Abooubaker/robocraft"
+            href="https://github.com/Abooubaker/blueprints-baker"
             target="_blank"
             rel="noreferrer"
             className="rounded-panel border-line-soft bg-surface text-muted hover:border-line hover:text-ink flex items-center justify-between border px-4 py-3 text-xs transition-colors"

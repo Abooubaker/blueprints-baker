@@ -81,7 +81,7 @@ class ComponentResearchAgent(BaseAgent):
                 category=profile.category.value,
                 specs=_candidate_specs(profile.key),
                 price_usd=profile.price_usd,
-                supplier="RoboCraft curated library",
+                supplier="Blueprints Baker curated library",
                 supplier_url=None,
                 availability="in_stock",
                 compatibility_notes=[profile.notes] if profile.notes else [],
@@ -120,7 +120,7 @@ class ComponentResearchAgent(BaseAgent):
             unresolved_requirements=unresolved,
             compatibility_notes=compatibility_notes,
             total_estimated_usd=total,
-            sources=["RoboCraft curated component library v1.0"],
+            sources=["Blueprints Baker curated component library v1.0"],
         )
 
 

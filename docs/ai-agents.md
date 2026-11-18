@@ -1,6 +1,6 @@
 # AI agents
 
-RoboCraft decomposes robot design into six specialized agents. Each agent owns one artifact and
+Blueprints Baker decomposes robot design into six specialized agents. Each agent owns one artifact and
 works against a typed contract. The orchestrator is deterministic: it resolves dependencies, runs
 agents in a fixed order, validates outputs before accepting them, and records every execution.
 
@@ -85,7 +85,7 @@ reject unknown fields (`extra="forbid"`) to surface drift immediately.
 | --- | --- |
 | `RobotSpecificationDraft` | Summary, use case, robot type, difficulty, platform, drive type, environment, dimensions, requirements, constraints, success criteria, open questions, confidence |
 | `ComponentResearchOutput` | Role-based bill of materials, candidates with specs/price/supplier, alternatives, compatibility notes, unresolved requirements |
-| `ElectricalPlan` | Nodes, typed connections, power budget, pin map, safety checks, warnings, wiring steps |
+| `ElectricalPlan` | Nodes, typed connections, full pinout, power budget, safety checks, warnings, wiring steps |
 | `ProgrammingOutput` | Platform, language/framework, code files, libraries, pin assignments, setup/upload/validation steps |
 | `MechanicalOutput` | Chassis, parts, ordered assembly steps, drawing references, manufacturing notes, warnings |
 | `CostEstimate` | Line items, subtotal/shipping/contingency/total, budget status, alternatives, assumptions |

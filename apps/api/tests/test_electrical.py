@@ -38,6 +38,15 @@ async def test_generate_electrical_plan_has_real_nets(client: AsyncClient) -> No
     assert len(plan["connections"]) >= 15
     assert {"GND", "VBAT", "5V_CTRL"} <= {rail["name"] for rail in plan["power_rails"]}
     assert plan["pin_map"]
+    assert len(plan["pinout"]) == sum(len(node["pins"]) for node in plan["nodes"])
+    assert {entry["ref"] for entry in plan["pinout"]} == {node["ref"] for node in plan["nodes"]}
+    for entry in plan["pinout"]:
+        assert entry["connected"] == bool(entry["destinations"])
+        if entry["connected"]:
+            assert entry["net"]
+            assert all(
+                destination["ref"] and destination["pin"] for destination in entry["destinations"]
+            )
     assert artifact["bom"]["bill_of_materials"]
     assert artifact["total_estimated_usd"] > 0
 
@@ -55,7 +64,7 @@ async def test_generate_electrical_plan_has_real_nets(client: AsyncClient) -> No
     fetched = await client.get(f"/api/v1/projects/{artifact['project_id']}/electrical")
     assert fetched.status_code == 200
     assert fetched.json()["agent_run_id"] == artifact["agent_run_id"]
-    assert len(fetched.json()["export_formats"]) == 6
+    assert len(fetched.json()["export_formats"]) == 8
 
 
 async def test_wiring_csv_and_bom_csv_are_parsable(client: AsyncClient) -> None:
@@ -76,6 +85,17 @@ async def test_wiring_csv_and_bom_csv_are_parsable(client: AsyncClient) -> None:
     assert len(bom_rows) == len(artifact["bom"]["bill_of_materials"])
     assert all(row["unit_price_usd"] for row in bom_rows)
 
+    pinout = await client.get(f"{base}/pinout-csv")
+    assert pinout.status_code == 200
+    assert 'filename="pinout.csv"' in pinout.headers["content-disposition"]
+    pinout_rows = list(csv.DictReader(io.StringIO(pinout.text)))
+    assert len(pinout_rows) == len(artifact["plan"]["pinout"])
+    assert {"ref", "pin", "net", "destinations", "wire_gauge_awg"} <= set(pinout_rows[0])
+    connected = [row for row in pinout_rows if row["connected"] == "yes"]
+    assert connected
+    assert all(row["destinations"] for row in connected)
+    assert any("." in row["destinations"] for row in connected)
+
 
 async def test_svg_netlist_and_markdown_exports_are_well_formed(client: AsyncClient) -> None:
     artifact = await generate_electrical(client)
@@ -95,11 +115,31 @@ async def test_svg_netlist_and_markdown_exports_are_well_formed(client: AsyncCli
     assert "(nets" in text
     assert text.count("(") == text.count(")")
 
+    schematic = await client.get(f"{base}/kicad-schematic")
+    assert schematic.status_code == 200
+    assert 'filename="blueprints-baker.kicad_sch"' in schematic.headers["content-disposition"]
+    schematic_text = schematic.text
+    assert schematic_text.startswith("(kicad_sch")
+    assert schematic_text.count("(") == schematic_text.count(")")
+    assert "(lib_symbols" in schematic_text
+    for node in artifact["plan"]["nodes"]:
+        assert f"blueprints-baker:{node['ref']}" in schematic_text
+        for pin in node["pins"]:
+            pin_name = pin["name"]
+            assert f'(name "{pin_name}"' in schematic_text
+    assert schematic_text.count("(wire") == len(artifact["plan"]["pinout"])
+    assert schematic_text.count("(global_label") == len(artifact["plan"]["pinout"])
+    labels = {entry["net"] for entry in artifact["plan"]["pinout"] if entry["net"]}
+    assert labels
+    for net in labels:
+        assert f'global_label "{net}"' in schematic_text
+
     guide = await client.get(f"{base}/markdown")
     assert guide.status_code == 200
     assert guide.headers["content-type"].startswith("text/markdown")
     assert "wiring guide" in guide.text
-    assert "## Pin map" in guide.text
+    assert "## Full pinout" in guide.text
+    assert "| Ref | Part | Pin | Net | Signal | Destination | Wire |" in guide.text
     assert "## Wiring order" in guide.text
 
     raw = await client.get(f"{base}/json")

@@ -24,7 +24,7 @@ class ElectricalEngineeringAgent(BaseAgent):
     name = AgentName.ELECTRICAL
     display_name = "Electrical Engineering"
     description = (
-        "Creates pin maps, nets, power budgets, and wiring steps, then validates "
+        "Creates a full pinout, nets, power budgets, and wiring steps, then validates "
         "voltage, logic-level, grounding, current, and pin conflicts."
     )
     depends_on = (AgentName.PLANNER, AgentName.COMPONENT_RESEARCH)

@@ -25,7 +25,7 @@ class Settings(BaseSettings):
         case_sensitive=False,
     )
 
-    app_name: str = "RoboCraft API"
+    app_name: str = "Blueprints Baker API"
     app_version: str = "0.1.0"
     environment: Environment = "development"
     debug: bool = False
@@ -36,7 +36,7 @@ class Settings(BaseSettings):
         default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000"]
     )
 
-    database_url: str = "postgresql+asyncpg://robocraft:robocraft@localhost:5432/robocraft"
+    database_url: str = "postgresql+asyncpg://blueprints:blueprints@localhost:5432/blueprints"
     database_echo: bool = False
     database_pool_size: int = 5
     database_max_overflow: int = 10

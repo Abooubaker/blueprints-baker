@@ -115,7 +115,7 @@ export default async function ModulePage({
               Project overview
             </ButtonLink>
             <a
-              href="https://github.com/Abooubaker/robocraft/issues"
+              href="https://github.com/Abooubaker/blueprints-baker/issues"
               target="_blank"
               rel="noreferrer"
               className="text-faint hover:text-signal ml-auto flex items-center gap-1 text-[11px]"

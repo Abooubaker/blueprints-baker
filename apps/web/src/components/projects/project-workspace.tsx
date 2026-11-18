@@ -222,40 +222,10 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
         </div>
 
         <div className="flex shrink-0 flex-wrap items-center gap-2">
-          <ButtonLink href={`/projects/${project.id}/wiring`} variant="secondary" size="md">
-            <CircuitBoard className="size-4" /> Open wiring
+          <ButtonLink href={`/projects/${project.id}/wiring`} size="md">
+            <CircuitBoard className="size-4" /> Open schematic
           </ButtonLink>
-          {DEMO_MODE ? (
-            <Badge variant="outline">Precomputed · read-only</Badge>
-          ) : (
-            <>
-              <Button
-                variant="secondary"
-                size="md"
-                onClick={() => void runAgents("all")}
-                disabled={running !== null}
-              >
-                {running === "all" ? (
-                  <Loader2 className="size-4 animate-spin" />
-                ) : (
-                  <Play className="size-3.5" />
-                )}
-                Run pipeline
-              </Button>
-              <Button
-                size="md"
-                onClick={() => void runAgents(["robot_planner"])}
-                disabled={running !== null}
-              >
-                {running !== null && running !== "all" ? (
-                  <Loader2 className="size-4 animate-spin" />
-                ) : (
-                  <Bot className="size-4" />
-                )}
-                Run planner
-              </Button>
-            </>
-          )}
+          {DEMO_MODE ? <Badge variant="outline">Precomputed · read-only</Badge> : null}
         </div>
       </div>
 
@@ -313,7 +283,7 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
             </p>
             <p className="text-muted mt-1 leading-relaxed">
               {runResult.status === "not_implemented"
-                ? "The planner, component research, and wiring agents completed and stored validated artifacts. Programming, mechanical, and cost agents are still placeholders; open Wiring to inspect the generated plan."
+                ? "The planner, component research, and electrical agents completed and stored validated artifacts. Programming, mechanical, and cost agents are still placeholders; open Schematic & pinout to inspect every connection."
                 : "Agent results are stored in the project audit trail below."}
             </p>
           </div>
@@ -480,7 +450,7 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
           </Card>
 
           <Card>
-            <CardHeader className="flex-row items-center justify-between space-y-0">
+            <CardHeader className="flex-row items-start justify-between space-y-0">
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Bot className="text-signal/80 size-4" /> Agent pipeline
@@ -489,7 +459,25 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
                   Typed contracts, deterministic dependency order, audited runs.
                 </p>
               </div>
-              <Badge variant="outline">{AGENTS.length} agents</Badge>
+              {DEMO_MODE ? (
+                <Badge variant="outline">read-only</Badge>
+              ) : (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => void runAgents("all")}
+                  disabled={running !== null}
+                >
+                  {running !== null ? (
+                    <Loader2 className="size-3.5 animate-spin" />
+                  ) : runs.length ? (
+                    <RefreshCw className="size-3.5" />
+                  ) : (
+                    <Play className="size-3.5" />
+                  )}
+                  {runs.length ? "Run again" : "Run pipeline"}
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               <div className="mb-5">
@@ -615,7 +603,7 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
               Product capabilities are delivered through milestones M2–M10.
             </p>
             <a
-              href="https://github.com/Abooubaker/robocraft"
+              href="https://github.com/Abooubaker/blueprints-baker"
               target="_blank"
               rel="noreferrer"
               className="text-muted hover:text-signal mt-3 flex items-center gap-1 text-[11px]"

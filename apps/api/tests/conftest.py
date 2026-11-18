@@ -25,7 +25,7 @@ def test_settings(tmp_path: Path) -> Settings:
         _env_file=None,
         environment="test",
         log_level="WARNING",
-        database_url=f"sqlite+aiosqlite:///{tmp_path / 'robocraft-test.db'}",
+        database_url=f"sqlite+aiosqlite:///{tmp_path / 'blueprints-baker-test.db'}",
         ai_provider="mock",
     )
 

@@ -28,7 +28,9 @@ from app.ai.contracts import (
     ElectricalIssue,
     ElectricalNode,
     ElectricalNodePin,
+    ElectricalPinoutEntry,
     ElectricalPlan,
+    PinDestination,
     PowerBudget,
     PowerRail,
     RobotSpecificationDraft,
@@ -1277,6 +1279,66 @@ def _finalize_connected_pins(design: _Design) -> None:
             pin.connected = (node.ref, pin.name) in used
 
 
+def _build_pinout(design: _Design) -> list[ElectricalPinoutEntry]:
+    """Expand every physical pin into an exact, destination-aware wiring row."""
+
+    rows: dict[tuple[str, str], ElectricalPinoutEntry] = {}
+    for node in design.nodes:
+        for pin in node.pins:
+            rows[(node.ref, pin.name)] = ElectricalPinoutEntry(
+                ref=node.ref,
+                part=node.label,
+                role=node.role,
+                pin=pin.name,
+                pin_kind=pin.kind,
+                voltage_v=pin.voltage_v,
+                connected=pin.connected,
+            )
+
+    def attach(
+        entry: ElectricalPinoutEntry,
+        *,
+        destination_ref: str,
+        destination_pin: str,
+        connection: ElectricalConnection,
+    ) -> None:
+        if not entry.net:
+            entry.net = connection.net
+            entry.signal = connection.signal
+            entry.wire_color = connection.wire_color
+            entry.wire_gauge_awg = connection.wire_gauge_awg
+        entry.destinations.append(
+            PinDestination(
+                ref=destination_ref,
+                pin=destination_pin,
+                net=connection.net,
+                signal=connection.signal,
+                kind=connection.kind,
+                connector=connection.connector,
+            )
+        )
+
+    for connection in design.connections:
+        source = rows.get((connection.from_ref, connection.from_pin))
+        target = rows.get((connection.to_ref, connection.to_pin))
+        if source is not None:
+            attach(
+                source,
+                destination_ref=connection.to_ref,
+                destination_pin=connection.to_pin,
+                connection=connection,
+            )
+        if target is not None:
+            attach(
+                target,
+                destination_ref=connection.from_ref,
+                destination_pin=connection.from_pin,
+                connection=connection,
+            )
+
+    return list(rows.values())
+
+
 def build_electrical_plan(
     spec: RobotSpecificationDraft,
     bom: ComponentResearchOutput,
@@ -1305,6 +1367,7 @@ def build_electrical_plan(
     return ElectricalPlan(
         nodes=design.nodes,
         connections=design.connections,
+        pinout=_build_pinout(design),
         power_budget=budget,
         power_rails=rails,
         pin_map=design.pin_map,

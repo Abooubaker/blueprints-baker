@@ -1,4 +1,4 @@
-# Contributing to RoboCraft
+# Contributing to Blueprints Baker
 
 Thanks for helping build a better way to design robots. This document covers the workflow, quality
 bar, and conventions used in this repository.
@@ -19,8 +19,8 @@ author. Harassment or discrimination is not welcome.
 ## Local setup
 
 ```bash
-git clone https://github.com/Abooubaker/robocraft.git
-cd robocraft
+git clone https://github.com/Abooubaker/blueprints-baker.git
+cd blueprints-baker
 docker compose up -d db
 
 cd apps/api

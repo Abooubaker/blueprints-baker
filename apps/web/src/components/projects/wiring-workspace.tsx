@@ -6,10 +6,10 @@ import {
   BatteryCharging,
   Cable,
   CheckCircle2,
+  ChevronDown,
   CircuitBoard,
   Cpu,
   Download,
-  FileJson,
   Gauge,
   Info,
   Loader2,
@@ -45,9 +45,9 @@ import { cn, formatDate } from "@/lib/utils";
 type TabKey = "diagram" | "connections" | "pins" | "power" | "validation" | "steps";
 
 const TABS: { key: TabKey; label: string; icon: typeof CircuitBoard }[] = [
-  { key: "diagram", label: "Diagram", icon: Waypoints },
-  { key: "connections", label: "Connections", icon: Table2 },
-  { key: "pins", label: "Pin map", icon: Cpu },
+  { key: "diagram", label: "Schematic", icon: Waypoints },
+  { key: "pins", label: "Pinout", icon: Cpu },
+  { key: "connections", label: "Nets", icon: Table2 },
   { key: "power", label: "Power", icon: BatteryCharging },
   { key: "validation", label: "Validation", icon: ShieldCheck },
   { key: "steps", label: "Build order", icon: Cable },
@@ -57,27 +57,27 @@ const KIND_STYLES: Record<ConnectionKind, { label: string; chip: string; stroke:
   power: {
     label: "Power",
     chip: "border-danger/25 bg-danger/10 text-danger",
-    stroke: "#f26d6d",
+    stroke: "#ff9b9b",
   },
   ground: {
     label: "Ground",
     chip: "border-line bg-elevated text-muted",
-    stroke: "#5f6e68",
+    stroke: "#7fa8c8",
   },
   signal: {
     label: "Signal",
     chip: "border-aqua/25 bg-aqua/10 text-aqua",
-    stroke: "#5cdbd3",
+    stroke: "#6fd6ff",
   },
   motor: {
     label: "Motor",
     chip: "border-warn/25 bg-warn/10 text-warn",
-    stroke: "#f5b544",
+    stroke: "#ffcc7a",
   },
   bus: {
     label: "Bus",
     chip: "border-signal/25 bg-signal/10 text-signal",
-    stroke: "#c9f75a",
+    stroke: "#eaf6ff",
   },
 };
 
@@ -93,14 +93,14 @@ const NODE_ORDER: ElectricalNode["kind"][] = [
 ];
 
 const NODE_STYLE: Record<ElectricalNode["kind"], { stroke: string; fill: string }> = {
-  power: { stroke: "rgba(242,109,109,0.55)", fill: "rgba(242,109,109,0.07)" },
-  regulator: { stroke: "rgba(245,181,68,0.55)", fill: "rgba(245,181,68,0.06)" },
-  controller: { stroke: "rgba(201,247,90,0.55)", fill: "rgba(201,247,90,0.06)" },
-  driver: { stroke: "rgba(92,219,211,0.55)", fill: "rgba(92,219,211,0.06)" },
-  motor: { stroke: "rgba(245,181,68,0.45)", fill: "rgba(245,181,68,0.05)" },
-  actuator: { stroke: "rgba(245,181,68,0.35)", fill: "rgba(245,181,68,0.04)" },
-  sensor: { stroke: "rgba(92,219,211,0.35)", fill: "rgba(92,219,211,0.04)" },
-  other: { stroke: "rgba(95,110,104,0.7)", fill: "rgba(24,35,38,0.9)" },
+  power: { stroke: "rgba(255,155,155,0.65)", fill: "rgba(255,155,155,0.07)" },
+  regulator: { stroke: "rgba(255,204,122,0.65)", fill: "rgba(255,204,122,0.06)" },
+  controller: { stroke: "rgba(234,246,255,0.8)", fill: "rgba(234,246,255,0.06)" },
+  driver: { stroke: "rgba(111,214,255,0.7)", fill: "rgba(111,214,255,0.06)" },
+  motor: { stroke: "rgba(255,204,122,0.5)", fill: "rgba(255,204,122,0.05)" },
+  actuator: { stroke: "rgba(255,204,122,0.4)", fill: "rgba(255,204,122,0.04)" },
+  sensor: { stroke: "rgba(111,214,255,0.5)", fill: "rgba(111,214,255,0.05)" },
+  other: { stroke: "rgba(127,168,200,0.8)", fill: "rgba(11,47,79,0.9)" },
 };
 
 const SEVERITY: Record<
@@ -136,21 +136,49 @@ function milliamps(value: number | null | undefined): string {
   return value >= 1000 ? `${(value / 1000).toFixed(2)} A` : `${value.toFixed(0)} mA`;
 }
 
+const DIAGRAM_NODE_WIDTH = 258;
+const DIAGRAM_ROW = 15;
+const DIAGRAM_HEADER = 42;
+
 function nodeLayout(plan: ElectricalPlan) {
-  const rows = new Map<number, number>();
-  const positions = new Map<string, { x: number; y: number; column: number }>();
+  const usedKinds = NODE_ORDER.filter((kind) => plan.nodes.some((node) => node.kind === kind));
+  const slot = new Map(usedKinds.map((kind, index) => [kind, index]));
+  const nodesByColumn = new Map<number, ElectricalNode[]>();
   for (const node of plan.nodes) {
-    const column = Math.max(0, NODE_ORDER.indexOf(node.kind));
-    const row = rows.get(column) ?? 0;
-    rows.set(column, row + 1);
-    positions.set(node.ref, { x: 20 + column * 196, y: 28 + row * 96, column });
+    const column = slot.get(node.kind) ?? 0;
+    nodesByColumn.set(column, [...(nodesByColumn.get(column) ?? []), node]);
   }
-  const maxRows = Math.max(1, ...rows.values());
+
+  const positions = new Map<string, { x: number; y: number; height: number }>();
+  const pinRows = new Map<string, number>();
+  let maxBottom = 320;
+  for (const [column, columnNodes] of nodesByColumn) {
+    let y = 24;
+    for (const node of columnNodes) {
+      const height = DIAGRAM_HEADER + Math.max(1, node.pins.length) * DIAGRAM_ROW + 10;
+      positions.set(node.ref, { x: 20 + column * 292, y, height });
+      maxBottom = Math.max(maxBottom, y + height);
+      node.pins.forEach((pin, index) => {
+        pinRows.set(`${node.ref}:${pin.name}`, y + DIAGRAM_HEADER + index * DIAGRAM_ROW + 7);
+      });
+      y += height + 18;
+    }
+  }
+
   return {
     positions,
-    width: 20 + NODE_ORDER.length * 196,
-    height: 28 + maxRows * 96,
+    pinRows,
+    width: 40 + Math.max(1, usedKinds.length) * 292,
+    height: maxBottom + 28,
   };
+}
+
+function destinationLabel(plan: ElectricalPlan, ref: string, pin: string): string {
+  const entry = plan.pinout.find((item) => item.ref === ref && item.pin === pin);
+  if (!entry || entry.destinations.length === 0) return "not connected";
+  return entry.destinations
+    .map((destination) => `${destination.ref}.${destination.pin}`)
+    .join(", ");
 }
 
 function Diagram({
@@ -166,7 +194,7 @@ function Diagram({
   onSelectNode: (ref: string | null) => void;
   onSelectNet: (net: string | null) => void;
 }) {
-  const { positions, width, height } = useMemo(() => nodeLayout(plan), [plan]);
+  const { positions, pinRows, width, height } = useMemo(() => nodeLayout(plan), [plan]);
   const matchingConnections = useMemo(
     () =>
       plan.connections.filter(
@@ -186,13 +214,13 @@ function Diagram({
     <div className="border-line-soft bg-canvas/60 overflow-x-auto rounded-xl border">
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        className="min-w-[760px]"
+        className="min-w-[980px]"
         role="img"
-        aria-label="Interactive wiring diagram"
+        aria-label="Pin-level wiring schematic"
       >
         <defs>
           <pattern id="wiring-grid" width="24" height="24" patternUnits="userSpaceOnUse">
-            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#182326" strokeWidth="1" />
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#ffffff" strokeOpacity="0.06" />
           </pattern>
         </defs>
         <rect width={width} height={height} fill="url(#wiring-grid)" />
@@ -201,22 +229,24 @@ function Diagram({
           const from = positions.get(connection.from_ref);
           const to = positions.get(connection.to_ref);
           if (!from || !to) return null;
+          const y1 = pinRows.get(`${connection.from_ref}:${connection.from_pin}`);
+          const y2 = pinRows.get(`${connection.to_ref}:${connection.to_pin}`);
+          if (y1 === undefined || y2 === undefined) return null;
           const active =
             matchingConnections.includes(connection) &&
             (selectedNode !== null || selectedNet !== null);
-          const x1 = from.x + 78;
-          const y1 = from.y + 29;
-          const x2 = to.x + 78;
-          const y2 = to.y + 29;
-          const middle = (x1 + x2) / 2;
+          const x1 = from.x + DIAGRAM_NODE_WIDTH;
+          const x2 = to.x + DIAGRAM_NODE_WIDTH;
+          const mid = Math.max(x1, x2) + 18;
           return (
             <path
               key={`${connection.net}-${connection.from_ref}-${connection.from_pin}-${index}`}
-              d={`M ${x1} ${y1} C ${middle} ${y1}, ${middle} ${y2}, ${x2} ${y2}`}
+              d={`M ${x1} ${y1} H ${mid} V ${y2} H ${x2}`}
               fill="none"
               stroke={KIND_STYLES[connection.kind].stroke}
-              strokeWidth={active ? 2.4 : 1.2}
-              strokeOpacity={selectedNet === connection.net ? 0.95 : active ? 0.7 : 0.2}
+              strokeWidth={active ? 2.2 : 1.1}
+              strokeOpacity={selectedNet === connection.net ? 0.95 : active ? 0.72 : 0.26}
+              strokeLinejoin="round"
               className="cursor-pointer transition-all"
               onClick={() => onSelectNet(connection.net)}
             >
@@ -237,7 +267,7 @@ function Diagram({
             <g
               key={node.ref}
               transform={`translate(${position.x} ${position.y})`}
-              opacity={dimmed ? 0.38 : 1}
+              opacity={dimmed ? 0.32 : 1}
               className="cursor-pointer transition-opacity"
               onClick={() => onSelectNode(selectedNode === node.ref ? null : node.ref)}
             >
@@ -245,35 +275,86 @@ function Diagram({
                 {node.label} · {node.ref}
               </title>
               <rect
-                width={156}
-                height={58}
-                rx={10}
-                strokeWidth={1.2}
+                width={DIAGRAM_NODE_WIDTH}
+                height={position.height}
+                rx={4}
+                strokeWidth={1.1}
                 stroke={NODE_STYLE[node.kind].stroke}
                 fill={NODE_STYLE[node.kind].fill}
               />
+              <line
+                x1={0}
+                y1={DIAGRAM_HEADER}
+                x2={DIAGRAM_NODE_WIDTH}
+                y2={DIAGRAM_HEADER}
+                stroke="#eaf6ff"
+                strokeOpacity={0.26}
+              />
               <text
-                x={11}
-                y={21}
+                x={10}
+                y={19}
                 fontFamily="JetBrains Mono, monospace"
                 fontSize={11}
-                fill="#c9f75a"
+                fill="#eaf6ff"
               >
                 {node.ref}
               </text>
-              <text x={11} y={38} fontFamily="Inter, sans-serif" fontSize={10} fill="#edf2ee">
-                {node.label.length > 25 ? `${node.label.slice(0, 24)}…` : node.label}
+              <text x={44} y={19} fontFamily="Inter, sans-serif" fontSize={10} fill="#f2f8ff">
+                {node.label.length > 26 ? `${node.label.slice(0, 25)}…` : node.label}
               </text>
               <text
-                x={11}
-                y={51}
+                x={10}
+                y={33}
                 fontFamily="JetBrains Mono, monospace"
-                fontSize={7.5}
-                fill="#5f6e68"
+                fontSize={7}
+                fill="#7fa8c8"
               >
-                {node.kind.toUpperCase()} · {node.pins.filter((pin) => pin.connected).length} PIN
-                {node.pins.filter((pin) => pin.connected).length === 1 ? "" : "S"}
+                {node.kind.toUpperCase()} · {node.pins.length} PINS
               </text>
+              <text
+                x={DIAGRAM_NODE_WIDTH - 10}
+                y={33}
+                textAnchor="end"
+                fontFamily="JetBrains Mono, monospace"
+                fontSize={7}
+                fill="#7fa8c8"
+              >
+                PIN → DESTINATION
+              </text>
+              {node.pins.map((pin, index) => {
+                const destination = destinationLabel(plan, node.ref, pin.name);
+                const connected = destination !== "not connected";
+                const rowY = DIAGRAM_HEADER + index * DIAGRAM_ROW;
+                return (
+                  <g key={pin.name}>
+                    <text
+                      x={10}
+                      y={rowY + 11}
+                      fontFamily="JetBrains Mono, monospace"
+                      fontSize={8.5}
+                      fill={connected ? "#f2f8ff" : "#7fa8c8"}
+                    >
+                      {pin.name.length > 15 ? `${pin.name.slice(0, 14)}…` : pin.name}
+                    </text>
+                    <text
+                      x={DIAGRAM_NODE_WIDTH - 10}
+                      y={rowY + 11}
+                      textAnchor="end"
+                      fontFamily="JetBrains Mono, monospace"
+                      fontSize={8}
+                      fill={connected ? "#6fd6ff" : "#7fa8c8"}
+                    >
+                      {destination.length > 26 ? `${destination.slice(0, 25)}…` : destination}
+                    </text>
+                    <circle
+                      cx={DIAGRAM_NODE_WIDTH}
+                      cy={rowY + 7}
+                      r={1.6}
+                      fill={connected ? "#6fd6ff" : "#2d6894"}
+                    />
+                  </g>
+                );
+              })}
             </g>
           );
         })}
@@ -286,6 +367,9 @@ function Diagram({
             {KIND_STYLES[kind].label}
           </span>
         ))}
+        <span className="text-faint ml-auto font-mono text-[9px]">
+          Every row names the exact pin and its destination.
+        </span>
       </div>
     </div>
   );
@@ -315,60 +399,132 @@ function Stat({
 }
 
 function PinMap({ plan }: { plan: ElectricalPlan }) {
-  const controllers = plan.nodes.filter((node) => node.kind === "controller");
-  const [controllerRef, setControllerRef] = useState(controllers[0]?.ref ?? "");
-  const controller = controllers.find((node) => node.ref === controllerRef) ?? controllers[0];
+  const [search, setSearch] = useState("");
+  const [spareOnly, setSpareOnly] = useState(false);
+  const entries = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return plan.pinout.filter((entry) => {
+      if (spareOnly && entry.connected) return false;
+      if (!query) return true;
+      return [
+        entry.ref,
+        entry.part,
+        entry.pin,
+        entry.pin_kind,
+        entry.net,
+        entry.signal,
+        ...entry.destinations.flatMap((destination) => [destination.ref, destination.pin]),
+      ]
+        .join(" ")
+        .toLowerCase()
+        .includes(query);
+    });
+  }, [plan.pinout, search, spareOnly]);
 
-  if (!controller) {
-    return <p className="text-faint text-xs">No controller is present in this plan.</p>;
-  }
-
-  const pinMap = plan.pin_map;
+  const wired = plan.pinout.filter((entry) => entry.connected).length;
 
   return (
-    <div className="space-y-4">
-      {controllers.length > 1 ? (
-        <div className="flex flex-wrap gap-1.5">
-          {controllers.map((item) => (
-            <Button
-              key={item.ref}
-              size="sm"
-              variant={item.ref === controller.ref ? "secondary" : "ghost"}
-              onClick={() => setControllerRef(item.ref)}
-            >
-              {item.ref} · {item.label}
-            </Button>
-          ))}
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative">
+          <Search className="text-faint absolute top-1/2 left-3 size-3.5 -translate-y-1/2" />
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search every pin and destination…"
+            className="h-9 w-[280px] pl-8 text-xs"
+            aria-label="Search the full pinout"
+          />
         </div>
-      ) : null}
-      <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-        {controller.pins.map((pin) => {
-          const signal = pinMap[pin.name];
-          return (
-            <div
-              key={pin.name}
-              className={cn(
-                "rounded-lg border px-3 py-2.5",
-                pin.connected ? "border-line bg-elevated/50" : "border-line-soft bg-canvas/30",
-              )}
-            >
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-ink font-mono text-[11px]">{pin.name}</span>
-                <Badge variant={pin.connected ? "aqua" : "outline"}>
-                  {pin.connected ? "wired" : "free"}
-                </Badge>
-              </div>
-              <p className="text-faint mt-1 truncate text-[10px]" title={signal ?? pin.kind}>
-                {signal ?? pin.kind.replace("_", " ")}
-              </p>
-            </div>
-          );
-        })}
+        <label className="text-faint flex cursor-pointer items-center gap-2 font-mono text-[10px] tracking-wide uppercase">
+          <input
+            type="checkbox"
+            checked={spareOnly}
+            onChange={(event) => setSpareOnly(event.target.checked)}
+            className="accent-aqua size-3.5"
+          />
+          Spare pins only
+        </label>
+        <span className="text-faint ml-auto font-mono text-[10px]">
+          {plan.pinout.length} physical pins · {wired} wired · {plan.pinout.length - wired} spare
+        </span>
       </div>
-      <p className="text-faint text-[10px] leading-relaxed">
-        {plan.safety_checks.find((check) => check.includes("pin")) ??
-          "Every assigned pin belongs to exactly one net."}
-      </p>
+
+      <div className="border-line-soft overflow-x-auto rounded-xl border">
+        <table className="w-full min-w-[980px] text-left text-xs">
+          <thead className="text-faint bg-elevated/40 font-mono text-[8px] tracking-[0.14em] uppercase">
+            <tr>
+              <th className="px-3 py-2.5">Ref</th>
+              <th className="px-3 py-2.5">Part</th>
+              <th className="px-3 py-2.5">Pin</th>
+              <th className="px-3 py-2.5">Net / signal</th>
+              <th className="px-3 py-2.5">Exact destination</th>
+              <th className="px-3 py-2.5">Wire</th>
+            </tr>
+          </thead>
+          <tbody>
+            {entries.map((entry) => (
+              <tr
+                key={`${entry.ref}.${entry.pin}`}
+                className={cn(
+                  "border-line-soft border-t",
+                  entry.connected ? "hover:bg-elevated/30" : "bg-canvas/30",
+                )}
+              >
+                <td className="text-signal px-3 py-2 font-mono text-[10px]">{entry.ref}</td>
+                <td className="text-faint max-w-[150px] truncate px-3 py-2 text-[10px]">
+                  {entry.part}
+                </td>
+                <td className="text-ink px-3 py-2 font-mono text-[10px]">
+                  {entry.pin}
+                  <span className="text-faint ml-1.5 text-[8px] uppercase">{entry.pin_kind}</span>
+                </td>
+                <td className="px-3 py-2">
+                  {entry.connected ? (
+                    <>
+                      <p className="text-aqua font-mono text-[10px]">{entry.net}</p>
+                      <p className="text-faint mt-0.5 text-[10px]">{entry.signal}</p>
+                    </>
+                  ) : (
+                    <span className="text-faint font-mono text-[9px] uppercase">not connected</span>
+                  )}
+                </td>
+                <td className="px-3 py-2">
+                  {entry.destinations.length ? (
+                    <div className="space-y-0.5">
+                      {entry.destinations.map((destination) => (
+                        <p
+                          key={`${destination.ref}.${destination.pin}`}
+                          className="text-muted font-mono text-[10px]"
+                        >
+                          {destination.ref}.{destination.pin}
+                          {destination.connector ? (
+                            <span className="text-faint"> · {destination.connector}</span>
+                          ) : null}
+                        </p>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="text-faint text-[10px]">—</span>
+                  )}
+                </td>
+                <td className="text-faint px-3 py-2 font-mono text-[9px]">
+                  {entry.connected
+                    ? `${entry.wire_color || "—"} · ${entry.wire_gauge_awg ?? "—"} AWG`
+                    : "—"}
+                </td>
+              </tr>
+            ))}
+            {entries.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="text-faint px-3 py-8 text-center text-[11px]">
+                  No pins match this filter.
+                </td>
+              </tr>
+            ) : null}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -649,7 +805,7 @@ export function WiringWorkspace({ projectId }: { projectId: string }) {
           setError(
             caught instanceof ApiError
               ? caught.message
-              : "Could not load the wiring plan for this project.",
+              : "Could not load the schematic for this project.",
           );
         }
       })
@@ -720,7 +876,7 @@ export function WiringWorkspace({ projectId }: { projectId: string }) {
       setSelectedNode(null);
     } catch (caught) {
       setError(
-        caught instanceof ApiError ? caught.message : "The wiring plan could not be generated.",
+        caught instanceof ApiError ? caught.message : "The schematic could not be generated.",
       );
     } finally {
       setGenerating(false);
@@ -764,11 +920,12 @@ export function WiringWorkspace({ projectId }: { projectId: string }) {
             ) : null}
           </div>
           <h1 className="text-ink text-[26px] leading-tight font-medium tracking-[-0.02em] sm:text-[30px]">
-            Wiring &amp; power
+            Schematic &amp; pinout
           </h1>
           <p className="text-muted mt-1.5 max-w-2xl text-sm leading-relaxed">
-            Pin allocation, nets, power budget, and deterministic safety checks generated from the
-            approved bill of materials. Nothing here is guessed by a language model.
+            Every physical pin, its net, and its exact destination — generated deterministically
+            from the approved bill of materials and checked against voltage, current, and
+            logic-level limits.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -785,26 +942,36 @@ export function WiringWorkspace({ projectId }: { projectId: string }) {
               ) : (
                 <CircuitBoard className="size-4" />
               )}
-              {plan ? "Regenerate" : "Generate wiring"}
+              {plan ? "Regenerate" : "Generate schematic"}
             </Button>
           )}
           {plan && artifact ? (
-            <div className="flex flex-wrap gap-1.5">
-              {artifact.export_formats
-                .filter((format) => format.format !== "json")
-                .map((format) => (
+            <details className="group relative">
+              <summary className="border-line bg-elevated text-muted hover:border-signal/35 hover:text-ink inline-flex h-9 cursor-pointer list-none items-center gap-2 rounded-lg border px-3 text-xs transition-colors [&::-webkit-details-marker]:hidden">
+                <Download className="size-3.5" /> Export
+                <ChevronDown className="size-3.5 transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="border-line bg-surface absolute right-0 z-30 mt-2 w-72 overflow-hidden rounded-xl border shadow-xl">
+                <p className="text-faint border-line-soft border-b px-3 py-2 font-mono text-[9px] tracking-[0.14em] uppercase">
+                  Download · all formats
+                </p>
+                {artifact.export_formats.map((format) => (
                   <a
                     key={format.format}
                     href={api.exportUrl(projectId, format.format as ExportFormat)}
                     download={format.filename}
-                    className="border-line bg-elevated text-muted hover:border-signal/35 hover:text-ink inline-flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-[11px] transition-colors"
-                    title={format.description}
+                    className="hover:bg-elevated/70 flex flex-col gap-0.5 px-3 py-2.5 transition-colors"
                   >
-                    <Download className="size-3" />
-                    {format.format === "kicad-netlist" ? "Netlist" : format.label}
+                    <span className="text-ink flex items-center gap-2 text-[11px]">
+                      <Download className="text-faint size-3" /> {format.label}
+                    </span>
+                    <span className="text-faint pl-5 text-[10px] leading-snug">
+                      {format.description}
+                    </span>
                   </a>
                 ))}
-            </div>
+              </div>
+            </details>
           ) : null}
         </div>
       </div>
@@ -822,8 +989,8 @@ export function WiringWorkspace({ projectId }: { projectId: string }) {
       {missing && !plan ? (
         <EmptyState
           icon={<CircuitBoard className="size-4" />}
-          title="No wiring plan yet"
-          description="Generate the deterministic plan to allocate pins, build nets, validate voltage and current limits, and unlock EasyEDA/KiCad netlist downloads."
+          title="No schematic yet"
+          description="Generate the deterministic plan to allocate every pin, build nets, validate voltage and current limits, and unlock the KiCad schematic, netlist, and full pinout downloads."
           action={
             <Button onClick={() => void generate()} disabled={generating}>
               {generating ? (
@@ -831,7 +998,7 @@ export function WiringWorkspace({ projectId }: { projectId: string }) {
               ) : (
                 <CircuitBoard className="size-4" />
               )}
-              Generate wiring plan
+              Generate schematic
             </Button>
           }
         />
@@ -843,7 +1010,7 @@ export function WiringWorkspace({ projectId }: { projectId: string }) {
             <Stat
               label="Parts"
               value={String(plan.nodes.length)}
-              hint={`${plan.nodes.reduce((sum, node) => sum + node.pins.length, 0)} physical pins modelled`}
+              hint={`${plan.pinout.filter((entry) => entry.connected).length} of ${plan.pinout.length} pins wired`}
               icon={Cpu}
             />
             <Stat
@@ -1012,8 +1179,9 @@ export function WiringWorkspace({ projectId }: { projectId: string }) {
                 </Card>
               </div>
               <p className="text-faint text-[10px]">
-                The SVG export is print-ready. The KiCad S-expression netlist imports into KiCad and
-                EasyEDA Pro; always re-check symbols before layout.
+                The SVG export is print-ready and labels every pin with its destination. The KiCad
+                schematic embeds one symbol per part and a labelled wire on every pin; open it in
+                KiCad or EasyEDA Pro and run ERC before layout.
               </p>
             </div>
           ) : null}
@@ -1142,21 +1310,6 @@ export function WiringWorkspace({ projectId }: { projectId: string }) {
           {activeTab === "power" ? <PowerPanel artifact={artifact} /> : null}
           {activeTab === "validation" ? <ValidationPanel plan={plan} /> : null}
           {activeTab === "steps" ? <StepsPanel plan={plan} /> : null}
-
-          <div className="border-line-soft bg-surface/60 flex flex-wrap items-center gap-3 rounded-xl border px-4 py-3">
-            <FileJson className="text-faint size-4" />
-            <p className="text-faint text-[11px]">
-              Exports: wiring CSV, BOM CSV, KiCad/EasyEDA netlist, printable SVG, Markdown build
-              guide, and the raw JSON contract.
-            </p>
-            <a
-              href={api.exportUrl(projectId, "json")}
-              download="electrical-plan.json"
-              className="text-muted hover:text-signal ml-auto inline-flex items-center gap-1 text-[11px]"
-            >
-              <Download className="size-3" /> JSON
-            </a>
-          </div>
         </div>
       ) : null}
     </div>

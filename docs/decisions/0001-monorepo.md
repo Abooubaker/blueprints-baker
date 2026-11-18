@@ -2,11 +2,11 @@
 
 - **Status:** Accepted
 - **Date:** 2026-11-16
-- **Deciders:** RoboCraft maintainers
+- **Deciders:** Blueprints Baker maintainers
 
 ## Context
 
-RoboCraft consists of a Next.js frontend, a Python API, generated contracts, and documentation. These
+Blueprints Baker consists of a Next.js frontend, a Python API, generated contracts, and documentation. These
 parts change together: an API field addition requires a frontend type update and a contract
 regeneration. The project is at an early stage with one small team and no independently deployed
 services.

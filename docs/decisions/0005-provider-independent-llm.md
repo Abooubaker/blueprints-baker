@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-11-16
-- **Deciders:** RoboCraft maintainers
+- **Deciders:** Blueprints Baker maintainers
 
 ## Context
 

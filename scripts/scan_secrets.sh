@@ -30,7 +30,7 @@ for pattern in "${patterns[@]}"; do
 done
 
 # Database URLs only matter when they point at a non-loopback host. The dev
-# compose credentials (robocraft:robocraft@localhost) are intentionally public.
+# compose credentials (blueprints-baker:blueprints-baker@localhost) are intentionally public.
 db_pattern='postgresql(\+asyncpg)?://[^[:space:]]+:[^[:space:]@]+@'
 if matches=$(git grep -I -n -E -- "$db_pattern" -- . 2>/dev/null \
   | grep -vE '@(localhost|127\.0\.0\.1|db|postgres)([:/]|$)'); then

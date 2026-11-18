@@ -1,6 +1,6 @@
-# RoboCraft API
+# Blueprints Baker API
 
-FastAPI service for RoboCraft. See the repository root [`README.md`](../../README.md) and
+FastAPI service for Blueprints Baker. See the repository root [`README.md`](../../README.md) and
 [`docs/`](../../docs) for architecture, setup, and API documentation.
 
 ```bash

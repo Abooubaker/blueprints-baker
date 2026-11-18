@@ -125,11 +125,11 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         <div className="text-faint flex items-center justify-between text-[11px]">
           <span>Foundation v0.1</span>
           <a
-            href="https://github.com/Abooubaker/robocraft"
+            href="https://github.com/Abooubaker/blueprints-baker"
             target="_blank"
             rel="noreferrer"
             className="hover:text-ink transition-colors"
-            aria-label="RoboCraft on GitHub"
+            aria-label="Blueprints Baker on GitHub"
           >
             <Github className="size-3.5" />
           </a>

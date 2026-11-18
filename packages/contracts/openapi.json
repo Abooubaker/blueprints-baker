@@ -1251,6 +1251,93 @@
         "title": "ElectricalNodePin",
         "type": "object"
       },
+      "ElectricalPinoutEntry": {
+        "additionalProperties": false,
+        "description": "One row of the every-pin wiring table.\n\nA pin can fan out (for example a battery positive feeding a regulator and a\nmotor driver), so destinations is a list rather than a single endpoint.\nUnconnected pins are still present with ``connected=False`` so the table is\na complete inventory of the physical part.",
+        "properties": {
+          "connected": {
+            "default": false,
+            "title": "Connected",
+            "type": "boolean"
+          },
+          "destinations": {
+            "items": {
+              "$ref": "#/components/schemas/PinDestination"
+            },
+            "title": "Destinations",
+            "type": "array"
+          },
+          "net": {
+            "default": "",
+            "title": "Net",
+            "type": "string"
+          },
+          "part": {
+            "title": "Part",
+            "type": "string"
+          },
+          "pin": {
+            "title": "Pin",
+            "type": "string"
+          },
+          "pin_kind": {
+            "default": "",
+            "title": "Pin Kind",
+            "type": "string"
+          },
+          "ref": {
+            "title": "Ref",
+            "type": "string"
+          },
+          "role": {
+            "default": "",
+            "title": "Role",
+            "type": "string"
+          },
+          "signal": {
+            "default": "",
+            "title": "Signal",
+            "type": "string"
+          },
+          "voltage_v": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voltage V"
+          },
+          "wire_color": {
+            "default": "",
+            "title": "Wire Color",
+            "type": "string"
+          },
+          "wire_gauge_awg": {
+            "anyOf": [
+              {
+                "maximum": 40.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wire Gauge Awg"
+          }
+        },
+        "required": [
+          "ref",
+          "part",
+          "pin"
+        ],
+        "title": "ElectricalPinoutEntry",
+        "type": "object"
+      },
       "ElectricalPlan": {
         "additionalProperties": false,
         "properties": {
@@ -1293,6 +1380,13 @@
             },
             "title": "Pin Map",
             "type": "object"
+          },
+          "pinout": {
+            "items": {
+              "$ref": "#/components/schemas/ElectricalPinoutEntry"
+            },
+            "title": "Pinout",
+            "type": "array"
           },
           "power_budget": {
             "$ref": "#/components/schemas/PowerBudget"
@@ -1343,8 +1437,10 @@
             "enum": [
               "json",
               "wiring-csv",
+              "pinout-csv",
               "bom-csv",
               "kicad-netlist",
+              "kicad-schematic",
               "svg",
               "markdown"
             ],
@@ -1632,6 +1728,46 @@
           "meta"
         ],
         "title": "Page[ProjectSummary]",
+        "type": "object"
+      },
+      "PinDestination": {
+        "additionalProperties": false,
+        "description": "Where one physical pin terminates, including the wire it travels on.",
+        "properties": {
+          "connector": {
+            "default": "",
+            "title": "Connector",
+            "type": "string"
+          },
+          "kind": {
+            "default": "signal",
+            "title": "Kind",
+            "type": "string"
+          },
+          "net": {
+            "default": "",
+            "title": "Net",
+            "type": "string"
+          },
+          "pin": {
+            "title": "Pin",
+            "type": "string"
+          },
+          "ref": {
+            "title": "Ref",
+            "type": "string"
+          },
+          "signal": {
+            "default": "",
+            "title": "Signal",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ref",
+          "pin"
+        ],
+        "title": "PinDestination",
         "type": "object"
       },
       "PowerBudget": {
@@ -2649,8 +2785,8 @@
     }
   },
   "info": {
-    "description": "RoboCraft is an AI-assisted robotics engineering platform. This API exposes project, component catalog, and agent orchestration contracts.",
-    "title": "RoboCraft API",
+    "description": "Blueprints Baker is an AI-assisted robotics engineering platform. This API exposes project, component catalog, and agent orchestration contracts.",
+    "title": "Blueprints Baker API",
     "version": "0.1.0"
   },
   "openapi": "3.1.0",
@@ -3195,7 +3331,7 @@
             "description": "Validation Error"
           }
         },
-        "summary": "Get the latest wiring plan",
+        "summary": "Get the latest electrical plan",
         "tags": [
           "electrical"
         ]
@@ -3237,7 +3373,7 @@
             "description": "Validation Error"
           }
         },
-        "summary": "Generate the wiring plan",
+        "summary": "Generate the electrical plan",
         "tags": [
           "electrical"
         ]
@@ -3265,8 +3401,10 @@
               "enum": [
                 "json",
                 "wiring-csv",
+                "pinout-csv",
                 "bom-csv",
                 "kicad-netlist",
+                "kicad-schematic",
                 "svg",
                 "markdown"
               ],
@@ -3297,7 +3435,7 @@
             "description": "Validation Error"
           }
         },
-        "summary": "Download a wiring export",
+        "summary": "Download an export",
         "tags": [
           "electrical"
         ]

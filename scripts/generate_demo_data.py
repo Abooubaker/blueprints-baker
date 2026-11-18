@@ -143,7 +143,7 @@ def _research() -> ComponentResearchOutput:
                         "electrical_notes": profile.notes,
                     },
                     price_usd=profile.price_usd,
-                    supplier="RoboCraft curated library",
+                    supplier="Blueprints Baker curated library",
                     supplier_url=None,
                     availability="in_stock",
                     compatibility_notes=[profile.notes] if profile.notes else [],
@@ -162,7 +162,7 @@ def _research() -> ComponentResearchOutput:
             "Prices are planning estimates in USD, not live supplier quotes.",
         ],
         total_estimated_usd=f"{total // 100}.{total % 100:02d}",
-        sources=["RoboCraft curated component library v1.0"],
+        sources=["Blueprints Baker curated component library v1.0"],
     )
 
 
@@ -294,7 +294,7 @@ def main() -> None:
             _agent_descriptor(
                 "electrical_engineering",
                 "Electrical Engineering",
-                "Creates pin maps, nets, power budgets, and validates the wiring.",
+                "Creates a full pinout, nets, power budgets, and wiring steps, then validates the wiring.",
                 "available",
                 ["robot_planner", "component_research"],
                 "ElectricalInput",
@@ -421,6 +421,10 @@ def main() -> None:
 
     export_dir = WEB_ROOT / "public" / "demo" / "exports"
     export_dir.mkdir(parents=True, exist_ok=True)
+    expected_files = {spec.filename for spec in EXPORT_SPECS.values()} | {"manifest.json"}
+    for stale in export_dir.iterdir():
+        if stale.is_file() and stale.name not in expected_files:
+            stale.unlink()
     for fmt, spec in EXPORT_SPECS.items():
         content = export_artifact(
             fmt,

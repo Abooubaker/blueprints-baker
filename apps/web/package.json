@@ -1,5 +1,5 @@
 {
-  "name": "@robocraft/web",
+  "name": "@blueprints-baker/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {

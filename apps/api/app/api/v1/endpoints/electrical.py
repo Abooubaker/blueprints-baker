@@ -23,7 +23,7 @@ SessionDep = Annotated[AsyncSession, Depends(get_db)]
     "",
     response_model=ElectricalArtifactRead,
     status_code=status.HTTP_201_CREATED,
-    summary="Generate the wiring plan",
+    summary="Generate the electrical plan",
     description=(
         "Runs the deterministic planner, component research, and electrical agents, "
         "then returns the validated plan, bill of materials, and export formats."
@@ -41,7 +41,7 @@ async def generate_electrical(
 @router.get(
     "",
     response_model=ElectricalArtifactRead,
-    summary="Get the latest wiring plan",
+    summary="Get the latest electrical plan",
 )
 async def get_electrical(project_id: uuid.UUID, session: SessionDep) -> ElectricalArtifactRead:
     return await electrical_service.get_artifact(session, project_id)
@@ -49,7 +49,7 @@ async def get_electrical(project_id: uuid.UUID, session: SessionDep) -> Electric
 
 @router.get(
     "/export/{export_format}",
-    summary="Download a wiring export",
+    summary="Download an export",
     response_class=Response,
     responses={
         200: {
@@ -81,7 +81,7 @@ async def export_electrical(
         media_type=exported.spec.media_type,
         headers={
             "Content-Disposition": f'attachment; filename="{exported.spec.filename}"',
-            "X-Robocraft-Export": exported.spec.format,
+            "X-Blueprints-Baker-Export": exported.spec.format,
         },
     )
 

@@ -29,7 +29,7 @@
     {
       "name": "electrical_engineering",
       "display_name": "Electrical Engineering",
-      "description": "Creates pin maps, nets, power budgets, and validates the wiring.",
+      "description": "Creates a full pinout, nets, power budgets, and wiring steps, then validates the wiring.",
       "status": "available",
       "depends_on": [
         "robot_planner",

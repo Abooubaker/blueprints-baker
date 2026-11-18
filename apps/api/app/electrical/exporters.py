@@ -3,11 +3,14 @@
 Formats are deliberately boring and inspectable:
 
 * ``wiring-csv`` — one row per connection, opens in any spreadsheet;
+* ``pinout-csv`` — one row per physical pin with its exact destination(s);
 * ``bom-csv`` — the bill of materials for purchasing;
 * ``kicad-netlist`` — KiCad S-expression netlist, importable by KiCad and by
   EasyEDA Pro's KiCad importer;
-* ``svg`` — a printable wiring overview;
-* ``markdown`` — a build guide with pin map, checks, and ordered steps;
+* ``kicad-schematic`` — a self-contained KiCad schematic with one embedded
+  symbol per part and a labelled wire on every physical pin;
+* ``svg`` — a printable pin-level wiring schematic;
+* ``markdown`` — a build guide with the full pinout, checks, and ordered steps;
 * ``json`` — the raw ``ElectricalPlan`` contract.
 
 Nothing in this module calls a network service or an LLM.
@@ -20,12 +23,24 @@ import html
 import io
 import uuid
 from dataclasses import dataclass
-from datetime import UTC, datetime
 from typing import Literal
 
-from app.ai.contracts import ComponentResearchOutput, ElectricalPlan
+from app.ai.contracts import (
+    ComponentResearchOutput,
+    ElectricalNode,
+    ElectricalPlan,
+)
 
-ExportFormat = Literal["json", "wiring-csv", "bom-csv", "kicad-netlist", "svg", "markdown"]
+ExportFormat = Literal[
+    "json",
+    "wiring-csv",
+    "pinout-csv",
+    "bom-csv",
+    "kicad-netlist",
+    "kicad-schematic",
+    "svg",
+    "markdown",
+]
 
 
 @dataclass(frozen=True, slots=True)
@@ -38,6 +53,27 @@ class ExportSpec:
 
 
 EXPORT_SPECS: dict[ExportFormat, ExportSpec] = {
+    "kicad-schematic": ExportSpec(
+        format="kicad-schematic",
+        label="KiCad schematic",
+        filename="blueprints-baker.kicad_sch",
+        media_type="text/plain; charset=utf-8",
+        description="Self-contained KiCad schematic, one labelled wire per pin.",
+    ),
+    "kicad-netlist": ExportSpec(
+        format="kicad-netlist",
+        label="KiCad / EasyEDA netlist",
+        filename="blueprints-baker.net",
+        media_type="text/plain; charset=utf-8",
+        description="KiCad S-expression netlist for EasyEDA Pro or KiCad import.",
+    ),
+    "pinout-csv": ExportSpec(
+        format="pinout-csv",
+        label="Full pinout",
+        filename="pinout.csv",
+        media_type="text/csv; charset=utf-8",
+        description="Every physical pin with its exact destination and wire.",
+    ),
     "wiring-csv": ExportSpec(
         format="wiring-csv",
         label="Wiring table",
@@ -45,26 +81,19 @@ EXPORT_SPECS: dict[ExportFormat, ExportSpec] = {
         media_type="text/csv; charset=utf-8",
         description="Every net as a spreadsheet row.",
     ),
-    "kicad-netlist": ExportSpec(
-        format="kicad-netlist",
-        label="KiCad / EasyEDA netlist",
-        filename="robocraft.net",
-        media_type="text/plain; charset=utf-8",
-        description="KiCad S-expression netlist for EasyEDA Pro or KiCad import.",
-    ),
     "svg": ExportSpec(
         format="svg",
-        label="Wiring diagram",
+        label="Pin-level schematic",
         filename="wiring.svg",
         media_type="image/svg+xml; charset=utf-8",
-        description="Printable connection overview with net colors.",
+        description="Blueprint-style schematic with every pin and destination.",
     ),
     "markdown": ExportSpec(
         format="markdown",
         label="Build guide",
         filename="build-guide.md",
         media_type="text/markdown; charset=utf-8",
-        description="Pin map, safety checks, and ordered wiring steps.",
+        description="Full pinout, safety checks, and ordered wiring steps.",
     ),
     "bom-csv": ExportSpec(
         format="bom-csv",
@@ -131,6 +160,48 @@ def export_wiring_csv(plan: ElectricalPlan) -> str:
     return _csv(rows)
 
 
+def export_pinout_csv(plan: ElectricalPlan) -> str:
+    rows = [
+        [
+            "ref",
+            "part",
+            "role",
+            "pin",
+            "pin_kind",
+            "pin_voltage_v",
+            "net",
+            "signal",
+            "connected",
+            "destination_count",
+            "destinations",
+            "wire_color",
+            "wire_gauge_awg",
+        ]
+    ]
+    for entry in plan.pinout:
+        destinations = "; ".join(
+            f"{destination.ref}.{destination.pin}" for destination in entry.destinations
+        )
+        rows.append(
+            [
+                entry.ref,
+                entry.part,
+                entry.role,
+                entry.pin,
+                entry.pin_kind,
+                "" if entry.voltage_v is None else f"{entry.voltage_v:g}",
+                entry.net,
+                entry.signal,
+                "yes" if entry.connected else "no",
+                str(len(entry.destinations)),
+                destinations,
+                entry.wire_color,
+                "" if entry.wire_gauge_awg is None else str(entry.wire_gauge_awg),
+            ]
+        )
+    return _csv(rows)
+
+
 def export_bom_csv(bom: ComponentResearchOutput | None) -> str:
     rows = [
         [
@@ -191,21 +262,20 @@ def export_kicad_netlist(plan: ElectricalPlan) -> str:
     lines = [
         '(export (version "E")',
         "  (design",
-        '    (source "RoboCraft")',
-        f"    (date {_sexpr_string(datetime.now(UTC).date().isoformat())})",
-        f'    (tool "RoboCraft electrical engine v{plan.library_version}")',
+        '    (source "Blueprints Baker")',
+        f'    (tool "Blueprints Baker electrical engine v{plan.library_version}")',
         "  )",
         "  (components",
     ]
     for node in sorted(plan.nodes, key=lambda item: item.ref):
-        tstamp = uuid.uuid5(uuid.NAMESPACE_URL, f"robocraft:{node.ref}")
+        tstamp = uuid.uuid5(uuid.NAMESPACE_URL, f"blueprints-baker:{node.ref}")
         lines.extend(
             [
                 "    (comp",
                 f"      (ref {_sexpr_string(node.ref)})",
                 f"      (value {_sexpr_string(node.label)})",
                 '      (footprint "")',
-                f"      (libsource (lib {_sexpr_string('robocraft')}) "
+                f"      (libsource (lib {_sexpr_string('blueprints-baker')}) "
                 f"(part {_sexpr_string(node.library_key or 'unknown')}))",
                 f"      (property (name {_sexpr_string('Description')}) "
                 f"(value {_sexpr_string(node.role or node.label)}))",
@@ -229,6 +299,188 @@ def export_kicad_netlist(plan: ElectricalPlan) -> str:
     return "\n".join(lines)
 
 
+def _kicad_id(seed: str) -> str:
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, f"blueprints-baker:{seed}"))
+
+
+def _kicad_net(value: str, *, fallback: str) -> str:
+    cleaned = "".join(
+        character if character.isalnum() or character in "_+-./" else "_" for character in value
+    ).strip("_")
+    return cleaned or fallback
+
+
+def export_kicad_schematic(plan: ElectricalPlan, *, project_name: str) -> str:
+    """Emit a self-contained KiCad schematic with a labelled wire on every pin.
+
+    Symbols are generated from the Blueprints Baker library, so the file does not
+    depend on an external symbol table. Nets are connected by global labels,
+    which is also what makes the file readable by EasyEDA Pro's KiCad importer.
+    Structural validity is covered by tests; always open the file in KiCad or
+    EasyEDA Pro and run ERC before manufacturing.
+    """
+
+    kind_column = {
+        "power": 0,
+        "regulator": 1,
+        "controller": 2,
+        "driver": 3,
+        "motor": 4,
+        "actuator": 5,
+        "sensor": 6,
+        "other": 7,
+    }
+    column_cursor: dict[int, float] = {}
+    origin: dict[str, tuple[float, float]] = {}
+    for node in sorted(plan.nodes, key=lambda item: (kind_column.get(item.kind, 7), item.ref)):
+        column = kind_column.get(node.kind, 7)
+        height = 17.78 + max(1, len(node.pins)) * 2.54
+        top = column_cursor.get(column, 25.4)
+        origin[node.ref] = (25.4 + column * 55.88, top)
+        column_cursor[column] = top + height + 12.7
+
+    root_uuid = _kicad_id(f"schematic:{project_name}")
+    lines: list[str] = [
+        "(kicad_sch",
+        "  (version 20231120)",
+        '  (generator "eeschema")',
+        '  (generator_version "8.0")',
+        f'  (uuid "{root_uuid}")',
+        '  (paper "A3")',
+        "  (title_block",
+        f"    (title {_sexpr_string(f'{project_name} — Blueprints Baker wiring')})",
+        '    (rev "1")',
+        "    (comment 1 "
+        f"{_sexpr_string('Generated by the Blueprints Baker deterministic electrical engine')})",
+        "  )",
+        "  (lib_symbols",
+    ]
+
+    for node in plan.nodes:
+        symbol_ref = f"blueprints-baker:{node.ref}"
+        bottom = -(12.7 + max(1, len(node.pins) - 1) * 2.54)
+        lines.extend(
+            [
+                f"    (symbol {_sexpr_string(symbol_ref)}",
+                "      (pin_names (offset 0.508))",
+                "      (exclude_from_sim no)",
+                "      (in_bom yes)",
+                "      (on_board yes)",
+                f'      (property "Reference" {_sexpr_string("U")} (at 0 0 0) '
+                "(effects (font (size 1.27 1.27))))",
+                f'      (property "Value" {_sexpr_string(node.label)} (at 0 -2.54 0) '
+                "(effects (font (size 1.27 1.27))))",
+                '      (property "Footprint" "" (at 0 0 0) '
+                "(effects (font (size 1.27 1.27)) (hide yes)))",
+                '      (property "Datasheet" "" (at 0 0 0) '
+                "(effects (font (size 1.27 1.27)) (hide yes)))",
+                f"      (symbol {_sexpr_string(f'{node.ref}_0_1')}",
+                "        (rectangle (start -12.7 2.54) "
+                f"(end 12.7 {bottom:.2f}) "
+                "(stroke (width 0.254) (type default)) (fill (type background)))",
+                "      )",
+                f"      (symbol {_sexpr_string(f'{node.ref}_1_1')}",
+            ]
+        )
+        for index, pin in enumerate(node.pins, start=1):
+            relative_y = -(10.16 + (index - 1) * 2.54)
+            lines.extend(
+                [
+                    f"        (pin passive line (at 17.78 {relative_y:.2f} 180) (length 5.08)",
+                    f"          (name {_sexpr_string(pin.name)} "
+                    "(effects (font (size 1.016 1.016))))",
+                    f"          (number {_sexpr_string(str(index))} "
+                    "(effects (font (size 1.016 1.016))))",
+                    "        )",
+                ]
+            )
+        lines.extend(["      )", "    )"])
+
+    lines.append("  )")
+
+    for node in plan.nodes:
+        origin_x, origin_y = origin[node.ref]
+        lines.extend(
+            [
+                "  (symbol",
+                f"    (lib_id {_sexpr_string(f'blueprints-baker:{node.ref}')})",
+                f"    (lib_name {_sexpr_string(f'blueprints-baker:{node.ref}')})",
+                f"    (at {origin_x:.2f} {origin_y:.2f} 0)",
+                "    (unit 1)",
+                "    (exclude_from_sim no)",
+                "    (in_bom yes)",
+                "    (on_board yes)",
+                "    (dnp no)",
+                f'    (uuid "{_kicad_id(f"symbol:{node.ref}")}")',
+                f'    (property "Reference" {_sexpr_string(node.ref)} '
+                f"(at {origin_x:.2f} {origin_y - 3.81:.2f} 0) "
+                "(effects (font (size 1.27 1.27))))",
+                f'    (property "Value" {_sexpr_string(node.label)} '
+                f"(at {origin_x:.2f} {origin_y - 1.27:.2f} 0) "
+                "(effects (font (size 1.27 1.27))))",
+                f'    (property "Footprint" "" (at {origin_x:.2f} {origin_y:.2f} 0) '
+                "(effects (font (size 1.27 1.27)) (hide yes)))",
+                f'    (property "Datasheet" "" (at {origin_x:.2f} {origin_y:.2f} 0) '
+                "(effects (font (size 1.27 1.27)) (hide yes)))",
+                f'    (property "Description" {_sexpr_string(node.role or node.label)} '
+                f"(at {origin_x:.2f} {origin_y:.2f} 0) "
+                "(effects (font (size 1.27 1.27)) (hide yes)))",
+            ]
+        )
+        for index, _pin in enumerate(node.pins, start=1):
+            lines.append(
+                f"    (pin {_sexpr_string(str(index))} "
+                f'(uuid "{_kicad_id(f"pin:{node.ref}:{index}")}"))'
+            )
+        lines.extend(
+            [
+                "    (instances",
+                f"      (project {_sexpr_string('blueprints-baker')}",
+                f"        (path {_sexpr_string(f'/{root_uuid}')} "
+                f"(reference {_sexpr_string(node.ref)}) (unit 1))",
+                "      )",
+                "    )",
+                "  )",
+            ]
+        )
+
+    pinout_by_pin = {(entry.ref, entry.pin): entry for entry in plan.pinout}
+    for node in plan.nodes:
+        origin_x, origin_y = origin[node.ref]
+        for index, pin in enumerate(node.pins, start=1):
+            pin_y = origin_y + 10.16 + (index - 1) * 2.54
+            wire_start = origin_x + 17.78
+            wire_end = origin_x + 22.86
+            entry = pinout_by_pin.get((node.ref, pin.name))
+            net_name = _kicad_net(
+                entry.net if entry and entry.net else "", fallback=f"NC_{node.ref}_{pin.name}"
+            )
+            lines.extend(
+                [
+                    "  (wire",
+                    f"    (pts (xy {wire_start:.2f} {pin_y:.2f}) (xy {wire_end:.2f} {pin_y:.2f}))",
+                    "    (stroke (width 0) (type default))",
+                    f'    (uuid "{_kicad_id(f"wire:{node.ref}:{pin.name}")}")',
+                    "  )",
+                    f"  (global_label {_sexpr_string(net_name)}",
+                    "    (shape passive)",
+                    f"    (at {wire_end:.2f} {pin_y:.2f} 0)",
+                    "    (effects (font (size 1.016 1.016)) (justify left))",
+                    f'    (uuid "{_kicad_id(f"label:{node.ref}:{pin.name}")}")',
+                    "  )",
+                ]
+            )
+
+    lines.extend(
+        [
+            '  (sheet_instances (path "/" (page "1")))',
+            ")",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
 def _svg_text(
     value: str, x: float, y: float, *, size: int, fill: str, anchor: str = "start"
 ) -> str:
@@ -239,9 +491,9 @@ def _svg_text(
 
 
 def export_svg(plan: ElectricalPlan) -> str:
-    """Render a deterministic, dependency-free wiring overview."""
+    """Render a deterministic, dependency-free pin-level wiring schematic."""
 
-    column_by_kind = {
+    kind_column = {
         "power": 0,
         "regulator": 1,
         "controller": 2,
@@ -251,93 +503,158 @@ def export_svg(plan: ElectricalPlan) -> str:
         "sensor": 6,
         "other": 7,
     }
-    rows: dict[int, int] = {}
-    positions: dict[str, tuple[float, float]] = {}
-    nodes = sorted(
-        plan.nodes,
-        key=lambda node: (column_by_kind.get(node.kind, 7), node.ref),
-    )
-    for node in nodes:
-        column = column_by_kind.get(node.kind, 7)
-        row = rows.get(column, 0)
-        rows[column] = row + 1
-        positions[node.ref] = (40.0 + column * 168.0, 150.0 + row * 108.0)
+    used_columns = sorted({kind_column.get(node.kind, 7) for node in plan.nodes})
+    column_slot = {column: index for index, column in enumerate(used_columns)}
 
-    max_rows = max(rows.values(), default=1)
-    width = 1400
-    height = int(210 + max_rows * 108)
+    node_width = 268
+    row_height = 15
+    header_height = 37
+    nodes_by_column: dict[int, list[ElectricalNode]] = {}
+    for node in sorted(plan.nodes, key=lambda item: (kind_column.get(item.kind, 7), item.ref)):
+        column = kind_column.get(node.kind, 7)
+        nodes_by_column.setdefault(column, []).append(node)
+
+    positions: dict[str, tuple[float, float, float]] = {}
+    for column, column_nodes in nodes_by_column.items():
+        y = 112.0
+        for node in column_nodes:
+            height = header_height + max(1, len(node.pins)) * row_height + 10
+            positions[node.ref] = (40.0 + column_slot[column] * 292.0, y, height)
+            y += height + 18.0
+
+    max_bottom = max((value[1] + value[2] for value in positions.values()), default=320.0)
+    width = 80 + len(used_columns) * 292
+    height = int(max(420.0, max_bottom + 96))
     color_by_kind = {
-        "power": "#f26d6d",
-        "ground": "#5f6e68",
-        "signal": "#5cdbd3",
-        "motor": "#f5b544",
-        "bus": "#8fa9ff",
+        "power": "#ff9b9b",
+        "ground": "#7fa8c8",
+        "signal": "#6fd6ff",
+        "motor": "#ffcc7a",
+        "bus": "#eaf6ff",
     }
 
     parts: list[str] = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-        f'viewBox="0 0 {width} {height}" role="img" aria-label="RoboCraft wiring overview">',
+        f'viewBox="0 0 {width} {height}" role="img" '
+        'aria-label="Blueprints Baker pin-level wiring schematic">',
         "<defs>",
-        '<pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">',
-        '<path d="M 24 0 L 0 0 0 24" fill="none" stroke="#152023" stroke-width="1"/>',
+        '<pattern id="bp-minor" width="24" height="24" patternUnits="userSpaceOnUse">',
+        '<path d="M 24 0 L 0 0 0 24" fill="none" stroke="#ffffff" stroke-opacity="0.05" '
+        'stroke-width="1"/>',
+        "</pattern>",
+        '<pattern id="bp-major" width="120" height="120" patternUnits="userSpaceOnUse">',
+        '<rect width="120" height="120" fill="url(#bp-minor)"/>',
+        '<path d="M 120 0 L 0 0 0 120" fill="none" stroke="#ffffff" stroke-opacity="0.1" '
+        'stroke-width="1"/>',
         "</pattern>",
         "</defs>",
-        f'<rect width="{width}" height="{height}" fill="#06090a"/>',
-        f'<rect width="{width}" height="{height}" fill="url(#grid)"/>',
-        _svg_text("ROBOCRAFT · WIRING OVERVIEW", 40, 52, size=18, fill="#edf2ee"),
+        f'<rect width="{width}" height="{height}" fill="#07233d"/>',
+        f'<rect width="{width}" height="{height}" fill="url(#bp-major)"/>',
         _svg_text(
-            f"{len(plan.nodes)} parts · {len({c.net for c in plan.connections})} nets · "
+            "BLUEPRINTS BAKER · PIN-LEVEL WIRING SCHEMATIC",
+            40,
+            52,
+            size=18,
+            fill="#f2f8ff",
+        ),
+        _svg_text(
+            f"{len(plan.nodes)} parts · {len(plan.pinout)} physical pins · "
+            f"{len({c.net for c in plan.connections})} nets · "
             f"{plan.power_budget.peak_current_ma or 0:.0f} mA peak",
             40,
             78,
             size=11,
-            fill="#94a29c",
+            fill="#b9d4ea",
+        ),
+        _svg_text(
+            "Every pin row names its exact destination. Labels mark unconnected pins.",
+            width - 40,
+            78,
+            size=10,
+            fill="#7fa8c8",
+            anchor="end",
         ),
     ]
 
+    destination_by_pin: dict[tuple[str, str], str] = {}
+    for entry in plan.pinout:
+        if entry.destinations:
+            destination_by_pin[(entry.ref, entry.pin)] = ", ".join(
+                f"{destination.ref}.{destination.pin}" for destination in entry.destinations
+            )
+        else:
+            destination_by_pin[(entry.ref, entry.pin)] = "not connected"
+
+    pin_index = {
+        (node.ref, pin.name): index for node in plan.nodes for index, pin in enumerate(node.pins)
+    }
+
+    # Faint routing behind the part blocks keeps the pin rows readable.
     for connection in plan.connections:
-        start = positions.get(connection.from_ref)
-        end = positions.get(connection.to_ref)
-        if start is None or end is None:
+        source = positions.get(connection.from_ref)
+        target = positions.get(connection.to_ref)
+        if source is None or target is None:
             continue
-        x1, y1 = start[0] + 62, start[1] + 22
-        x2, y2 = end[0] + 62, end[1] + 22
-        midx = (x1 + x2) / 2
-        color = color_by_kind.get(connection.kind, "#94a29c")
-        opacity = "0.18" if connection.kind == "ground" else "0.55"
+        sx, sy, _ = source
+        tx, ty, _ = target
+        source_entry = pin_index.get((connection.from_ref, connection.from_pin))
+        target_entry = pin_index.get((connection.to_ref, connection.to_pin))
+        if source_entry is None or target_entry is None:
+            continue
+        y1 = sy + header_height + source_entry * row_height + 7
+        y2 = ty + header_height + target_entry * row_height + 7
+        x1 = sx + node_width
+        x2 = tx + node_width
+        mid = max(x1, x2) + 16
+        color = color_by_kind.get(connection.kind, "#b9d4ea")
         parts.append(
-            f'<path d="M {x1:.0f} {y1:.0f} C {midx:.0f} {y1:.0f}, {midx:.0f} {y2:.0f}, '
-            f'{x2:.0f} {y2:.0f}" fill="none" stroke="{color}" stroke-width="1.4" '
-            f'opacity="{opacity}"><title>{html.escape(connection.net)}: '
+            f'<path d="M {x1:.0f} {y1:.0f} H {mid:.0f} V {y2:.0f} H {x2:.0f}" '
+            f'fill="none" stroke="{color}" stroke-width="1.1" stroke-opacity="0.34" '
+            f'stroke-linejoin="round"><title>{html.escape(connection.net)}: '
             f"{html.escape(connection.from_ref)}.{html.escape(connection.from_pin)} → "
             f"{html.escape(connection.to_ref)}.{html.escape(connection.to_pin)}</title></path>"
         )
 
-    fill_by_kind = {
-        "power": "#1b1113",
-        "regulator": "#101a1a",
-        "controller": "#141c0d",
-        "driver": "#101a1a",
-        "motor": "#1b1810",
-        "actuator": "#1b1810",
-        "sensor": "#0f1a1c",
-        "other": "#10171a",
-    }
-    for node in nodes:
-        x, y = positions[node.ref]
-        fill = fill_by_kind.get(node.kind, "#10171a")
+    for node in plan.nodes:
+        x, y, block_height = positions[node.ref]
         parts.append(
             f"<g><title>{html.escape(node.label)} · {html.escape(node.ref)}</title>"
-            f'<rect x="{x:.0f}" y="{y:.0f}" width="150" height="58" rx="8" '
-            f'fill="{fill}" stroke="#223034"/>'
-            f'<text x="{x + 10:.0f}" y="{y + 20:.0f}" font-family="Menlo, monospace" '
-            f'font-size="11" fill="#c9f75a">{html.escape(node.ref)}</text>'
-            f'<text x="{x + 10:.0f}" y="{y + 38:.0f}" font-family="Inter, sans-serif" '
-            f'font-size="10" fill="#edf2ee">{html.escape(node.label[:26])}</text>'
-            f'<text x="{x + 10:.0f}" y="{y + 51:.0f}" font-family="Menlo, monospace" '
-            f'font-size="8" fill="#5f6e68">{html.escape(node.kind.upper())}</text></g>'
+            f'<rect x="{x:.0f}" y="{y:.0f}" width="{node_width}" height="{block_height:.0f}" '
+            'rx="4" fill="#0b2f4f" fill-opacity="0.94" stroke="#eaf6ff" '
+            'stroke-opacity="0.55" stroke-width="1.1"/>'
+            f'<line x1="{x:.0f}" y1="{y + header_height:.0f}" x2="{x + node_width:.0f}" '
+            f'y2="{y + header_height:.0f}" stroke="#eaf6ff" stroke-opacity="0.28"/>'
+            f'<text x="{x + 10:.0f}" y="{y + 17:.0f}" font-family="Menlo, monospace" '
+            f'font-size="11" fill="#eaf6ff">{html.escape(node.ref)}</text>'
+            f'<text x="{x + 44:.0f}" y="{y + 17:.0f}" font-family="Inter, sans-serif" '
+            f'font-size="10" fill="#f2f8ff">{html.escape(node.label[:28])}</text>'
+            f'<text x="{x + 10:.0f}" y="{y + 30:.0f}" font-family="Menlo, monospace" '
+            f'font-size="7" fill="#7fa8c8">{html.escape(node.kind.upper())} · '
+            f"{len(node.pins)} PINS</text>"
+            f'<text x="{x + node_width - 10:.0f}" y="{y + 30:.0f}" '
+            'font-family="Menlo, monospace" font-size="7" fill="#7fa8c8" '
+            'text-anchor="end">PIN → DESTINATION</text>'
         )
+        for index, pin in enumerate(node.pins):
+            row_y = y + header_height + index * row_height
+            destination = destination_by_pin.get((node.ref, pin.name), "not connected")
+            connected = destination != "not connected"
+            if len(destination) > 34:
+                destination = destination[:33] + "…"
+            parts.append(
+                f'<text x="{x + 10:.0f}" y="{row_y + 11:.0f}" '
+                f'font-family="Menlo, monospace" font-size="8.5" '
+                f'fill="{"#f2f8ff" if connected else "#7fa8c8"}">'
+                f"{html.escape(pin.name[:16])}</text>"
+                f'<text x="{x + node_width - 10:.0f}" y="{row_y + 11:.0f}" '
+                'font-family="Menlo, monospace" font-size="8" text-anchor="end" '
+                f'fill="{"#6fd6ff" if connected else "#7fa8c8"}">'
+                f"{html.escape(destination)}</text>"
+                f'<circle cx="{x + node_width:.0f}" cy="{row_y + 7:.0f}" r="1.6" '
+                f'fill="{"#6fd6ff" if connected else "#2d6894"}"/>'
+            )
+        parts.append("</g>")
 
     legend = [
         ("power", "Power"),
@@ -348,19 +665,19 @@ def export_svg(plan: ElectricalPlan) -> str:
     ]
     for index, (kind, label) in enumerate(legend):
         x = 40 + index * 110
-        y = height - 42
+        y = height - 40
         parts.append(
             f'<line x1="{x}" y1="{y - 4}" x2="{x + 18}" y2="{y - 4}" '
             f'stroke="{color_by_kind[kind]}" stroke-width="2"/>'
         )
-        parts.append(_svg_text(label, x + 24, y, size=10, fill="#94a29c"))
+        parts.append(_svg_text(label, x + 24, y, size=10, fill="#b9d4ea"))
     parts.append(
         _svg_text(
             f"LIBRARY v{plan.library_version} · CHECK ALL CONNECTIONS BEFORE POWER-ON",
             width - 40,
             height - 20,
             size=9,
-            fill="#5f6e68",
+            fill="#7fa8c8",
             anchor="end",
         )
     )
@@ -376,7 +693,7 @@ def export_markdown(plan: ElectricalPlan, bom: ComponentResearchOutput | None, t
     lines = [
         f"# {title} — wiring guide",
         "",
-        "Generated by the RoboCraft deterministic electrical engine. "
+        "Generated by the Blueprints Baker deterministic electrical engine. "
         "Verify every connection against the component datasheet before power-on.",
         "",
         "## Power budget",
@@ -396,9 +713,30 @@ def export_markdown(plan: ElectricalPlan, bom: ComponentResearchOutput | None, t
         supply = f"{node.voltage_v:g} V" if node.voltage_v is not None else "—"
         lines.append(f"| {_md(node.ref)} | {_md(node.label)} | {_md(node.role)} | {_md(supply)} |")
 
-    lines.extend(["", "## Pin map", "", "| Pin | Signal |", "| --- | --- |"])
-    for pin, signal in sorted(plan.pin_map.items()):
-        lines.append(f"| {_md(pin)} | {_md(signal)} |")
+    lines.extend(
+        [
+            "",
+            "## Full pinout",
+            "",
+            "| Ref | Part | Pin | Net | Signal | Destination | Wire |",
+            "| --- | --- | --- | --- | --- | --- | --- |",
+        ]
+    )
+    for entry in plan.pinout:
+        destinations = (
+            ", ".join(f"{destination.ref}.{destination.pin}" for destination in entry.destinations)
+            or "not connected"
+        )
+        wire = (
+            f"{entry.wire_color} · {entry.wire_gauge_awg} AWG"
+            if entry.wire_color or entry.wire_gauge_awg
+            else "—"
+        )
+        lines.append(
+            f"| {_md(entry.ref)} | {_md(entry.part)} | {_md(entry.pin)} "
+            f"| {_md(entry.net or '—')} | {_md(entry.signal or '—')} "
+            f"| {_md(destinations)} | {_md(wire)} |"
+        )
 
     lines.extend(["", "## Nets", "", "| Net | From | To | Signal |", "| --- | --- | --- | --- |"])
     for connection in plan.connections:
@@ -436,10 +774,14 @@ def export_artifact(
     spec = EXPORT_SPECS[fmt]
     if fmt == "wiring-csv":
         content = export_wiring_csv(plan)
+    elif fmt == "pinout-csv":
+        content = export_pinout_csv(plan)
     elif fmt == "bom-csv":
         content = export_bom_csv(bom)
     elif fmt == "kicad-netlist":
         content = export_kicad_netlist(plan)
+    elif fmt == "kicad-schematic":
+        content = export_kicad_schematic(plan, project_name=project_name)
     elif fmt == "svg":
         content = export_svg(plan)
     elif fmt == "markdown":
@@ -457,7 +799,9 @@ __all__ = [
     "export_artifact",
     "export_bom_csv",
     "export_kicad_netlist",
+    "export_kicad_schematic",
     "export_markdown",
+    "export_pinout_csv",
     "export_svg",
     "export_wiring_csv",
 ]

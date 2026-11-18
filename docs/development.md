@@ -19,8 +19,8 @@ No AI provider account or API key is required. The default provider is a determi
 ## First-time setup
 
 ```bash
-git clone https://github.com/Abooubaker/robocraft.git
-cd robocraft
+git clone https://github.com/Abooubaker/blueprints-baker.git
+cd blueprints-baker
 
 # 1. Database (or use an existing PostgreSQL 16 instance)
 docker compose up -d db
@@ -121,7 +121,7 @@ npm run codegen                    # regenerate src/lib/api-schema.ts
 | `LOG_LEVEL` | `INFO` | `CRITICAL`/`ERROR`/`WARNING`/`INFO`/`DEBUG` |
 | `API_V1_PREFIX` | `/api/v1` | Router prefix |
 | `CORS_ORIGINS` | localhost:3000 origins | Comma-separated allow-list |
-| `DATABASE_URL` | local robocraft DSN | Must use `postgresql+asyncpg://` at runtime |
+| `DATABASE_URL` | local blueprints-baker DSN | Must use `postgresql+asyncpg://` at runtime |
 | `DATABASE_ECHO` | `false` | Log SQL (noisy) |
 | `DATABASE_POOL_SIZE` | `5` | Ignored for SQLite |
 | `DATABASE_MAX_OVERFLOW` | `10` | Ignored for SQLite |
@@ -136,7 +136,7 @@ npm run codegen                    # regenerate src/lib/api-schema.ts
 | --- | --- | --- |
 | `NEXT_PUBLIC_API_URL` | `http://localhost:8000` | Browser-visible API origin |
 | `NEXT_PUBLIC_DEMO_MODE` | `false` | Read precomputed fixtures and export statically |
-| `NEXT_PUBLIC_BASE_PATH` | empty | Pages project-site prefix, e.g. `/robocraft` |
+| `NEXT_PUBLIC_BASE_PATH` | empty | Pages project-site prefix, e.g. `/blueprints-baker` |
 
 Never put a provider key in a `NEXT_PUBLIC_*` variable: Next.js inlines those values into the
 browser bundle. Provider keys belong only in the API environment. See
@@ -186,7 +186,7 @@ not hand-edit generated files.
 | --- | --- | --- |
 | API behavior | pytest + httpx ASGI transport | Health, project lifecycle, validation, specification updates, agent runs, audit history |
 | Agent graph | pytest | Dependency resolution, skip propagation, status aggregation, contract rejection |
-| Electrical | pytest | Plan generation, pin/net wiring, validation findings, all six exports, API round-trip |
+| Electrical | pytest | Plan generation, pin/net wiring, validation findings, all eight exports, API round-trip |
 | Contracts | pytest / JSON Schema export | Unknown-field rejection, enum validity, serialization |
 | Frontend | TypeScript, ESLint, Prettier | Type safety, hooks rules, formatting |
 | Build | `next build` | Route compilation and production bundling |
@@ -264,12 +264,12 @@ Rules of thumb:
 
 ### `database_unavailable` / readiness 503
 
-- Check PostgreSQL: `pg_isready -h localhost -p 5432 -U robocraft`.
+- Check PostgreSQL: `pg_isready -h localhost -p 5432 -U blueprints-baker`.
 - Confirm `DATABASE_URL` uses `postgresql+asyncpg://`, not `postgresql://`.
 - If using Compose, wait for the health check: `docker compose ps`.
 - Run `uv run alembic upgrade head` if the schema is missing.
 
-### `Cannot reach the RoboCraft API`
+### `Cannot reach the Blueprints Baker API`
 
 - Confirm the API is on port 8000 and `NEXT_PUBLIC_API_URL` matches.
 - CORS failures appear in the browser console; add the web origin to `CORS_ORIGINS`.

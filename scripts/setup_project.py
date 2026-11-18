@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Configure the RoboCraft GitHub Project board.
+"""Configure the Blueprints Baker GitHub Project board.
 
 Requires the `project` auth scope:
 
@@ -323,7 +323,7 @@ def item_map(project_id: str, seed: dict[str, Any], dry_run: bool) -> dict[str, 
                 "api",
                 "graphql",
                 "-f",
-                "query=query($number:Int!){repository(owner:\"Abooubaker\",name:\"robocraft\"){issue(number:$number){id}}}",
+                "query=query($number:Int!){repository(owner:\"Abooubaker\",name:\"blueprints-baker\"){issue(number:$number){id}}}",
                 "-F",
                 f"number={match['number']}",
                 "--jq",

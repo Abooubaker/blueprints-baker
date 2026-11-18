@@ -860,6 +860,95 @@
       "title": "ElectricalNodePin",
       "type": "object"
     },
+    "ElectricalPinoutEntry": {
+      "additionalProperties": false,
+      "description": "One row of the every-pin wiring table.\n\nA pin can fan out (for example a battery positive feeding a regulator and a\nmotor driver), so destinations is a list rather than a single endpoint.\nUnconnected pins are still present with ``connected=False`` so the table is\na complete inventory of the physical part.",
+      "properties": {
+        "connected": {
+          "default": false,
+          "title": "Connected",
+          "type": "boolean"
+        },
+        "destinations": {
+          "items": {
+            "$ref": "#/$defs/PinDestination"
+          },
+          "title": "Destinations",
+          "type": "array"
+        },
+        "net": {
+          "default": "",
+          "title": "Net",
+          "type": "string"
+        },
+        "part": {
+          "title": "Part",
+          "type": "string"
+        },
+        "pin": {
+          "title": "Pin",
+          "type": "string"
+        },
+        "pin_kind": {
+          "default": "",
+          "title": "Pin Kind",
+          "type": "string"
+        },
+        "ref": {
+          "title": "Ref",
+          "type": "string"
+        },
+        "role": {
+          "default": "",
+          "title": "Role",
+          "type": "string"
+        },
+        "signal": {
+          "default": "",
+          "title": "Signal",
+          "type": "string"
+        },
+        "voltage_v": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Voltage V"
+        },
+        "wire_color": {
+          "default": "",
+          "title": "Wire Color",
+          "type": "string"
+        },
+        "wire_gauge_awg": {
+          "anyOf": [
+            {
+              "maximum": 40,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Wire Gauge Awg"
+        }
+      },
+      "required": [
+        "ref",
+        "part",
+        "pin"
+      ],
+      "title": "ElectricalPinoutEntry",
+      "type": "object"
+    },
     "ElectricalPlan": {
       "additionalProperties": false,
       "properties": {
@@ -902,6 +991,13 @@
           },
           "title": "Pin Map",
           "type": "object"
+        },
+        "pinout": {
+          "items": {
+            "$ref": "#/$defs/ElectricalPinoutEntry"
+          },
+          "title": "Pinout",
+          "type": "array"
         },
         "power_budget": {
           "$ref": "#/$defs/PowerBudget"
@@ -1028,6 +1124,46 @@
         "name"
       ],
       "title": "MechanicalPart",
+      "type": "object"
+    },
+    "PinDestination": {
+      "additionalProperties": false,
+      "description": "Where one physical pin terminates, including the wire it travels on.",
+      "properties": {
+        "connector": {
+          "default": "",
+          "title": "Connector",
+          "type": "string"
+        },
+        "kind": {
+          "default": "signal",
+          "title": "Kind",
+          "type": "string"
+        },
+        "net": {
+          "default": "",
+          "title": "Net",
+          "type": "string"
+        },
+        "pin": {
+          "title": "Pin",
+          "type": "string"
+        },
+        "ref": {
+          "title": "Ref",
+          "type": "string"
+        },
+        "signal": {
+          "default": "",
+          "title": "Signal",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ref",
+        "pin"
+      ],
+      "title": "PinDestination",
       "type": "object"
     },
     "PowerBudget": {

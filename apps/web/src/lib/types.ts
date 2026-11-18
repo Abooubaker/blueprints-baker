@@ -174,6 +174,30 @@ export interface ElectricalConnection {
   notes: string;
 }
 
+export interface PinDestination {
+  ref: string;
+  pin: string;
+  net: string;
+  signal: string;
+  kind: ConnectionKind;
+  connector: string;
+}
+
+export interface ElectricalPinoutEntry {
+  ref: string;
+  part: string;
+  role: string;
+  pin: string;
+  pin_kind: string;
+  voltage_v: number | null;
+  net: string;
+  signal: string;
+  connected: boolean;
+  destinations: PinDestination[];
+  wire_color: string;
+  wire_gauge_awg: number | null;
+}
+
 export interface ElectricalIssue {
   code: string;
   severity: IssueSeverity;
@@ -203,6 +227,7 @@ export interface PowerBudget {
 export interface ElectricalPlan {
   nodes: ElectricalNode[];
   connections: ElectricalConnection[];
+  pinout: ElectricalPinoutEntry[];
   power_budget: PowerBudget;
   power_rails: PowerRail[];
   pin_map: Record<string, string>;
@@ -245,7 +270,15 @@ export interface ComponentResearchOutput {
   sources: string[];
 }
 
-export type ExportFormat = "json" | "wiring-csv" | "bom-csv" | "kicad-netlist" | "svg" | "markdown";
+export type ExportFormat =
+  | "json"
+  | "wiring-csv"
+  | "pinout-csv"
+  | "bom-csv"
+  | "kicad-netlist"
+  | "kicad-schematic"
+  | "svg"
+  | "markdown";
 
 export interface ExportFormatDescriptor {
   format: ExportFormat;

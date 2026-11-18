@@ -1,4 +1,4 @@
-# RoboCraft developer commands. Run `make` or `make help` for the list.
+# Blueprints Baker developer commands. Run `make` or `make help` for the list.
 SHELL := /usr/bin/env bash
 .DEFAULT_GOAL := help
 
@@ -11,7 +11,7 @@ COMPOSE := docker compose
 	demo-data demo-build api-check web-check clean
 
 help: ## Show available commands
-	@awk 'BEGIN {FS = ":.*## "; printf "\nRoboCraft commands:\n\n"} /^[a-zA-Z_-]+:.*## / {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2} END {printf "\n"}' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*## "; printf "\nBlueprints Baker commands:\n\n"} /^[a-zA-Z_-]+:.*## / {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2} END {printf "\n"}' $(MAKEFILE_LIST)
 
 install: install-api install-web ## Install backend and frontend dependencies
 
@@ -75,7 +75,7 @@ demo-data: ## Regenerate the static GitHub Pages fixtures from the electrical en
 	cd $(API_DIR) && uv run python ../../scripts/generate_demo_data.py
 
 demo-build: demo-data ## Build the static demo export served on GitHub Pages
-	cd $(WEB_DIR) && NEXT_PUBLIC_DEMO_MODE=true NEXT_PUBLIC_BASE_PATH=/robocraft NEXT_PUBLIC_API_URL= npm run build
+	cd $(WEB_DIR) && NEXT_PUBLIC_DEMO_MODE=true NEXT_PUBLIC_BASE_PATH=/blueprints-baker NEXT_PUBLIC_API_URL= npm run build
 	bash scripts/scan_secrets.sh
 
 api-check: ## Full backend quality gate

@@ -3,14 +3,14 @@
 The repository publishes a read-only demo to GitHub Pages. It is the same Next.js app,
 built in demo mode against precomputed fixtures instead of a live API.
 
-Live site: <https://abooubaker.github.io/robocraft/> — the workflow derives the base path from
+Live site: <https://abooubaker.github.io/blueprints-baker/> — the workflow derives the base path from
 the repository name, so a project site is served from `/<repository>/`.
 
 ## What the demo is
 
 - One project, **Patio Scout** (ESP32 obstacle avoider), with a generated specification,
-  bill of materials, agent-run audit trail, and a complete wiring plan.
-- The wiring workspace, exports, validation findings, and power budget are all real output
+  bill of materials, agent-run audit trail, and a complete schematic with a full pinout.
+- The schematic, pinout, exports, validation findings, and power budget are all real output
   from the deterministic engine in `apps/api/app/electrical/`.
 - The dashboard, project overview, and every module route render from the same JSON.
 
@@ -31,7 +31,7 @@ apps/web/src/lib/demo/agent-runs.json       audit trail for the six agents
 apps/web/src/lib/demo/agent-catalog.json    agent roster with real statuses
 apps/web/src/lib/demo/electrical.json       ElectricalArtifact (plan + BOM + formats)
 apps/web/src/lib/demo/orchestration.json    shared pipeline context
-apps/web/public/demo/exports/*              the six downloadable exports
+apps/web/public/demo/exports/*              the eight downloadable exports
 apps/web/public/demo/exports/manifest.json  engine summary
 ```
 
@@ -48,13 +48,13 @@ make demo-build    # static export + credential scan
 ```bash
 cd apps/web
 NEXT_PUBLIC_DEMO_MODE=true \
-NEXT_PUBLIC_BASE_PATH=/robocraft \
+NEXT_PUBLIC_BASE_PATH=/blueprints-baker \
 NEXT_PUBLIC_API_URL= \
 npm run build
 npx serve out
 ```
 
-Open `http://localhost:3000/robocraft/`. `next.config.ts` switches `output: "export"`,
+Open `http://localhost:3000/blueprints-baker/`. `next.config.ts` switches `output: "export"`,
 `trailingSlash`, and unoptimized images when `NEXT_PUBLIC_DEMO_MODE=true`.
 
 ## Demo mode in code

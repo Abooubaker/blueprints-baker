@@ -79,9 +79,9 @@ Validation detail entries look like:
 | GET | `/api/v1/projects/{project_id}/agent-runs` | List agent executions (newest first) |
 | GET | `/api/v1/agents` | Agent catalog with provider and dependencies |
 | GET | `/api/v1/components` | List/filter the component catalog |
-| POST | `/api/v1/projects/{project_id}/electrical` | Generate and persist the wiring plan |
-| GET | `/api/v1/projects/{project_id}/electrical` | Read the latest wiring plan |
-| GET | `/api/v1/projects/{project_id}/electrical/export/{format}` | Download a wiring export |
+| POST | `/api/v1/projects/{project_id}/electrical` | Generate and persist the electrical plan |
+| GET | `/api/v1/projects/{project_id}/electrical` | Read the latest electrical plan |
+| GET | `/api/v1/projects/{project_id}/electrical/export/{format}` | Download an export |
 
 ## Health
 
@@ -92,7 +92,7 @@ curl http://localhost:8000/health/ready
 ```json
 {
   "status": "ok",
-  "service": "RoboCraft API",
+  "service": "Blueprints Baker API",
   "version": "0.1.0",
   "environment": "development",
   "timestamp": "2026-11-16T22:00:00Z",
@@ -352,6 +352,7 @@ plan. `GET` returns the latest artifact (`404` before the first run).
   "plan": {
     "nodes": [],
     "connections": [],
+    "pinout": [],
     "pin_map": {},
     "power_budget": {},
     "power_rails": [],
@@ -372,12 +373,16 @@ Exports are attachments with a fixed filename:
 | --- | --- |
 | `json` | `electrical-plan.json` |
 | `wiring-csv` | `wiring.csv` |
+| `pinout-csv` | `pinout.csv` |
 | `bom-csv` | `bill-of-materials.csv` |
-| `kicad-netlist` | `robocraft.net` |
+| `kicad-netlist` | `blueprints-baker.net` |
+| `kicad-schematic` | `blueprints-baker.kicad_sch` |
 | `svg` | `wiring.svg` |
 | `markdown` | `build-guide.md` |
 
-The `.net` export is a KiCad S-expression netlist; EasyEDA Pro and KiCad can import it.
+The `.net` export is a KiCad S-expression netlist and the `.kicad_sch` export is a KiCad 8
+schematic with embedded symbols and a labelled wire on every physical pin. EasyEDA Pro and
+KiCad can import both.
 See [electrical.md](electrical.md) for validation rules and the full contract.
 
 ## Enum reference
