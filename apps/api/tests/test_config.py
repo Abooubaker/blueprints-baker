@@ -26,9 +26,7 @@ def test_render_postgres_url_is_normalized() -> None:
         database_url="postgres://albayraq:secret@db.example.com/albayraq",
     )
 
-    assert settings.database_url == (
-        "postgresql+asyncpg://albayraq:secret@db.example.com/albayraq"
-    )
+    assert settings.database_url == ("postgresql+asyncpg://albayraq:secret@db.example.com/albayraq")
     assert settings.sqlalchemy_connect_args == {}
 
 
