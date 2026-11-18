@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { assetPath } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export function LogoMark({ className }: { className?: string }) {
@@ -12,17 +13,14 @@ export function LogoMark({ className }: { className?: string }) {
         strokeWidth="1.1"
         strokeOpacity="0.7"
       />
-      <path
-        d="M9 25V15.5C9 10.8 12 8.2 15.8 8.2c3.4 0 5.9 1.6 7.1 4l3.9.9c.7.2.8 1 .2 1.3l-2.6 1.1c-1 3.5-4 5.9-8.2 5.9L9 25Z"
-        fill="#eaf6ff"
+      <image
+        href={assetPath("/brand/albayraq-mark.png")}
+        x="3.6"
+        y="9.6"
+        width="24.8"
+        height="12.8"
+        preserveAspectRatio="xMidYMid meet"
       />
-      <path
-        d="M26.4 14.4c-1.6-.2-3.1-.3-4.4-.2"
-        stroke="#0b2f4f"
-        strokeWidth="1.1"
-        strokeLinecap="round"
-      />
-      <circle cx="17.4" cy="13.4" r="1.2" fill="#6fd6ff" />
     </svg>
   );
 }
