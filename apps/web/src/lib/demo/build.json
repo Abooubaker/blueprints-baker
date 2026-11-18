@@ -30,7 +30,12 @@
     "confirmed": true,
     "budget_max_usd": "150",
     "identification_rationale": "Matched obstacle, ultrasonic, and rover keywords in the description.",
-    "identification_confidence": 0.86
+    "identification_confidence": 0.86,
+    "print_settings": {
+      "material": "PLA",
+      "infill_percent": 35,
+      "price_per_gram_jod": null
+    }
   },
   "identification": {
     "proposed_name": "Patio Scout",
@@ -3209,12 +3214,13 @@
     ],
     "manufacturing_notes": [
       "STL units are millimetres.",
-      "Material weights use the required JOD print chart with a 40% effective material fraction for a 35% infill print.",
-      "Cheapest estimate: PLA at 3.556 JOD."
+      "Material weights use the required JOD print chart with a 40.2% effective material fraction for 35% infill.",
+      "Selected print: PLA at 0.070 JOD/g, 43.87 g, 3.571 JOD.",
+      "Cheapest estimate: PLA at 3.571 JOD."
     ],
     "warnings": [
       "The STL is a reference plate, not a production-ready enclosure.",
-      "Weigh the actual print; the price chart uses an effective 40% material fraction."
+      "Weigh the actual print; the estimate uses a 40.2% effective material fraction for 35% infill."
     ],
     "dimensions_mm": {
       "length_mm": 160.0,
@@ -3223,6 +3229,10 @@
     },
     "volume_cm3": "88.000",
     "infill_percent": 35,
+    "material_fraction": "0.402",
+    "selected_material": "PLA",
+    "custom_price_per_gram_jod": null,
+    "print_price_jod": "3.571",
     "stl_ascii": "solid patio-scout-chassis\n  facet normal 0.0 0.0 -1.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 0.000 110.000 0.000\n      vertex 160.000 110.000 0.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 -1.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 110.000 0.000\n      vertex 160.000 0.000 0.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 1.0\n    outer loop\n      vertex 0.000 0.000 5.000\n      vertex 160.000 0.000 5.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 1.0\n    outer loop\n      vertex 0.000 0.000 5.000\n      vertex 160.000 110.000 5.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 -1.0 0.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 0.000 0.000\n      vertex 160.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 -1.0 0.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 0.000 5.000\n      vertex 0.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 1.0 0.0\n    outer loop\n      vertex 160.000 110.000 0.000\n      vertex 0.000 110.000 0.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 1.0 0.0\n    outer loop\n      vertex 160.000 110.000 0.000\n      vertex 0.000 110.000 5.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal -1.0 0.0 0.0\n    outer loop\n      vertex 0.000 110.000 0.000\n      vertex 0.000 0.000 0.000\n      vertex 0.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal -1.0 0.0 0.0\n    outer loop\n      vertex 0.000 110.000 0.000\n      vertex 0.000 0.000 5.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 1.0 0.0 0.0\n    outer loop\n      vertex 160.000 0.000 0.000\n      vertex 160.000 110.000 0.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 1.0 0.0 0.0\n    outer loop\n      vertex 160.000 0.000 0.000\n      vertex 160.000 110.000 5.000\n      vertex 160.000 0.000 5.000\n    endloop\n  endfacet\nendsolid patio-scout-chassis\n",
     "stl_filename": "patio-scout-chassis.stl",
     "material_quotes": [
@@ -3231,45 +3241,50 @@
         "price_per_gram_jod": "0.070",
         "base_jod": "0.500",
         "minimum_jod": "1.000",
-        "weight_g": "43.65",
-        "total_jod": "3.556",
-        "is_cheapest": true
+        "weight_g": "43.87",
+        "total_jod": "3.571",
+        "is_cheapest": true,
+        "is_selected": true
       },
       {
         "material": "PETG",
         "price_per_gram_jod": "0.120",
         "base_jod": "0.500",
         "minimum_jod": "1.200",
-        "weight_g": "44.70",
-        "total_jod": "5.864",
-        "is_cheapest": false
+        "weight_g": "44.93",
+        "total_jod": "5.892",
+        "is_cheapest": false,
+        "is_selected": false
       },
       {
         "material": "ABS",
         "price_per_gram_jod": "0.120",
         "base_jod": "0.500",
         "minimum_jod": "1.000",
-        "weight_g": "36.61",
-        "total_jod": "4.893",
-        "is_cheapest": false
+        "weight_g": "36.79",
+        "total_jod": "4.915",
+        "is_cheapest": false,
+        "is_selected": false
       },
       {
         "material": "Resin",
         "price_per_gram_jod": "0.300",
         "base_jod": "0.500",
         "minimum_jod": "1.500",
-        "weight_g": "38.72",
-        "total_jod": "12.116",
-        "is_cheapest": false
+        "weight_g": "38.91",
+        "total_jod": "12.173",
+        "is_cheapest": false,
+        "is_selected": false
       },
       {
         "material": "TPU",
         "price_per_gram_jod": "0.200",
         "base_jod": "2.000",
         "minimum_jod": "1.200",
-        "weight_g": "42.59",
-        "total_jod": "10.518",
-        "is_cheapest": false
+        "weight_g": "42.80",
+        "total_jod": "10.560",
+        "is_cheapest": false,
+        "is_selected": false
       }
     ],
     "pricing_notes": [
@@ -3360,13 +3375,13 @@
         "is_estimate": true
       },
       {
-        "label": "3D-printed chassis (cheapest material)",
+        "label": "3D-printed chassis (PLA, 35% infill)",
         "category": "mechanical",
         "quantity": 1,
         "unit_price_usd": null,
         "line_total_usd": null,
-        "unit_price_jod": "3.556",
-        "line_total_jod": "3.556",
+        "unit_price_jod": "3.571",
+        "line_total_jod": "3.571",
         "supplier": "local 3D print",
         "is_estimate": true
       }
@@ -3375,9 +3390,9 @@
     "subtotal_jod": "23.69",
     "shipping_usd": "0",
     "contingency_usd": "2.72",
-    "print_cost_jod": "3.56",
+    "print_cost_jod": "3.57",
     "total_usd": "57.12",
-    "total_jod": "27.25",
+    "total_jod": "27.26",
     "currency": "JOD",
     "budget": {
       "min_usd": null,
@@ -3394,10 +3409,10 @@
         ]
       },
       {
-        "description": "Print the chassis in PLA instead of resin.",
-        "savings_usd": "1.14",
+        "description": "Drop the chassis infill to 20%.",
+        "savings_usd": "0.76",
         "tradeoffs": [
-          "Lower heat resistance and a less smooth finish."
+          "A lighter, less rigid reference plate."
         ]
       }
     ],
@@ -3405,7 +3420,9 @@
       "Component prices are curated planning estimates in JOD, not live quotes.",
       "Shipping is excluded because the selected stores ship differently.",
       "A 5% contingency is added to the component subtotal.",
-      "Print pricing uses the required PLA/PETG/ABS/Resin/TPU chart."
+      "Print pricing uses the required PLA/PETG/ABS/Resin/TPU chart.",
+      "Print cost uses PLA at 35% infill.",
+      "The selected material uses the chart per-gram price."
     ]
   },
   "documentation": {
@@ -3413,7 +3430,7 @@
       {
         "path": "README.md",
         "title": "Project overview",
-        "content": "# Patio Scout\n\nAn ESP32 obstacle-avoiding rover with ultrasonic distance sensing, a scanning servo, and a fused 2S LiPo power tree.\n\n## Guided decisions\n\n| Decision | Answer |\n| --- | --- |\n| Identified robot | obstacle_avoider |\n| Stores | temu, mikroelectron, waslleh, amazon, aliexpress, ghanimjo |\n| Languages | python, cpp, c, verilog |\n| Controllers | ESP32 DevKit |\n| Custom PCB | no |\n| Platform | esp32 |\n| Print material | cheapest of the required chart |\n\n## What is included\n\n- Sourced component estimates, cheapest store first.\n- A validated electrical pinout and schematic exports.\n- Multi-file code scaffolds for every selected language.\n- A parametric chassis STL, weight estimate, and print price.\n- This documentation set.\n\n## Honest limits\n\n- Store prices are estimates, not live supplier quotes.\n- Generated code is a scaffold and must be verified on hardware.\n- The STL is a reference plate for price and weight, not a production enclosure.\n"
+        "content": "# Patio Scout\n\nAn ESP32 obstacle-avoiding rover with ultrasonic distance sensing, a scanning servo, and a fused 2S LiPo power tree.\n\n## Guided decisions\n\n| Decision | Answer |\n| --- | --- |\n| Identified robot | obstacle_avoider |\n| Stores | temu, mikroelectron, waslleh, amazon, aliexpress, ghanimjo |\n| Languages | python, cpp, c, verilog |\n| Controllers | ESP32 DevKit |\n| Custom PCB | no |\n| Platform | esp32 |\n| Print material | PLA (35% infill) |\n| Print price | 3.57 JOD |\n\n## What is included\n\n- Sourced component estimates, cheapest store first.\n- A validated electrical pinout and schematic exports.\n- Multi-file code scaffolds for every selected language.\n- A parametric chassis STL, weight estimate, and print price.\n- This documentation set.\n\n## Honest limits\n\n- Store prices are estimates, not live supplier quotes.\n- Generated code is a scaffold and must be verified on hardware.\n- The STL is a reference plate for price and weight, not a production enclosure.\n"
       },
       {
         "path": "docs/sourcing.md",
@@ -3433,7 +3450,7 @@
       {
         "path": "docs/mechanical.md",
         "title": "Mechanical and pricing",
-        "content": "# Mechanical and 3D print price\n\n- Model: `patio-scout-chassis.stl`\n- Dimensions: 160.0 x 110.0 x 5.0 mm\n- Volume: 88.000 cm³\n- Infill: 35%\n\n| Material | JOD/g | Base | Minimum | Weight | Total |\n| --- | ---: | ---: | ---: | ---: | ---: |\n| PLA (cheapest) | 0.070 | 0.500 | 1.000 | 43.65 g | 3.556 JOD |\n| PETG | 0.120 | 0.500 | 1.200 | 44.70 g | 5.864 JOD |\n| ABS | 0.120 | 0.500 | 1.000 | 36.61 g | 4.893 JOD |\n| Resin | 0.300 | 0.500 | 1.500 | 38.72 g | 12.116 JOD |\n| TPU | 0.200 | 2.000 | 1.200 | 42.59 g | 10.518 JOD |\n"
+        "content": "# Mechanical and 3D print price\n\n- Model: `patio-scout-chassis.stl`\n- Dimensions: 160.0 x 110.0 x 5.0 mm\n- Volume: 88.000 cm³\n- Infill: 35%\n- Effective material fraction: 40.2%\n- Selected material: PLA (chart price)\n- Selected print total: 3.57 JOD\n\n| Material | JOD/g | Base | Minimum | Weight | Total |\n| --- | ---: | ---: | ---: | ---: | ---: |\n| PLA (selected, cheapest) | 0.070 | 0.500 | 1.000 | 43.87 g | 3.571 JOD |\n| PETG | 0.120 | 0.500 | 1.200 | 44.93 g | 5.892 JOD |\n| ABS | 0.120 | 0.500 | 1.000 | 36.79 g | 4.915 JOD |\n| Resin | 0.300 | 0.500 | 1.500 | 38.91 g | 12.173 JOD |\n| TPU | 0.200 | 2.000 | 1.200 | 42.80 g | 10.560 JOD |\n"
       },
       {
         "path": "docs/safety.md",
@@ -3448,7 +3465,7 @@
       {
         "path": "docs/budget.md",
         "title": "Budget",
-        "content": "# Budget\n\n- Components: 23.69 JOD\n- 3D print: 3.56 JOD\n- Total: 27.25 JOD\n- Budget status: within\n\n- Component prices are curated planning estimates in JOD, not live quotes.\n- Shipping is excluded because the selected stores ship differently.\n- A 5% contingency is added to the component subtotal.\n- Print pricing uses the required PLA/PETG/ABS/Resin/TPU chart."
+        "content": "# Budget\n\n- Components: 23.69 JOD\n- 3D print: 3.57 JOD\n- Total: 27.26 JOD\n- Budget status: within\n\n- Component prices are curated planning estimates in JOD, not live quotes.\n- Shipping is excluded because the selected stores ship differently.\n- A 5% contingency is added to the component subtotal.\n- Print pricing uses the required PLA/PETG/ABS/Resin/TPU chart.\n- Print cost uses PLA at 35% infill.\n- The selected material uses the chart per-gram price."
       }
     ],
     "summary": "Generated documentation covers sourcing, wiring, firmware, mechanical pricing, safety, and the guided decisions.",

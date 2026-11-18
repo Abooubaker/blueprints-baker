@@ -87,6 +87,7 @@ Validation detail entries look like:
 | PUT | `/api/v1/projects/{project_id}/preferences` | Save stores, languages, controllers, PCB choice |
 | POST | `/api/v1/projects/{project_id}/build` | Run the full build and persist the artifact |
 | GET | `/api/v1/projects/{project_id}/build` | Read the latest build artifact |
+| PUT | `/api/v1/projects/{project_id}/print-settings` | Change print material, infill, or JOD/g price |
 | GET | `/api/v1/projects/{project_id}/mechanical/stl` | Download the generated reference STL |
 
 ## Health
@@ -392,7 +393,8 @@ See [electrical.md](electrical.md) for validation rules and the full contract.
 ## Guided build
 
 The guided flow is four calls: identify → save preferences → generate build → read the artifact.
-Everything the web workspace renders comes from the last build response.
+Everything the web workspace renders comes from the last build response. Print settings can be
+changed afterward without rerunning the electrical, programming, or component stages.
 
 ### Identify a robot
 
@@ -437,12 +439,36 @@ confirm or correct. Nothing is persisted by this call.
   "confirmed": true,
   "budget_max_usd": 80,
   "identification_rationale": "…",
-  "identification_confidence": 0.72
+  "identification_confidence": 0.72,
+  "print_settings": {
+    "material": "PLA",
+    "infill_percent": 35,
+    "price_per_gram_jod": null
+  }
 }
 ```
 
 Preferences are stored in `ProjectConfiguration.configuration` so every later agent reads the same
 confirmed answers. `GET` returns the saved values or the project defaults.
+
+### Print settings
+
+`PUT /api/v1/projects/{project_id}/print-settings` changes the 3D-print assumptions and returns the
+refreshed `BuildArtifactRead`:
+
+```json
+{
+  "material": "PETG",
+  "infill_percent": 60,
+  "price_per_gram_jod": 0.15
+}
+```
+
+`price_per_gram_jod` is optional. When it is set, it replaces the chart rate for the selected
+material so the estimate can match a local spool or print-shop quote. The endpoint persists the
+settings and recomputes the mechanical and cost artifacts; the budget line and total use the
+selected material instead of the cheapest one. Weight derives from volume, density, and an
+effective material fraction of `8% + 92% × infill%`.
 
 ### Generate and read the build
 
@@ -462,7 +488,15 @@ mechanical → cost → documentation and returns a `BuildArtifactRead` (`201`).
   "research": { "selected_shops": [], "bill_of_materials": [] },
   "electrical": {},
   "programming": { "bundles": [] },
-  "mechanical": { "material_quotes": [], "stl_filename": "patio-scout.stl" },
+  "mechanical": {
+    "selected_material": "PLA",
+    "infill_percent": 35,
+    "material_fraction": "0.402",
+    "custom_price_per_gram_jod": null,
+    "print_price_jod": "3.556",
+    "material_quotes": [],
+    "stl_filename": "patio-scout.stl"
+  },
   "cost": {},
   "documentation": { "files": [] },
   "missing": [],

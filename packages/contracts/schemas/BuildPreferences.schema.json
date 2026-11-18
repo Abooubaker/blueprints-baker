@@ -23,6 +23,53 @@
       "title": "Difficulty",
       "type": "string"
     },
+    "PrintMaterial": {
+      "description": "Materials carried by the 3D-print price chart.",
+      "enum": [
+        "PLA",
+        "PETG",
+        "ABS",
+        "Resin",
+        "TPU"
+      ],
+      "title": "PrintMaterial",
+      "type": "string"
+    },
+    "PrintSettings": {
+      "additionalProperties": false,
+      "description": "User-adjustable 3D print assumptions.\n\n``price_per_gram_jod`` is optional. When set, it replaces the chart rate for\n``material`` so the estimate can match a local supplier or spool price.",
+      "properties": {
+        "infill_percent": {
+          "default": 35,
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Infill Percent",
+          "type": "integer"
+        },
+        "material": {
+          "$ref": "#/$defs/PrintMaterial",
+          "default": "PLA"
+        },
+        "price_per_gram_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Price Per Gram Jod"
+        }
+      },
+      "title": "PrintSettings",
+      "type": "object"
+    },
     "RobotType": {
       "enum": [
         "line_follower",
@@ -119,6 +166,9 @@
       },
       "title": "Languages",
       "type": "array"
+    },
+    "print_settings": {
+      "$ref": "#/$defs/PrintSettings"
     },
     "robot_name": {
       "default": "",

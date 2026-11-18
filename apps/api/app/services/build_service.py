@@ -14,6 +14,7 @@ from app.ai.contracts import (
     CostEstimate,
     ElectricalPlan,
     MechanicalOutput,
+    PrintSettings,
     ProgrammingOutput,
     RobotIdentification,
     RobotSpecificationDraft,
@@ -167,6 +168,42 @@ async def generate_build(
     return await get_build_artifact(session, project_id)
 
 
+async def update_print_settings(
+    session: AsyncSession,
+    project_id: uuid.UUID,
+    settings: PrintSettings,
+    orchestrator: AgentOrchestrator,
+    provider: LLMProvider,
+) -> BuildArtifactRead:
+    """Save print controls and recompute the mechanical and cost artifacts."""
+
+    preferences = await preferences_service.get_preferences(session, project_id)
+    if not preferences.confirmed:
+        raise ValidationError("Confirm the guided flow before changing print settings.")
+
+    await preferences_service.save_print_settings(session, project_id, settings)
+    result = await agent_service.run_agents(
+        session,
+        project_id,
+        AgentRunRequest(
+            agents=[AgentName.MECHANICAL, AgentName.COST],
+            parameters=preferences_service.preferences_parameters(
+                preferences.model_copy(update={"print_settings": settings})
+            ),
+        ),
+        orchestrator,
+        provider,
+    )
+    failed = [run for run in result.runs if run.status == AgentRunStatus.FAILED]
+    if failed:
+        raise ValidationError(
+            "The print settings were saved, but the estimate could not be refreshed: "
+            + "; ".join(run.error_message or run.agent.value for run in failed),
+            details={"errors": [run.error_message for run in failed]},
+        )
+    return await get_build_artifact(session, project_id)
+
+
 async def get_mechanical_stl(session: AsyncSession, project_id: uuid.UUID) -> tuple[str, str]:
     artifact = await get_build_artifact(session, project_id)
     if artifact.mechanical is None or not artifact.mechanical.stl_ascii:
@@ -174,4 +211,9 @@ async def get_mechanical_stl(session: AsyncSession, project_id: uuid.UUID) -> tu
     return artifact.mechanical.stl_filename, artifact.mechanical.stl_ascii
 
 
-__all__ = ["generate_build", "get_build_artifact", "get_mechanical_stl"]
+__all__ = [
+    "generate_build",
+    "get_build_artifact",
+    "get_mechanical_stl",
+    "update_print_settings",
+]

@@ -48,6 +48,7 @@ domain layer.
 | --- | --- |
 | Next.js 16 web app (landing, dashboard, guided wizard, project workspace, schematic & pinout) | ✅ Implemented |
 | Guided flow: describe → identify/confirm → stores → languages → controllers → custom PCB | ✅ Implemented |
+| Interactive print pricing: filament, infill, and per-gram price sliders that update weight, print cost, and budget | ✅ Implemented |
 | FastAPI service, versioned REST API, OpenAPI docs, structured errors, request IDs | ✅ Implemented |
 | PostgreSQL schema for users, projects, specifications, configurations, components, selections, agent runs | ✅ Implemented + migration |
 | Provider-independent agent contracts and JSON Schema export | ✅ Implemented |
@@ -56,7 +57,7 @@ domain layer.
 | Schematic & pinout: every pin and destination, nets, power budget, validation, CSV/SVG/Markdown/JSON exports | ✅ Implemented |
 | KiCad netlist and KiCad schematic exports (importable by EasyEDA Pro and KiCad) | ✅ Implemented |
 | Programming agent: multi-file code bundles for Python, C++, C, STM32 assembly, Verilog, VHDL | ✅ Implemented (scaffolds) |
-| Mechanical agent: parametric STL, printed weight, PLA/PETG/ABS/Resin/TPU JOD chart | ✅ Implemented |
+| Mechanical agent: parametric STL, printed weight, PLA/PETG/ABS/Resin/TPU JOD chart, user price override | ✅ Implemented |
 | Cost agent: JOD/USD roll-up, budget status, alternatives | ✅ Implemented |
 | Documentation generator: overview, sourcing, wiring, firmware, mechanical, safety, decisions, budget | ✅ Implemented |
 | Store pricing from six curated stores (Temu, mikroelectron, waslleh, Amazon, AliExpress, ghanimjo) | ✅ Estimates, cheapest-first |

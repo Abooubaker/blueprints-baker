@@ -10,8 +10,9 @@ agents in a fixed order, validates outputs before accepting them, and records ev
 rules engine produce the same result for the same input, which makes every finding reproducible
 and testable offline. The electrical engine exports CSV/SVG/Markdown/JSON, a KiCad netlist, and a
 KiCad schematic. Programming emits multi-file scaffolds for the requested languages, mechanical
-emits a parametric STL plus the JOD print-material chart, cost rolls the BOM and print into a
-budget, and documentation renders the whole build as Markdown.
+emits a parametric STL plus the JOD print-material chart with user-selected material, infill, and
+per-gram price, cost rolls the BOM and print into a budget, and documentation renders the whole
+build as Markdown.
 
 The orchestration, contracts, API, and persistence are fully implemented and tested. Nothing is
 model-backed yet: `AI_PROVIDER=mock` remains the only provider. Replacing a deterministic agent
@@ -92,7 +93,7 @@ reject unknown fields (`extra="forbid"`) to surface drift immediately.
 | `ComponentResearchOutput` | Role-based bill of materials, candidates with specs/price/supplier, alternatives, compatibility notes, unresolved requirements |
 | `ElectricalPlan` | Nodes, typed connections, full pinout, power budget, safety checks, warnings, wiring steps |
 | `ProgrammingOutput` | Platform, language/framework, code files, libraries, pin assignments, setup/upload/validation steps |
-| `MechanicalOutput` | Chassis, parts, ordered assembly steps, drawing references, manufacturing notes, warnings |
+| `MechanicalOutput` | Chassis, parts, ordered assembly steps, drawing references, selected print material/infill/price, all material quotes, manufacturing notes, warnings |
 | `CostEstimate` | Line items, subtotal/shipping/contingency/total, budget status, alternatives, assumptions |
 
 ### Per-agent inputs

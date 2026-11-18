@@ -3237,12 +3237,13 @@
         ],
         "manufacturing_notes": [
           "STL units are millimetres.",
-          "Material weights use the required JOD print chart with a 40% effective material fraction for a 35% infill print.",
-          "Cheapest estimate: PLA at 3.556 JOD."
+          "Material weights use the required JOD print chart with a 40.2% effective material fraction for 35% infill.",
+          "Selected print: PLA at 0.070 JOD/g, 43.87 g, 3.571 JOD.",
+          "Cheapest estimate: PLA at 3.571 JOD."
         ],
         "warnings": [
           "The STL is a reference plate, not a production-ready enclosure.",
-          "Weigh the actual print; the price chart uses an effective 40% material fraction."
+          "Weigh the actual print; the estimate uses a 40.2% effective material fraction for 35% infill."
         ],
         "dimensions_mm": {
           "length_mm": 160.0,
@@ -3251,6 +3252,10 @@
         },
         "volume_cm3": "88.000",
         "infill_percent": 35,
+        "material_fraction": "0.402",
+        "selected_material": "PLA",
+        "custom_price_per_gram_jod": null,
+        "print_price_jod": "3.571",
         "stl_ascii": "solid patio-scout-chassis\n  facet normal 0.0 0.0 -1.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 0.000 110.000 0.000\n      vertex 160.000 110.000 0.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 -1.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 110.000 0.000\n      vertex 160.000 0.000 0.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 1.0\n    outer loop\n      vertex 0.000 0.000 5.000\n      vertex 160.000 0.000 5.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 1.0\n    outer loop\n      vertex 0.000 0.000 5.000\n      vertex 160.000 110.000 5.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 -1.0 0.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 0.000 0.000\n      vertex 160.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 -1.0 0.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 0.000 5.000\n      vertex 0.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 1.0 0.0\n    outer loop\n      vertex 160.000 110.000 0.000\n      vertex 0.000 110.000 0.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 1.0 0.0\n    outer loop\n      vertex 160.000 110.000 0.000\n      vertex 0.000 110.000 5.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal -1.0 0.0 0.0\n    outer loop\n      vertex 0.000 110.000 0.000\n      vertex 0.000 0.000 0.000\n      vertex 0.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal -1.0 0.0 0.0\n    outer loop\n      vertex 0.000 110.000 0.000\n      vertex 0.000 0.000 5.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 1.0 0.0 0.0\n    outer loop\n      vertex 160.000 0.000 0.000\n      vertex 160.000 110.000 0.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 1.0 0.0 0.0\n    outer loop\n      vertex 160.000 0.000 0.000\n      vertex 160.000 110.000 5.000\n      vertex 160.000 0.000 5.000\n    endloop\n  endfacet\nendsolid patio-scout-chassis\n",
         "stl_filename": "patio-scout-chassis.stl",
         "material_quotes": [
@@ -3259,45 +3264,50 @@
             "price_per_gram_jod": "0.070",
             "base_jod": "0.500",
             "minimum_jod": "1.000",
-            "weight_g": "43.65",
-            "total_jod": "3.556",
-            "is_cheapest": true
+            "weight_g": "43.87",
+            "total_jod": "3.571",
+            "is_cheapest": true,
+            "is_selected": true
           },
           {
             "material": "PETG",
             "price_per_gram_jod": "0.120",
             "base_jod": "0.500",
             "minimum_jod": "1.200",
-            "weight_g": "44.70",
-            "total_jod": "5.864",
-            "is_cheapest": false
+            "weight_g": "44.93",
+            "total_jod": "5.892",
+            "is_cheapest": false,
+            "is_selected": false
           },
           {
             "material": "ABS",
             "price_per_gram_jod": "0.120",
             "base_jod": "0.500",
             "minimum_jod": "1.000",
-            "weight_g": "36.61",
-            "total_jod": "4.893",
-            "is_cheapest": false
+            "weight_g": "36.79",
+            "total_jod": "4.915",
+            "is_cheapest": false,
+            "is_selected": false
           },
           {
             "material": "Resin",
             "price_per_gram_jod": "0.300",
             "base_jod": "0.500",
             "minimum_jod": "1.500",
-            "weight_g": "38.72",
-            "total_jod": "12.116",
-            "is_cheapest": false
+            "weight_g": "38.91",
+            "total_jod": "12.173",
+            "is_cheapest": false,
+            "is_selected": false
           },
           {
             "material": "TPU",
             "price_per_gram_jod": "0.200",
             "base_jod": "2.000",
             "minimum_jod": "1.200",
-            "weight_g": "42.59",
-            "total_jod": "10.518",
-            "is_cheapest": false
+            "weight_g": "42.80",
+            "total_jod": "10.560",
+            "is_cheapest": false,
+            "is_selected": false
           }
         ],
         "pricing_notes": [
@@ -3404,13 +3414,13 @@
             "is_estimate": true
           },
           {
-            "label": "3D-printed chassis (cheapest material)",
+            "label": "3D-printed chassis (PLA, 35% infill)",
             "category": "mechanical",
             "quantity": 1,
             "unit_price_usd": null,
             "line_total_usd": null,
-            "unit_price_jod": "3.556",
-            "line_total_jod": "3.556",
+            "unit_price_jod": "3.571",
+            "line_total_jod": "3.571",
             "supplier": "local 3D print",
             "is_estimate": true
           }
@@ -3419,9 +3429,9 @@
         "subtotal_jod": "23.69",
         "shipping_usd": "0",
         "contingency_usd": "2.72",
-        "print_cost_jod": "3.56",
+        "print_cost_jod": "3.57",
         "total_usd": "57.12",
-        "total_jod": "27.25",
+        "total_jod": "27.26",
         "currency": "JOD",
         "budget": {
           "min_usd": null,
@@ -3438,10 +3448,10 @@
             ]
           },
           {
-            "description": "Print the chassis in PLA instead of resin.",
-            "savings_usd": "1.14",
+            "description": "Drop the chassis infill to 20%.",
+            "savings_usd": "0.76",
             "tradeoffs": [
-              "Lower heat resistance and a less smooth finish."
+              "A lighter, less rigid reference plate."
             ]
           }
         ],
@@ -3449,7 +3459,9 @@
           "Component prices are curated planning estimates in JOD, not live quotes.",
           "Shipping is excluded because the selected stores ship differently.",
           "A 5% contingency is added to the component subtotal.",
-          "Print pricing uses the required PLA/PETG/ABS/Resin/TPU chart."
+          "Print pricing uses the required PLA/PETG/ABS/Resin/TPU chart.",
+          "Print cost uses PLA at 35% infill.",
+          "The selected material uses the chart per-gram price."
         ]
       },
       "error_message": null,
@@ -6625,12 +6637,13 @@
       ],
       "manufacturing_notes": [
         "STL units are millimetres.",
-        "Material weights use the required JOD print chart with a 40% effective material fraction for a 35% infill print.",
-        "Cheapest estimate: PLA at 3.556 JOD."
+        "Material weights use the required JOD print chart with a 40.2% effective material fraction for 35% infill.",
+        "Selected print: PLA at 0.070 JOD/g, 43.87 g, 3.571 JOD.",
+        "Cheapest estimate: PLA at 3.571 JOD."
       ],
       "warnings": [
         "The STL is a reference plate, not a production-ready enclosure.",
-        "Weigh the actual print; the price chart uses an effective 40% material fraction."
+        "Weigh the actual print; the estimate uses a 40.2% effective material fraction for 35% infill."
       ],
       "dimensions_mm": {
         "length_mm": 160.0,
@@ -6639,6 +6652,10 @@
       },
       "volume_cm3": "88.000",
       "infill_percent": 35,
+      "material_fraction": "0.402",
+      "selected_material": "PLA",
+      "custom_price_per_gram_jod": null,
+      "print_price_jod": "3.571",
       "stl_ascii": "solid patio-scout-chassis\n  facet normal 0.0 0.0 -1.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 0.000 110.000 0.000\n      vertex 160.000 110.000 0.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 -1.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 110.000 0.000\n      vertex 160.000 0.000 0.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 1.0\n    outer loop\n      vertex 0.000 0.000 5.000\n      vertex 160.000 0.000 5.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 1.0\n    outer loop\n      vertex 0.000 0.000 5.000\n      vertex 160.000 110.000 5.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 -1.0 0.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 0.000 0.000\n      vertex 160.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 -1.0 0.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 0.000 5.000\n      vertex 0.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 1.0 0.0\n    outer loop\n      vertex 160.000 110.000 0.000\n      vertex 0.000 110.000 0.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 1.0 0.0\n    outer loop\n      vertex 160.000 110.000 0.000\n      vertex 0.000 110.000 5.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal -1.0 0.0 0.0\n    outer loop\n      vertex 0.000 110.000 0.000\n      vertex 0.000 0.000 0.000\n      vertex 0.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal -1.0 0.0 0.0\n    outer loop\n      vertex 0.000 110.000 0.000\n      vertex 0.000 0.000 5.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 1.0 0.0 0.0\n    outer loop\n      vertex 160.000 0.000 0.000\n      vertex 160.000 110.000 0.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 1.0 0.0 0.0\n    outer loop\n      vertex 160.000 0.000 0.000\n      vertex 160.000 110.000 5.000\n      vertex 160.000 0.000 5.000\n    endloop\n  endfacet\nendsolid patio-scout-chassis\n",
       "stl_filename": "patio-scout-chassis.stl",
       "material_quotes": [
@@ -6647,45 +6664,50 @@
           "price_per_gram_jod": "0.070",
           "base_jod": "0.500",
           "minimum_jod": "1.000",
-          "weight_g": "43.65",
-          "total_jod": "3.556",
-          "is_cheapest": true
+          "weight_g": "43.87",
+          "total_jod": "3.571",
+          "is_cheapest": true,
+          "is_selected": true
         },
         {
           "material": "PETG",
           "price_per_gram_jod": "0.120",
           "base_jod": "0.500",
           "minimum_jod": "1.200",
-          "weight_g": "44.70",
-          "total_jod": "5.864",
-          "is_cheapest": false
+          "weight_g": "44.93",
+          "total_jod": "5.892",
+          "is_cheapest": false,
+          "is_selected": false
         },
         {
           "material": "ABS",
           "price_per_gram_jod": "0.120",
           "base_jod": "0.500",
           "minimum_jod": "1.000",
-          "weight_g": "36.61",
-          "total_jod": "4.893",
-          "is_cheapest": false
+          "weight_g": "36.79",
+          "total_jod": "4.915",
+          "is_cheapest": false,
+          "is_selected": false
         },
         {
           "material": "Resin",
           "price_per_gram_jod": "0.300",
           "base_jod": "0.500",
           "minimum_jod": "1.500",
-          "weight_g": "38.72",
-          "total_jod": "12.116",
-          "is_cheapest": false
+          "weight_g": "38.91",
+          "total_jod": "12.173",
+          "is_cheapest": false,
+          "is_selected": false
         },
         {
           "material": "TPU",
           "price_per_gram_jod": "0.200",
           "base_jod": "2.000",
           "minimum_jod": "1.200",
-          "weight_g": "42.59",
-          "total_jod": "10.518",
-          "is_cheapest": false
+          "weight_g": "42.80",
+          "total_jod": "10.560",
+          "is_cheapest": false,
+          "is_selected": false
         }
       ],
       "pricing_notes": [
@@ -6776,13 +6798,13 @@
           "is_estimate": true
         },
         {
-          "label": "3D-printed chassis (cheapest material)",
+          "label": "3D-printed chassis (PLA, 35% infill)",
           "category": "mechanical",
           "quantity": 1,
           "unit_price_usd": null,
           "line_total_usd": null,
-          "unit_price_jod": "3.556",
-          "line_total_jod": "3.556",
+          "unit_price_jod": "3.571",
+          "line_total_jod": "3.571",
           "supplier": "local 3D print",
           "is_estimate": true
         }
@@ -6791,9 +6813,9 @@
       "subtotal_jod": "23.69",
       "shipping_usd": "0",
       "contingency_usd": "2.72",
-      "print_cost_jod": "3.56",
+      "print_cost_jod": "3.57",
       "total_usd": "57.12",
-      "total_jod": "27.25",
+      "total_jod": "27.26",
       "currency": "JOD",
       "budget": {
         "min_usd": null,
@@ -6810,10 +6832,10 @@
           ]
         },
         {
-          "description": "Print the chassis in PLA instead of resin.",
-          "savings_usd": "1.14",
+          "description": "Drop the chassis infill to 20%.",
+          "savings_usd": "0.76",
           "tradeoffs": [
-            "Lower heat resistance and a less smooth finish."
+            "A lighter, less rigid reference plate."
           ]
         }
       ],
@@ -6821,7 +6843,9 @@
         "Component prices are curated planning estimates in JOD, not live quotes.",
         "Shipping is excluded because the selected stores ship differently.",
         "A 5% contingency is added to the component subtotal.",
-        "Print pricing uses the required PLA/PETG/ABS/Resin/TPU chart."
+        "Print pricing uses the required PLA/PETG/ABS/Resin/TPU chart.",
+        "Print cost uses PLA at 35% infill.",
+        "The selected material uses the chart per-gram price."
       ]
     },
     "artifacts": {},

@@ -52,6 +52,11 @@ export function CostView({ projectId }: { projectId: string }) {
                 3D print
               </p>
               <p className="text-ink mt-2 text-xl font-medium">{formatJod(cost.print_cost_jod)}</p>
+              {build.mechanical ? (
+                <p className="text-faint mt-1 text-[10px]">
+                  {build.mechanical.selected_material} · {build.mechanical.infill_percent}% infill
+                </p>
+              ) : null}
             </Card>
             <Card className="p-4">
               <p className="text-faint font-mono text-[9px] tracking-[0.16em] uppercase">Total</p>
@@ -134,7 +139,7 @@ export function CostView({ projectId }: { projectId: string }) {
                     </tr>
                     <tr className="border-line-soft border-t">
                       <td className="text-muted px-3 py-2" colSpan={4}>
-                        3D print (cheapest material)
+                        3D print ({build.mechanical?.selected_material ?? "selected material"})
                       </td>
                       <td className="text-ink px-3 py-2 text-right font-mono">
                         {formatJod(cost.print_cost_jod)}

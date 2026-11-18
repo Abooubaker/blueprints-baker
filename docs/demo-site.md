@@ -14,6 +14,8 @@ the repository name, so a project site is served from `/<repository>/`.
   with the JOD print-material chart, a budget, and the full documentation set.
 - All of it is real output from the deterministic engine in `apps/api`, not hand-written fixtures.
 - The dashboard, project overview, and every module route render from the same JSON.
+- The 3D print view recomputes material, infill, and price locally in the demo. Changes stay in
+  browser storage because the demo has no write API.
 
 ## What the demo is not
 

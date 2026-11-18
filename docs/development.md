@@ -89,7 +89,7 @@ Run from the repository root:
 Backend commands (from `apps/api`):
 
 ```bash
-uv run pytest                      # 34 tests, SQLite, no network
+uv run pytest                      # 38 tests, SQLite, no network
 uv run pytest -k agent             # focused selection
 uv run pytest --cov=app            # coverage
 uv run ruff check .

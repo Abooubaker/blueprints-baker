@@ -8,7 +8,7 @@ feeds can replace :func:`build_store_offers` without changing the contract.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from decimal import ROUND_HALF_UP, Decimal
 from urllib.parse import quote_plus
@@ -148,33 +148,61 @@ PRINT_MATERIAL_RULES: tuple[PrintMaterialRule, ...] = (
 )
 
 
+_SHELL_FRACTION = Decimal("0.08")
+
+
+def material_fraction_for_infill(infill_percent: int) -> Decimal:
+    """Effective printed material fraction for a given infill percentage.
+
+    A printed plate is not solid at low infill: walls and top/bottom layers still
+    consume material. ``8%`` approximates those shells, and the remainder scales
+    with infill. The default 35% therefore lands near the previous 40% estimate.
+    """
+
+    clamped = max(0, min(100, infill_percent))
+    infill = Decimal(clamped) / Decimal("100")
+    fraction = _SHELL_FRACTION + (Decimal("1") - _SHELL_FRACTION) * infill
+    return fraction.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)
+
+
 def price_print(
     volume_cm3: Decimal,
     *,
     infill_percent: int = 35,
-    material_fraction: Decimal = Decimal("0.40"),
+    material_fraction: Decimal | None = None,
+    price_overrides: Mapping[PrintMaterial, Decimal] | None = None,
+    selected_material: PrintMaterial = PrintMaterial.PLA,
 ) -> list[dict[str, Decimal | str | bool]]:
     """Price a printed part for every material in the required chart.
 
-    ``material_fraction`` approximates walls/solid layers beyond the infill
-    percentage. It keeps the estimate honest for a simple solid model.
+    ``material_fraction`` is derived from ``infill_percent`` unless supplied.
+    ``price_overrides`` replaces a chart rate for a material, which lets a user
+    match a known local spool or print-shop price. The selected material is
+    marked so the cost agent can use it instead of the cheapest quote.
     """
 
-    del infill_percent  # documented in the output, folded into material_fraction
+    fraction = (
+        material_fraction
+        if material_fraction is not None
+        else material_fraction_for_infill(infill_percent)
+    )
+    overrides = price_overrides or {}
     quotes: list[dict[str, Decimal | str | bool]] = []
     for rule in PRINT_MATERIAL_RULES:
-        weight = volume_cm3 * rule.density_g_cm3 * material_fraction
+        price_per_gram = overrides.get(rule.material, rule.price_per_gram_jod)
+        weight = volume_cm3 * rule.density_g_cm3 * fraction
         weight = weight.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        total = max(rule.minimum_jod, rule.base_jod + rule.price_per_gram_jod * weight)
+        total = max(rule.minimum_jod, rule.base_jod + price_per_gram * weight)
         quotes.append(
             {
                 "material": rule.material.value,
-                "price_per_gram_jod": rule.price_per_gram_jod,
+                "price_per_gram_jod": price_per_gram,
                 "base_jod": rule.base_jod,
                 "minimum_jod": rule.minimum_jod,
                 "weight_g": weight,
                 "total_jod": total.quantize(Decimal("0.001"), rounding=ROUND_HALF_UP),
                 "is_cheapest": False,
+                "is_selected": rule.material == selected_material,
             }
         )
     cheapest = min(quotes, key=lambda quote: quote["total_jod"])
@@ -203,5 +231,6 @@ __all__ = [
     "STORE_ORDER",
     "build_store_offers",
     "cheapest_print_quote",
+    "material_fraction_for_infill",
     "price_print",
 ]

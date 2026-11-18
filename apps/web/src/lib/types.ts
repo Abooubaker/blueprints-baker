@@ -303,6 +303,12 @@ export interface RobotIdentification {
   needs_confirmation: boolean;
 }
 
+export interface PrintSettings {
+  material: PrintMaterial;
+  infill_percent: number;
+  price_per_gram_jod: number | string | null;
+}
+
 export interface BuildPreferences {
   description: string;
   robot_name: string;
@@ -317,6 +323,7 @@ export interface BuildPreferences {
   budget_max_usd: number | string | null;
   identification_rationale: string;
   identification_confidence: number;
+  print_settings: PrintSettings;
 }
 
 export interface CodeFile {
@@ -357,6 +364,7 @@ export interface PrintMaterialQuote {
   weight_g: number | string;
   total_jod: number | string;
   is_cheapest: boolean;
+  is_selected: boolean;
 }
 
 export interface MechanicalPart {
@@ -387,6 +395,10 @@ export interface MechanicalOutput {
   dimensions_mm: { length_mm: number | null; width_mm: number | null; height_mm: number | null };
   volume_cm3: number | string;
   infill_percent: number;
+  material_fraction: number | string;
+  selected_material: PrintMaterial;
+  custom_price_per_gram_jod: number | string | null;
+  print_price_jod: number | string | null;
   stl_ascii: string;
   stl_filename: string;
   material_quotes: PrintMaterialQuote[];

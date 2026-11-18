@@ -416,6 +416,22 @@
           ],
           "default": null
         },
+        "custom_price_per_gram_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Custom Price Per Gram Jod"
+        },
         "dimensions_mm": {
           "$ref": "#/$defs/Dimensions"
         },
@@ -441,6 +457,20 @@
           "title": "Manufacturing Notes",
           "type": "array"
         },
+        "material_fraction": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "default": "0.402",
+          "title": "Material Fraction"
+        },
         "material_quotes": {
           "items": {
             "$ref": "#/$defs/PrintMaterialQuote"
@@ -461,6 +491,26 @@
           },
           "title": "Pricing Notes",
           "type": "array"
+        },
+        "print_price_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Print Price Jod"
+        },
+        "selected_material": {
+          "$ref": "#/$defs/PrintMaterial",
+          "default": "PLA"
         },
         "stl_ascii": {
           "default": "",
@@ -565,6 +615,11 @@
         "is_cheapest": {
           "default": false,
           "title": "Is Cheapest",
+          "type": "boolean"
+        },
+        "is_selected": {
+          "default": false,
+          "title": "Is Selected",
           "type": "boolean"
         },
         "material": {

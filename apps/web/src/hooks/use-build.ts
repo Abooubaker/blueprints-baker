@@ -33,5 +33,5 @@ export function useBuild(projectId: string) {
     };
   }, [projectId]);
 
-  return { build, loading, error };
+  return { build, loading, error, setBuild };
 }

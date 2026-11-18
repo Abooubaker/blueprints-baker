@@ -21,6 +21,7 @@ import type {
   ExportFormat,
   OrchestrationResult,
   Page,
+  PrintSettings,
   Project,
   ProjectSummary,
   RobotIdentification,
@@ -278,5 +279,21 @@ export const api = {
       return Promise.resolve(demoBuild);
     }
     return request<BuildArtifact>(`/api/v1/projects/${projectId}/build`);
+  },
+
+  savePrintSettings(projectId: string, settings: PrintSettings): Promise<BuildArtifact> {
+    if (DEMO_MODE) {
+      return Promise.reject(
+        new ApiError(
+          "Saving print settings needs the full API. This Pages build is read-only.",
+          "demo_read_only",
+          405,
+        ),
+      );
+    }
+    return request<BuildArtifact>(`/api/v1/projects/${projectId}/print-settings`, {
+      method: "PUT",
+      body: JSON.stringify(settings),
+    });
   },
 };

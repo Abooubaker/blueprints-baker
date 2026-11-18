@@ -12,7 +12,7 @@ from app.ai.contracts import (
     CostInput,
     CostLineItem,
 )
-from app.models.enums import AgentName
+from app.models.enums import AgentName, PrintMaterial
 from app.pricing import JOD_PER_USD, cheapest_print_quote
 
 
@@ -72,12 +72,19 @@ class CostEstimationAgent(BaseAgent):
 
         mechanical = request.context.shared.mechanical
         print_cost: Decimal | None = None
+        print_label = "3D-printed chassis"
         if mechanical is not None and mechanical.material_quotes:
-            print_cost = cheapest_print_quote(mechanical.material_quotes)
+            print_cost = mechanical.print_price_jod or cheapest_print_quote(
+                mechanical.material_quotes
+            )
             if print_cost is not None:
+                print_label = (
+                    f"3D-printed chassis ({mechanical.selected_material.value}, "
+                    f"{mechanical.infill_percent}% infill)"
+                )
                 line_items.append(
                     CostLineItem(
-                        label="3D-printed chassis (cheapest material)",
+                        label=print_label,
                         category="mechanical",
                         quantity=1,
                         unit_price_jod=print_cost,
@@ -103,16 +110,43 @@ class CostEstimationAgent(BaseAgent):
         else:
             budget_status = "over"
 
+        print_alternative = BudgetAlternative(
+            description="Print the chassis in PLA.",
+            tradeoffs=["Lower heat resistance and less flexibility than other materials."],
+        )
+        if mechanical is not None and print_cost is not None:
+            selected_material = mechanical.selected_material
+            if selected_material == PrintMaterial.PLA:
+                print_alternative = BudgetAlternative(
+                    description="Drop the chassis infill to 20%.",
+                    savings_usd=_money(print_jod * Decimal("0.30") * JOD_PER_USD),
+                    tradeoffs=["A lighter, less rigid reference plate."],
+                )
+            else:
+                pla_quote = next(
+                    (
+                        quote
+                        for quote in mechanical.material_quotes
+                        if quote.material == PrintMaterial.PLA
+                    ),
+                    None,
+                )
+                if pla_quote is not None:
+                    savings = max(Decimal("0"), print_cost - pla_quote.total_jod)
+                    print_alternative = BudgetAlternative(
+                        description=(
+                            f"Print the chassis in PLA instead of {selected_material.value}."
+                        ),
+                        savings_usd=_money(savings * JOD_PER_USD),
+                        tradeoffs=["Lower heat resistance and a less durable finish."],
+                    )
+
         alternatives = [
             BudgetAlternative(
                 description="Use the cheapest selected store for every part.",
                 tradeoffs=["Longer shipping and less predictable stock."],
             ),
-            BudgetAlternative(
-                description="Print the chassis in PLA instead of resin.",
-                savings_usd=_money(print_jod * Decimal("0.45") * JOD_PER_USD),
-                tradeoffs=["Lower heat resistance and a less smooth finish."],
-            ),
+            print_alternative,
         ]
 
         return CostEstimate(
@@ -133,6 +167,17 @@ class CostEstimationAgent(BaseAgent):
                 "Shipping is excluded because the selected stores ship differently.",
                 "A 5% contingency is added to the component subtotal.",
                 "Print pricing uses the required PLA/PETG/ABS/Resin/TPU chart.",
+                (
+                    f"Print cost uses {mechanical.selected_material.value} at "
+                    f"{mechanical.infill_percent}% infill."
+                    if mechanical is not None
+                    else "Print cost uses the selected material and infill."
+                ),
+                (
+                    "The selected material uses your custom per-gram price."
+                    if mechanical is not None and mechanical.custom_price_per_gram_jod is not None
+                    else "The selected material uses the chart per-gram price."
+                ),
             ],
         )
 

@@ -176,6 +176,11 @@ export function GuidedWizard() {
         budget_max_usd: null,
         identification_rationale: identification?.rationale ?? "",
         identification_confidence: identification?.confidence ?? 0,
+        print_settings: {
+          material: "PLA",
+          infill_percent: 35,
+          price_per_gram_jod: null,
+        },
       };
       setProgressLabel("Saving your answers…");
       await api.savePreferences(project.id, preferences);

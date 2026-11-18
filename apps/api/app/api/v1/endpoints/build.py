@@ -8,7 +8,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.ai.contracts import BuildPreferences, RobotIdentification
+from app.ai.contracts import BuildPreferences, PrintSettings, RobotIdentification
 from app.ai.intent import identify_robot
 from app.api.deps import OrchestratorDep, ProviderDep
 from app.core.db import get_db
@@ -76,6 +76,27 @@ async def generate_build(
 )
 async def get_build(project_id: uuid.UUID, session: SessionDep) -> BuildArtifactRead:
     return await build_service.get_build_artifact(session, project_id)
+
+
+@router.put(
+    "/projects/{project_id}/print-settings",
+    response_model=BuildArtifactRead,
+    summary="Change the print material, infill, or per-gram price",
+    description=(
+        "Saves the print controls and recomputes the 3D weight, material quote, "
+        "and budget so the estimate matches a local price."
+    ),
+)
+async def update_print_settings(
+    project_id: uuid.UUID,
+    payload: PrintSettings,
+    session: SessionDep,
+    orchestrator: OrchestratorDep,
+    provider: ProviderDep,
+) -> BuildArtifactRead:
+    return await build_service.update_print_settings(
+        session, project_id, payload, orchestrator, provider
+    )
 
 
 @router.get(

@@ -20,8 +20,8 @@ from app.ai.contracts import (
     MechanicalPart,
     PrintMaterialQuote,
 )
-from app.models.enums import AgentName, RobotType
-from app.pricing import price_print
+from app.models.enums import AgentName, PrintMaterial, RobotType
+from app.pricing import material_fraction_for_infill, price_print
 
 _DEFAULT_SIZE: dict[RobotType, tuple[Decimal, Decimal, Decimal]] = {
     RobotType.LINE_FOLLOWER: (Decimal("120"), Decimal("90"), Decimal("4")),
@@ -33,7 +33,29 @@ _DEFAULT_SIZE: dict[RobotType, tuple[Decimal, Decimal, Decimal]] = {
     RobotType.CUSTOM: (Decimal("140"), Decimal("100"), Decimal("5")),
 }
 
-_MATERIAL_FRACTION = Decimal("0.40")
+
+def _print_material(value: object) -> PrintMaterial:
+    try:
+        return PrintMaterial(str(value))
+    except ValueError:
+        return PrintMaterial.PLA
+
+
+def _infill_percent(value: object) -> int:
+    try:
+        return max(0, min(100, int(str(value))))
+    except (TypeError, ValueError):
+        return 35
+
+
+def _price_per_gram(value: object) -> Decimal | None:
+    if value is None or value == "":
+        return None
+    try:
+        price = Decimal(str(value))
+    except Exception:
+        return None
+    return price if price >= 0 else None
 
 
 def _box_stl(length: float, width: float, height: float, name: str) -> str:
@@ -103,11 +125,24 @@ class MechanicalDesignAgent(BaseAgent):
         volume_cm3 = (volume_mm3 / Decimal("1000")).quantize(
             Decimal("0.001"), rounding=ROUND_HALF_UP
         )
+
+        material = _print_material(request.parameters.get("print_material"))
+        infill = _infill_percent(request.parameters.get("print_infill_percent"))
+        custom_price = _price_per_gram(request.parameters.get("print_price_per_gram_jod"))
+        material_fraction = material_fraction_for_infill(infill)
+        overrides = {material: custom_price} if custom_price is not None else None
         quotes = [
             PrintMaterialQuote.model_validate(quote)
-            for quote in price_print(volume_cm3, material_fraction=_MATERIAL_FRACTION)
+            for quote in price_print(
+                volume_cm3,
+                infill_percent=infill,
+                material_fraction=material_fraction,
+                price_overrides=overrides,
+                selected_material=material,
+            )
         ]
         cheapest = min(quotes, key=lambda quote: quote.total_jod)
+        selected = next(quote for quote in quotes if quote.is_selected)
 
         filename = f"{request.context.project_name.lower().replace(' ', '-')}-chassis.stl"
         stl = _box_stl(
@@ -121,7 +156,7 @@ class MechanicalDesignAgent(BaseAgent):
             name="Chassis plate",
             category="structure",
             quantity=1,
-            material="PLA",
+            material=material.value,
             dimensions_mm=Dimensions(
                 length_mm=float(length), width_mm=float(width), height_mm=float(thickness)
             ),
@@ -197,12 +232,34 @@ class MechanicalDesignAgent(BaseAgent):
 
         warnings = [
             "The STL is a reference plate, not a production-ready enclosure.",
-            "Weigh the actual print; the price chart uses an effective 40% material fraction.",
+            (
+                "Weigh the actual print; the estimate uses a "
+                f"{material_fraction * 100:.1f}% effective material fraction for "
+                f"{infill}% infill."
+            ),
         ]
+        if custom_price is not None:
+            warnings.append(
+                f"Your custom {material.value} price of {custom_price} JOD/g replaces the "
+                "chart rate for the selected material only."
+            )
         if request.parameters.get("custom_pcb"):
             warnings.append(
                 "A custom PCB was requested. The chassis still needs mounting holes and "
                 "clearance for the final board outline."
+            )
+
+        pricing_notes = [
+            "PLA: 0.070 JOD/g, base 0.500, minimum 1.000.",
+            "PETG: 0.120 JOD/g, base 0.500, minimum 1.200.",
+            "ABS: 0.120 JOD/g, base 0.500, minimum 1.000.",
+            "Resin: 0.300 JOD/g, base 0.500, minimum 1.500.",
+            "TPU: 0.200 JOD/g, base 2.000, minimum 1.200.",
+        ]
+        if custom_price is not None:
+            pricing_notes.append(
+                f"Selected {material.value} uses your {custom_price} JOD/g rate; "
+                "other materials keep the chart rate."
             )
 
         return MechanicalOutput(
@@ -212,8 +269,16 @@ class MechanicalDesignAgent(BaseAgent):
             drawings=[f"stl:{filename}"],
             manufacturing_notes=[
                 "STL units are millimetres.",
-                "Material weights use the required JOD print chart with a 40% effective "
-                "material fraction for a 35% infill print.",
+                (
+                    f"Material weights use the required JOD print chart with a "
+                    f"{material_fraction * 100:.1f}% effective material fraction for "
+                    f"{infill}% infill."
+                ),
+                (
+                    f"Selected print: {selected.material.value} at "
+                    f"{selected.price_per_gram_jod} JOD/g, {selected.weight_g} g, "
+                    f"{selected.total_jod} JOD."
+                ),
                 f"Cheapest estimate: {cheapest.material.value} at {cheapest.total_jod} JOD.",
             ],
             warnings=warnings,
@@ -221,17 +286,15 @@ class MechanicalDesignAgent(BaseAgent):
                 length_mm=float(length), width_mm=float(width), height_mm=float(thickness)
             ),
             volume_cm3=volume_cm3,
-            infill_percent=35,
+            infill_percent=infill,
+            material_fraction=material_fraction,
+            selected_material=material,
+            custom_price_per_gram_jod=custom_price,
+            print_price_jod=selected.total_jod,
             stl_ascii=stl,
             stl_filename=filename,
             material_quotes=quotes,
-            pricing_notes=[
-                "PLA: 0.070 JOD/g, base 0.500, minimum 1.000.",
-                "PETG: 0.120 JOD/g, base 0.500, minimum 1.200.",
-                "ABS: 0.120 JOD/g, base 0.500, minimum 1.000.",
-                "Resin: 0.300 JOD/g, base 0.500, minimum 1.500.",
-                "TPU: 0.200 JOD/g, base 2.000, minimum 1.200.",
-            ],
+            pricing_notes=pricing_notes,
         )
 
 

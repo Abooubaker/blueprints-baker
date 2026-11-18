@@ -69,6 +69,18 @@ class RobotIdentification(ContractModel):
     needs_confirmation: bool = True
 
 
+class PrintSettings(ContractModel):
+    """User-adjustable 3D print assumptions.
+
+    ``price_per_gram_jod`` is optional. When set, it replaces the chart rate for
+    ``material`` so the estimate can match a local supplier or spool price.
+    """
+
+    material: PrintMaterial = PrintMaterial.PLA
+    infill_percent: int = Field(default=35, ge=0, le=100)
+    price_per_gram_jod: Decimal | None = Field(default=None, ge=0)
+
+
 class BuildPreferences(ContractModel):
     """Persisted answers from the guided project flow.
 
@@ -92,6 +104,7 @@ class BuildPreferences(ContractModel):
     budget_max_usd: Decimal | None = Field(default=None, ge=0)
     identification_rationale: str = ""
     identification_confidence: float = Field(default=0.0, ge=0, le=1)
+    print_settings: PrintSettings = Field(default_factory=PrintSettings)
 
 
 class RobotSpecificationDraft(ContractModel):
@@ -365,6 +378,7 @@ class PrintMaterialQuote(ContractModel):
     weight_g: Decimal = Field(ge=0)
     total_jod: Decimal = Field(ge=0)
     is_cheapest: bool = False
+    is_selected: bool = False
 
 
 class MechanicalOutput(ContractModel):
@@ -379,6 +393,10 @@ class MechanicalOutput(ContractModel):
     dimensions_mm: Dimensions = Field(default_factory=Dimensions)
     volume_cm3: Decimal = Field(default=Decimal("0"), ge=0)
     infill_percent: int = Field(default=35, ge=0, le=100)
+    material_fraction: Decimal = Field(default=Decimal("0.402"), ge=0, le=1)
+    selected_material: PrintMaterial = PrintMaterial.PLA
+    custom_price_per_gram_jod: Decimal | None = Field(default=None, ge=0)
+    print_price_jod: Decimal | None = Field(default=None, ge=0)
     stl_ascii: str = ""
     stl_filename: str = ""
     material_quotes: list[PrintMaterialQuote] = Field(default_factory=list)

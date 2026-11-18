@@ -207,6 +207,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{project_id}/print-settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Change the print material, infill, or per-gram price
+         * @description Saves the print controls and recomputes the 3D weight, material quote, and budget so the estimate matches a local price.
+         */
+        put: operations["update_print_settings_api_v1_projects__project_id__print_settings_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{project_id}/specification": {
         parameters: {
             query?: never;
@@ -517,6 +537,7 @@ export interface components {
             identification_rationale: string;
             /** Languages */
             languages?: components["schemas"]["CodeLanguage"][];
+            print_settings?: components["schemas"]["PrintSettings-Input"];
             /**
              * Robot Name
              * @default
@@ -574,6 +595,7 @@ export interface components {
             identification_rationale: string;
             /** Languages */
             languages?: components["schemas"]["CodeLanguage"][];
+            print_settings?: components["schemas"]["PrintSettings-Output"];
             /**
              * Robot Name
              * @default
@@ -1135,6 +1157,8 @@ export interface components {
             /** Assembly Steps */
             assembly_steps?: components["schemas"]["AssemblyStep"][];
             chassis?: components["schemas"]["MechanicalPart"] | null;
+            /** Custom Price Per Gram Jod */
+            custom_price_per_gram_jod?: string | null;
             dimensions_mm?: components["schemas"]["Dimensions"];
             /**
              * Drawings
@@ -1148,12 +1172,21 @@ export interface components {
             infill_percent: number;
             /** Manufacturing Notes */
             manufacturing_notes?: string[];
+            /**
+             * Material Fraction
+             * @default 0.402
+             */
+            material_fraction: string;
             /** Material Quotes */
             material_quotes?: components["schemas"]["PrintMaterialQuote"][];
             /** Parts */
             parts?: components["schemas"]["MechanicalPart"][];
             /** Pricing Notes */
             pricing_notes?: string[];
+            /** Print Price Jod */
+            print_price_jod?: string | null;
+            /** @default PLA */
+            selected_material: components["schemas"]["PrintMaterial"];
             /**
              * Stl Ascii
              * @default
@@ -1325,6 +1358,11 @@ export interface components {
              * @default false
              */
             is_cheapest: boolean;
+            /**
+             * Is Selected
+             * @default false
+             */
+            is_selected: boolean;
             material: components["schemas"]["PrintMaterial"];
             /** Minimum Jod */
             minimum_jod: string;
@@ -1334,6 +1372,42 @@ export interface components {
             total_jod: string;
             /** Weight G */
             weight_g: string;
+        };
+        /**
+         * PrintSettings
+         * @description User-adjustable 3D print assumptions.
+         *
+         *     ``price_per_gram_jod`` is optional. When set, it replaces the chart rate for
+         *     ``material`` so the estimate can match a local supplier or spool price.
+         */
+        "PrintSettings-Input": {
+            /**
+             * Infill Percent
+             * @default 35
+             */
+            infill_percent: number;
+            /** @default PLA */
+            material: components["schemas"]["PrintMaterial"];
+            /** Price Per Gram Jod */
+            price_per_gram_jod?: number | string | null;
+        };
+        /**
+         * PrintSettings
+         * @description User-adjustable 3D print assumptions.
+         *
+         *     ``price_per_gram_jod`` is optional. When set, it replaces the chart rate for
+         *     ``material`` so the estimate can match a local supplier or spool price.
+         */
+        "PrintSettings-Output": {
+            /**
+             * Infill Percent
+             * @default 35
+             */
+            infill_percent: number;
+            /** @default PLA */
+            material: components["schemas"]["PrintMaterial"];
+            /** Price Per Gram Jod */
+            price_per_gram_jod?: string | null;
         };
         /** ProgrammingOutput */
         ProgrammingOutput: {
@@ -2341,6 +2415,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BuildPreferences-Output"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_print_settings_api_v1_projects__project_id__print_settings_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PrintSettings-Input"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuildArtifactRead"];
                 };
             };
             /** @description Validation Error */

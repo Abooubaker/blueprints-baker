@@ -14,7 +14,7 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.ai.contracts import BuildPreferences
+from app.ai.contracts import BuildPreferences, PrintSettings
 from app.models.enums import DriveType, RobotType, SpecificationStatus, TargetPlatform
 from app.models.project import ProjectConfiguration, RobotProject, RobotSpecification
 from app.services.project_service import get_project
@@ -72,6 +72,31 @@ async def get_preferences(session: AsyncSession, project_id: uuid.UUID) -> Build
         return _default_preferences(project)
 
 
+async def _write_preferences(
+    session: AsyncSession, project_id: uuid.UUID, preferences: BuildPreferences
+) -> None:
+    """Persist preferences without discarding other configuration keys."""
+
+    configuration = await session.scalar(
+        select(ProjectConfiguration).where(ProjectConfiguration.project_id == project_id)
+    )
+    if configuration is None:
+        configuration = ProjectConfiguration(
+            project_id=project_id,
+            name="Guided build",
+            version=1,
+            is_active=True,
+            configuration={},
+        )
+        session.add(configuration)
+    existing = configuration.configuration if isinstance(configuration.configuration, dict) else {}
+    configuration.configuration = {
+        **existing,
+        "version": 1,
+        "preferences": preferences.model_dump(mode="json"),
+    }
+
+
 async def save_preferences(
     session: AsyncSession, project_id: uuid.UUID, preferences: BuildPreferences
 ) -> BuildPreferences:
@@ -86,22 +111,7 @@ async def save_preferences(
     if preferences.budget_max_usd is not None:
         project.budget_max_usd = preferences.budget_max_usd
 
-    configuration = await session.scalar(
-        select(ProjectConfiguration).where(ProjectConfiguration.project_id == project_id)
-    )
-    if configuration is None:
-        configuration = ProjectConfiguration(
-            project_id=project.id,
-            name="Guided build",
-            version=1,
-            is_active=True,
-            configuration={},
-        )
-        session.add(configuration)
-    configuration.configuration = {
-        "version": 1,
-        "preferences": preferences.model_dump(mode="json"),
-    }
+    await _write_preferences(session, project_id, preferences)
 
     specification = project.specification
     if specification is None:
@@ -124,6 +134,18 @@ async def save_preferences(
     await session.commit()
     await session.refresh(project)
     return preferences
+
+
+async def save_print_settings(
+    session: AsyncSession, project_id: uuid.UUID, settings: PrintSettings
+) -> BuildPreferences:
+    """Persist print controls without touching project identity or the spec."""
+
+    preferences = await get_preferences(session, project_id)
+    updated = preferences.model_copy(update={"print_settings": settings})
+    await _write_preferences(session, project_id, updated)
+    await session.commit()
+    return updated
 
 
 def preferences_requirements(preferences: BuildPreferences) -> tuple[str, ...]:
@@ -172,6 +194,13 @@ def preferences_parameters(preferences: BuildPreferences) -> dict[str, Any]:
         "controller_notes": preferences.controller_notes,
         "custom_pcb": preferences.custom_pcb,
         "skill_level": preferences.difficulty.value,
+        "print_material": preferences.print_settings.material.value,
+        "print_infill_percent": preferences.print_settings.infill_percent,
+        "print_price_per_gram_jod": (
+            str(preferences.print_settings.price_per_gram_jod)
+            if preferences.print_settings.price_per_gram_jod is not None
+            else None
+        ),
     }
 
 
@@ -181,4 +210,5 @@ __all__ = [
     "preferences_parameters",
     "preferences_requirements",
     "save_preferences",
+    "save_print_settings",
 ]

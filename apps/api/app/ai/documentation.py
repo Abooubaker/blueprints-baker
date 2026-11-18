@@ -88,6 +88,9 @@ def build_documentation(
         if identification
         else (specification.robot_type.value if specification else "custom")
     )
+    print_material = mechanical.selected_material.value if mechanical else "PLA"
+    print_infill = mechanical.infill_percent if mechanical else 35
+    print_price = _money(mechanical.print_price_jod if mechanical else None)
     overview = f"""# {project_name}
 
 {description}
@@ -102,7 +105,8 @@ def build_documentation(
 | Controllers | {controllers} |
 | Custom PCB | {pcb} |
 | Platform | {specification.target_platform.value if specification else "undecided"} |
-| Print material | cheapest of the required chart |
+| Print material | {print_material} ({print_infill}% infill) |
+| Print price | {print_price} |
 
 ## What is included
 
@@ -250,17 +254,30 @@ def _mechanical_summary(mechanical: MechanicalOutput | None) -> str:
     if mechanical is None:
         return "_No mechanical model was generated._"
     dimensions = mechanical.dimensions_mm
+    price_source = (
+        "your custom per-gram price"
+        if mechanical.custom_price_per_gram_jod is not None
+        else "chart price"
+    )
     lines = [
         f"- Model: `{mechanical.stl_filename}`",
         f"- Dimensions: {dimensions.length_mm} x {dimensions.width_mm} x {dimensions.height_mm} mm",
         f"- Volume: {mechanical.volume_cm3} cm³",
         f"- Infill: {mechanical.infill_percent}%",
+        f"- Effective material fraction: {mechanical.material_fraction * 100:.1f}%",
+        f"- Selected material: {mechanical.selected_material.value} ({price_source})",
+        f"- Selected print total: {_money(mechanical.print_price_jod)}",
         "",
         "| Material | JOD/g | Base | Minimum | Weight | Total |",
         "| --- | ---: | ---: | ---: | ---: | ---: |",
     ]
     for quote in mechanical.material_quotes:
-        marker = " (cheapest)" if quote.is_cheapest else ""
+        markers = []
+        if quote.is_selected:
+            markers.append("selected")
+        if quote.is_cheapest:
+            markers.append("cheapest")
+        marker = f" ({', '.join(markers)})" if markers else ""
         lines.append(
             f"| {quote.material.value}{marker} | {quote.price_per_gram_jod} | "
             f"{quote.base_jod} | {quote.minimum_jod} | {quote.weight_g} g | {quote.total_jod} JOD |"
