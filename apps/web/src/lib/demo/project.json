@@ -1,0 +1,43 @@
+{
+  "id": "11111111-1111-4111-8111-111111111111",
+  "name": "Patio Scout",
+  "slug": "patio-scout",
+  "description": "An ESP32 obstacle-avoiding rover with ultrasonic distance sensing, a scanning servo, and a fused 2S LiPo power tree.",
+  "robot_type": "obstacle_avoider",
+  "status": "planning",
+  "difficulty": "intermediate",
+  "budget_min_usd": 80,
+  "budget_max_usd": 150,
+  "owner_id": null,
+  "specification": {
+    "id": "22222222-2222-4222-8222-222222222222",
+    "project_id": "11111111-1111-4111-8111-111111111111",
+    "summary": "A compact ESP32 obstacle-avoiding rover that scans ahead with an HC-SR04, steers around furniture, and reports distance over Wi-Fi.",
+    "use_case": "Indoor patio and hallway inspection demonstrations.",
+    "environment": "indoor",
+    "target_platform": "esp32",
+    "drive_type": "differential",
+    "power_source": "2S LiPo (7.4 V) with a regulated 5 V rail",
+    "payload_capacity_kg": 0.5,
+    "dimensions": {
+      "length_mm": null,
+      "width_mm": null,
+      "height_mm": null
+    },
+    "requirements": [
+      "Detect obstacles before contact",
+      "Turn or stop without losing control",
+      "Stream distance readings over Wi-Fi"
+    ],
+    "constraints": [
+      "Total component cost must stay below $150.00.",
+      "All electronics must run from a single 2S LiPo pack."
+    ],
+    "status": "generated",
+    "version": 2,
+    "created_at": "2026-11-18T09:30:00Z",
+    "updated_at": "2026-11-18T09:31:00Z"
+  },
+  "created_at": "2026-11-18T09:30:00Z",
+  "updated_at": "2026-11-18T09:31:00Z"
+}

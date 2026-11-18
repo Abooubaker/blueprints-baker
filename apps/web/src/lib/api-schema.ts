@@ -96,6 +96,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{project_id}/electrical": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the latest wiring plan */
+        get: operations["get_electrical_api_v1_projects__project_id__electrical_get"];
+        put?: never;
+        /**
+         * Generate the wiring plan
+         * @description Runs the deterministic planner, component research, and electrical agents, then returns the validated plan, bill of materials, and export formats.
+         */
+        post: operations["generate_electrical_api_v1_projects__project_id__electrical_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/electrical/export/{export_format}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download a wiring export */
+        get: operations["export_electrical_api_v1_projects__project_id__electrical_export__export_format__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{project_id}/specification": {
         parameters: {
             query?: never;
@@ -519,12 +557,54 @@ export interface components {
          * @enum {string}
          */
         DriveType: "differential" | "mecanum" | "omni" | "tank" | "servo_arm" | "none";
+        /** ElectricalArtifactRead */
+        ElectricalArtifactRead: {
+            /**
+             * Agent Run Id
+             * Format: uuid
+             */
+            agent_run_id: string;
+            bom?: components["schemas"]["ComponentResearchOutput"] | null;
+            /** Export Formats */
+            export_formats?: components["schemas"]["ExportFormatRead"][];
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+            plan: components["schemas"]["ElectricalPlan"];
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /** Project Name */
+            project_name: string;
+            /** Total Estimated Usd */
+            total_estimated_usd?: number | null;
+        };
         /** ElectricalConnection */
         ElectricalConnection: {
+            /**
+             * Connector
+             * @default
+             */
+            connector: string;
             /** From Pin */
             from_pin: string;
             /** From Ref */
             from_ref: string;
+            /**
+             * Kind
+             * @default signal
+             * @enum {string}
+             */
+            kind: "power" | "ground" | "signal" | "motor" | "bus";
+            /**
+             * Net
+             * @default
+             */
+            net: string;
             /**
              * Notes
              * @default
@@ -541,6 +621,35 @@ export interface components {
             to_ref: string;
             /** Voltage V */
             voltage_v?: number | null;
+            /**
+             * Wire Color
+             * @default
+             */
+            wire_color: string;
+            /** Wire Gauge Awg */
+            wire_gauge_awg?: number | null;
+        };
+        /**
+         * ElectricalIssue
+         * @description A deterministic validation finding shown before power is applied.
+         */
+        ElectricalIssue: {
+            /** Code */
+            code: string;
+            /** Message */
+            message: string;
+            /** Refs */
+            refs?: string[];
+            /**
+             * Remediation
+             * @default
+             */
+            remediation: string;
+            /**
+             * Severity
+             * @enum {string}
+             */
+            severity: "error" | "warning" | "info";
         };
         /** ElectricalNode */
         ElectricalNode: {
@@ -551,14 +660,53 @@ export interface components {
              * @default other
              * @enum {string}
              */
-            kind: "controller" | "motor" | "driver" | "sensor" | "power" | "other";
+            kind: "controller" | "motor" | "driver" | "sensor" | "power" | "actuator" | "regulator" | "other";
             /** Label */
             label: string;
+            /**
+             * Library Key
+             * @default
+             */
+            library_key: string;
+            /**
+             * Notes
+             * @default
+             */
+            notes: string;
+            /** Peak Current Ma */
+            peak_current_ma?: number | null;
+            /** Pins */
+            pins?: components["schemas"]["ElectricalNodePin"][];
             /**
              * Ref
              * @description Stable reference, e.g. U1, M1, BAT1.
              */
             ref: string;
+            /**
+             * Role
+             * @default
+             */
+            role: string;
+            /** Voltage V */
+            voltage_v?: number | null;
+        };
+        /**
+         * ElectricalNodePin
+         * @description A physical pin surfaced for pin maps and netlist export.
+         */
+        ElectricalNodePin: {
+            /**
+             * Connected
+             * @default false
+             */
+            connected: boolean;
+            /**
+             * Kind
+             * @default other
+             */
+            kind: string;
+            /** Name */
+            name: string;
             /** Voltage V */
             voltage_v?: number | null;
         };
@@ -566,6 +714,15 @@ export interface components {
         ElectricalPlan: {
             /** Connections */
             connections?: components["schemas"]["ElectricalConnection"][];
+            /** Design Notes */
+            design_notes?: string[];
+            /** Issues */
+            issues?: components["schemas"]["ElectricalIssue"][];
+            /**
+             * Library Version
+             * @default 1.0
+             */
+            library_version: string;
             /** Nodes */
             nodes?: components["schemas"]["ElectricalNode"][];
             /** Pin Map */
@@ -573,12 +730,30 @@ export interface components {
                 [key: string]: string;
             };
             power_budget?: components["schemas"]["PowerBudget"];
+            /** Power Rails */
+            power_rails?: components["schemas"]["PowerRail"][];
             /** Safety Checks */
             safety_checks?: string[];
             /** Warnings */
             warnings?: string[];
             /** Wiring Steps */
             wiring_steps?: string[];
+        };
+        /** ExportFormatRead */
+        ExportFormatRead: {
+            /** Description */
+            description: string;
+            /** Filename */
+            filename: string;
+            /**
+             * Format
+             * @enum {string}
+             */
+            format: "json" | "wiring-csv" | "bom-csv" | "kicad-netlist" | "svg" | "markdown";
+            /** Label */
+            label: string;
+            /** Media Type */
+            media_type: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -689,6 +864,8 @@ export interface components {
         };
         /** PowerBudget */
         PowerBudget: {
+            /** Estimated Runtime Min */
+            estimated_runtime_min?: number | null;
             /** Margin Percent */
             margin_percent?: number | null;
             /** Peak Current Ma */
@@ -697,6 +874,29 @@ export interface components {
             recommended_supply_ma?: number | null;
             /** Supply Voltage V */
             supply_voltage_v?: number | null;
+            /** Typical Current Ma */
+            typical_current_ma?: number | null;
+            /** Usable Capacity Mah */
+            usable_capacity_mah?: number | null;
+        };
+        /** PowerRail */
+        PowerRail: {
+            /** Name */
+            name: string;
+            /**
+             * Notes
+             * @default
+             */
+            notes: string;
+            /** Peak Current Ma */
+            peak_current_ma?: number | null;
+            /**
+             * Source Ref
+             * @default
+             */
+            source_ref: string;
+            /** Voltage V */
+            voltage_v?: number | null;
         };
         /** ProgrammingOutput */
         ProgrammingOutput: {
@@ -1334,6 +1534,104 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OrchestrationRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_electrical_api_v1_projects__project_id__electrical_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ElectricalArtifactRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    generate_electrical_api_v1_projects__project_id__electrical_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ElectricalArtifactRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_electrical_api_v1_projects__project_id__electrical_export__export_format__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+                export_format: "json" | "wiring-csv" | "bom-csv" | "kicad-netlist" | "svg" | "markdown";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested export file. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                    "image/svg+xml": unknown;
+                    "text/csv": unknown;
+                    "text/markdown": unknown;
+                    "text/plain": unknown;
                 };
             };
             /** @description Validation Error */

@@ -79,6 +79,9 @@ Validation detail entries look like:
 | GET | `/api/v1/projects/{project_id}/agent-runs` | List agent executions (newest first) |
 | GET | `/api/v1/agents` | Agent catalog with provider and dependencies |
 | GET | `/api/v1/components` | List/filter the component catalog |
+| POST | `/api/v1/projects/{project_id}/electrical` | Generate and persist the wiring plan |
+| GET | `/api/v1/projects/{project_id}/electrical` | Read the latest wiring plan |
+| GET | `/api/v1/projects/{project_id}/electrical/export/{format}` | Download a wiring export |
 
 ## Health
 
@@ -333,6 +336,49 @@ records, newest first.
 Returns active catalog entries. `category` is one of `controller`, `motor`, `motor_driver`, `sensor`,
 `power`, `chassis`, `wheel`, `actuator`, `communication`, `display`, `wiring`, `tool`, `other`.
 There is no seed data and no write endpoint yet (M4).
+
+## Electrical
+
+`POST /api/v1/projects/{project_id}/electrical` runs planner → component research → electrical and
+persists an `ElectricalArtifactRead` (`201`). It is deterministic, so re-running produces the same
+plan. `GET` returns the latest artifact (`404` before the first run).
+
+```json
+{
+  "project_id": "…",
+  "project_name": "Science Fair Line Follower",
+  "agent_run_id": "…",
+  "generated_at": "2026-11-18T09:30:00Z",
+  "plan": {
+    "nodes": [],
+    "connections": [],
+    "pin_map": {},
+    "power_budget": {},
+    "power_rails": [],
+    "issues": [],
+    "safety_checks": [],
+    "wiring_steps": [],
+    "library_version": "1.0"
+  },
+  "bom": {},
+  "total_estimated_usd": 67.4,
+  "export_formats": []
+}
+```
+
+Exports are attachments with a fixed filename:
+
+| `format` | Filename |
+| --- | --- |
+| `json` | `electrical-plan.json` |
+| `wiring-csv` | `wiring.csv` |
+| `bom-csv` | `bill-of-materials.csv` |
+| `kicad-netlist` | `robocraft.net` |
+| `svg` | `wiring.svg` |
+| `markdown` | `build-guide.md` |
+
+The `.net` export is a KiCad S-expression netlist; EasyEDA Pro and KiCad can import it.
+See [electrical.md](electrical.md) for validation rules and the full contract.
 
 ## Enum reference
 

@@ -7,6 +7,7 @@ import {
   ArrowUpRight,
   Bot,
   CheckCircle2,
+  CircuitBoard,
   Clock3,
   Compass,
   FileText,
@@ -26,10 +27,10 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState, Progress, Separator } from "@/components/ui/misc";
-import { AGENTS, PROJECT_MODULES, PROJECT_STATUS_STYLES } from "@/lib/constants";
+import { AGENTS, DEMO_MODE, PROJECT_MODULES, PROJECT_STATUS_STYLES } from "@/lib/constants";
 import { api, ApiError } from "@/lib/api";
 import type {
   AgentName,
@@ -221,31 +222,40 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
         </div>
 
         <div className="flex shrink-0 flex-wrap items-center gap-2">
-          <Button
-            variant="secondary"
-            size="md"
-            onClick={() => void runAgents("all")}
-            disabled={running !== null}
-          >
-            {running === "all" ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <Play className="size-3.5" />
-            )}
-            Run pipeline
-          </Button>
-          <Button
-            size="md"
-            onClick={() => void runAgents(["robot_planner"])}
-            disabled={running !== null}
-          >
-            {running !== null && running !== "all" ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <Bot className="size-4" />
-            )}
-            Run planner
-          </Button>
+          <ButtonLink href={`/projects/${project.id}/wiring`} variant="secondary" size="md">
+            <CircuitBoard className="size-4" /> Open wiring
+          </ButtonLink>
+          {DEMO_MODE ? (
+            <Badge variant="outline">Precomputed · read-only</Badge>
+          ) : (
+            <>
+              <Button
+                variant="secondary"
+                size="md"
+                onClick={() => void runAgents("all")}
+                disabled={running !== null}
+              >
+                {running === "all" ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <Play className="size-3.5" />
+                )}
+                Run pipeline
+              </Button>
+              <Button
+                size="md"
+                onClick={() => void runAgents(["robot_planner"])}
+                disabled={running !== null}
+              >
+                {running !== null && running !== "all" ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <Bot className="size-4" />
+                )}
+                Run planner
+              </Button>
+            </>
+          )}
         </div>
       </div>
 
@@ -303,7 +313,7 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
             </p>
             <p className="text-muted mt-1 leading-relaxed">
               {runResult.status === "not_implemented"
-                ? "The orchestration contract is live, but specialized agent logic is intentionally not implemented in the foundation release. Planner delivery is tracked in milestone M3."
+                ? "The planner, component research, and wiring agents completed and stored validated artifacts. Programming, mechanical, and cost agents are still placeholders; open Wiring to inspect the generated plan."
                 : "Agent results are stored in the project audit trail below."}
             </p>
           </div>
@@ -336,9 +346,10 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               {PROJECT_MODULES.map((module) => {
-                const href = module.available
-                  ? "#specification"
-                  : `/projects/${project.id}/${module.slug}`;
+                const href =
+                  module.slug === "specification"
+                    ? "#specification"
+                    : `/projects/${project.id}/${module.slug}`;
                 return (
                   <Link
                     key={module.slug}

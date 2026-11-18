@@ -117,12 +117,28 @@ class ComponentResearchOutput(ContractModel):
 # ---------------------------------------------------------------------------
 
 
+class ElectricalNodePin(ContractModel):
+    """A physical pin surfaced for pin maps and netlist export."""
+
+    name: str
+    kind: str = "other"
+    voltage_v: float | None = Field(default=None, ge=0)
+    connected: bool = False
+
+
 class ElectricalNode(ContractModel):
     ref: str = Field(description="Stable reference, e.g. U1, M1, BAT1.")
     label: str
-    kind: Literal["controller", "motor", "driver", "sensor", "power", "other"] = "other"
+    kind: Literal[
+        "controller", "motor", "driver", "sensor", "power", "actuator", "regulator", "other"
+    ] = "other"
+    role: str = ""
+    library_key: str = ""
     voltage_v: float | None = Field(default=None, ge=0)
     current_ma: float | None = Field(default=None, ge=0)
+    peak_current_ma: float | None = Field(default=None, ge=0)
+    pins: list[ElectricalNodePin] = Field(default_factory=list)
+    notes: str = ""
 
 
 class ElectricalConnection(ContractModel):
@@ -130,26 +146,56 @@ class ElectricalConnection(ContractModel):
     from_pin: str
     to_ref: str
     to_pin: str
+    net: str = ""
     signal: str = ""
+    kind: Literal["power", "ground", "signal", "motor", "bus"] = "signal"
     voltage_v: float | None = Field(default=None, ge=0)
+    wire_color: str = ""
+    wire_gauge_awg: int | None = Field(default=None, ge=1, le=40)
+    connector: str = ""
+    notes: str = ""
+
+
+class ElectricalIssue(ContractModel):
+    """A deterministic validation finding shown before power is applied."""
+
+    code: str
+    severity: Literal["error", "warning", "info"]
+    message: str
+    refs: list[str] = Field(default_factory=list)
+    remediation: str = ""
+
+
+class PowerRail(ContractModel):
+    name: str
+    voltage_v: float | None = Field(default=None, ge=0)
+    peak_current_ma: float | None = Field(default=None, ge=0)
+    source_ref: str = ""
     notes: str = ""
 
 
 class PowerBudget(ContractModel):
     supply_voltage_v: float | None = Field(default=None, ge=0)
     peak_current_ma: float | None = Field(default=None, ge=0)
+    typical_current_ma: float | None = Field(default=None, ge=0)
     recommended_supply_ma: float | None = Field(default=None, ge=0)
     margin_percent: float | None = None
+    usable_capacity_mah: float | None = Field(default=None, ge=0)
+    estimated_runtime_min: float | None = Field(default=None, ge=0)
 
 
 class ElectricalPlan(ContractModel):
     nodes: list[ElectricalNode] = Field(default_factory=list)
     connections: list[ElectricalConnection] = Field(default_factory=list)
     power_budget: PowerBudget = Field(default_factory=PowerBudget)
+    power_rails: list[PowerRail] = Field(default_factory=list)
     pin_map: dict[str, str] = Field(default_factory=dict)
+    issues: list[ElectricalIssue] = Field(default_factory=list)
     safety_checks: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
     wiring_steps: list[str] = Field(default_factory=list)
+    design_notes: list[str] = Field(default_factory=list)
+    library_version: str = "1.0"
 
 
 # ---------------------------------------------------------------------------

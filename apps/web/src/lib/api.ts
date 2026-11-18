@@ -1,9 +1,21 @@
-import { API_BASE_URL } from "@/lib/constants";
+import { API_BASE_URL, DEMO_MODE } from "@/lib/constants";
+import {
+  demoAgentCatalog,
+  demoAgentRuns,
+  demoElectrical,
+  demoExportPath,
+  demoOrchestration,
+  demoProjectById,
+  demoProjectSummaries,
+  isDemoProject,
+} from "@/lib/demo";
 import type {
   AgentCatalog,
   AgentName,
   AgentRun,
   CreateProjectInput,
+  ElectricalArtifact,
+  ExportFormat,
   OrchestrationResult,
   Page,
   Project,
@@ -70,6 +82,21 @@ export const api = {
     robotType?: string;
     search?: string;
   }): Promise<Page<ProjectSummary>> {
+    if (DEMO_MODE) {
+      const search = options?.search?.trim().toLowerCase();
+      const items = demoProjectSummaries.filter(
+        (project) =>
+          (!search ||
+            project.name.toLowerCase().includes(search) ||
+            project.description.toLowerCase().includes(search)) &&
+          (!options?.status || project.status === options.status) &&
+          (!options?.robotType || project.robot_type === options.robotType),
+      );
+      return Promise.resolve({
+        items,
+        meta: { total: items.length, limit: options?.limit ?? 50, offset: options?.offset ?? 0 },
+      });
+    }
     const params = new URLSearchParams();
     if (options?.limit) params.set("limit", String(options.limit));
     if (options?.offset) params.set("offset", String(options.offset));
@@ -81,10 +108,25 @@ export const api = {
   },
 
   getProject(id: string): Promise<Project> {
+    if (DEMO_MODE) {
+      const project = demoProjectById(id);
+      return project
+        ? Promise.resolve(project)
+        : Promise.reject(new ApiError("This demo only contains one project.", "not_found", 404));
+    }
     return request<Project>(`/api/v1/projects/${id}`);
   },
 
   createProject(payload: CreateProjectInput): Promise<Project> {
+    if (DEMO_MODE) {
+      return Promise.reject(
+        new ApiError(
+          "Project creation needs the full API. This Pages build is a read-only demo.",
+          "demo_read_only",
+          405,
+        ),
+      );
+    }
     return request<Project>("/api/v1/projects", {
       method: "POST",
       body: JSON.stringify(payload),
@@ -95,6 +137,17 @@ export const api = {
     projectId: string,
     body: { agents?: AgentName[]; parameters?: Record<string, unknown> } = {},
   ): Promise<OrchestrationResult> {
+    if (DEMO_MODE) {
+      if (!isDemoProject(projectId)) {
+        return Promise.reject(new ApiError("Demo project not found.", "not_found", 404));
+      }
+      return Promise.resolve({
+        ...demoOrchestration,
+        runs: body.agents
+          ? demoOrchestration.runs.filter((run) => body.agents?.includes(run.agent))
+          : demoOrchestration.runs,
+      });
+    }
     return request<OrchestrationResult>(`/api/v1/projects/${projectId}/agent-runs`, {
       method: "POST",
       body: JSON.stringify(body),
@@ -102,6 +155,7 @@ export const api = {
   },
 
   getAgentCatalog(): Promise<AgentCatalog> {
+    if (DEMO_MODE) return Promise.resolve(demoAgentCatalog);
     return request<AgentCatalog>("/api/v1/agents");
   },
 
@@ -109,6 +163,20 @@ export const api = {
     projectId: string,
     options?: { limit?: number; offset?: number },
   ): Promise<Page<AgentRun>> {
+    if (DEMO_MODE) {
+      const items = demoAgentRuns.slice(
+        options?.offset ?? 0,
+        (options?.offset ?? 0) + (options?.limit ?? 50),
+      );
+      return Promise.resolve({
+        items,
+        meta: {
+          total: demoAgentRuns.length,
+          limit: options?.limit ?? 50,
+          offset: options?.offset ?? 0,
+        },
+      });
+    }
     const params = new URLSearchParams();
     if (options?.limit) params.set("limit", String(options.limit));
     if (options?.offset) params.set("offset", String(options.offset));
@@ -116,5 +184,32 @@ export const api = {
     return request<Page<AgentRun>>(
       `/api/v1/projects/${projectId}/agent-runs${query ? `?${query}` : ""}`,
     );
+  },
+
+  generateElectrical(projectId: string): Promise<ElectricalArtifact> {
+    if (DEMO_MODE) {
+      if (!isDemoProject(projectId)) {
+        return Promise.reject(new ApiError("Demo project not found.", "not_found", 404));
+      }
+      return Promise.resolve(demoElectrical);
+    }
+    return request<ElectricalArtifact>(`/api/v1/projects/${projectId}/electrical`, {
+      method: "POST",
+    });
+  },
+
+  getElectrical(projectId: string): Promise<ElectricalArtifact> {
+    if (DEMO_MODE) {
+      if (!isDemoProject(projectId)) {
+        return Promise.reject(new ApiError("Demo project not found.", "not_found", 404));
+      }
+      return Promise.resolve(demoElectrical);
+    }
+    return request<ElectricalArtifact>(`/api/v1/projects/${projectId}/electrical`);
+  },
+
+  exportUrl(projectId: string, format: ExportFormat): string {
+    if (DEMO_MODE) return demoExportPath(format);
+    return `${API_BASE_URL}/api/v1/projects/${projectId}/electrical/export/${format}`;
   },
 };

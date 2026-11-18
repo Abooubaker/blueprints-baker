@@ -117,3 +117,37 @@ jobs:
       - run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: "1"
+
+  demo:
+    name: Static demo build (GitHub Pages)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: apps/api/uv.lock
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: uv sync --locked
+        working-directory: apps/api
+      - name: Regenerate demo fixtures
+        run: uv run python ../../scripts/generate_demo_data.py
+        working-directory: apps/api
+      - name: Fail on fixture drift
+        run: git diff --exit-code -- apps/web/src/lib/demo apps/web/public/demo
+      - run: npm ci
+        working-directory: apps/web
+      - name: Build static export
+        run: npm run build
+        working-directory: apps/web
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+          NEXT_PUBLIC_DEMO_MODE: "true"
+          NEXT_PUBLIC_BASE_PATH: /robocraft
+          NEXT_PUBLIC_API_URL: ""
+      - name: Scan for credential-shaped strings
+        run: bash scripts/scan_secrets.sh

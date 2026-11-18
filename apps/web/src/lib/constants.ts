@@ -23,6 +23,15 @@ import type { AgentName, RobotType } from "@/lib/types";
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:8000";
 
+export const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH?.replace(/\/$/, "") ?? "";
+export const DEMO_PROJECT_ID = "11111111-1111-4111-8111-111111111111";
+
+export function assetPath(path: string): string {
+  const normalized = path.startsWith("/") ? path : `/${path}`;
+  return `${BASE_PATH}${normalized}`;
+}
+
 export interface RobotTypeOption {
   value: RobotType;
   label: string;
@@ -223,7 +232,7 @@ export const PROJECT_MODULES: ProjectModule[] = [
     description: "Pin map, power budget, connection validation, and wiring steps.",
     milestone: "M5",
     icon: CircuitBoard,
-    available: false,
+    available: true,
   },
   {
     slug: "programming",

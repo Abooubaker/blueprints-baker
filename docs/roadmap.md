@@ -123,6 +123,12 @@ settings, list filtering/search in the UI, and first-run onboarding.
 - Wiring instructions can be followed without the model.
 - Unsafe configurations cannot be marked ready.
 
+**Delivered (deterministic):** curated library and reference designs, pin allocation, named nets,
+power rails and budget, severity-classified validation (`motor_overvoltage`, `logic_level_mismatch`,
+`pin_conflict`, `missing_ground`, current headroom), wiring steps, and CSV/SVG/Markdown/JSON plus
+KiCad-netlist exports. The web wiring workspace and the static demo are live. Remaining M5 work is
+the model-backed electrical agent, richer interface/bus planning, and schematic-layout handoff.
+
 ## M6 — Programming and firmware
 
 **Goal:** generate deployable firmware from the approved hardware plan.

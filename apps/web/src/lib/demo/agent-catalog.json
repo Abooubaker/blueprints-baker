@@ -1,0 +1,87 @@
+{
+  "provider": "mock",
+  "model": "deterministic-v1",
+  "agents": [
+    {
+      "name": "robot_planner",
+      "display_name": "Robot Planner",
+      "description": "Turns a plain-language robot idea into a structured specification.",
+      "status": "available",
+      "depends_on": [],
+      "input_schema": "PlannerInput",
+      "output_schema": "RobotSpecificationDraft",
+      "milestone": "M3",
+      "owner_area": "Robotics / Systems Engineering"
+    },
+    {
+      "name": "component_research",
+      "display_name": "Component Research",
+      "description": "Selects a compatible bill of materials for the robot archetype.",
+      "status": "available",
+      "depends_on": [
+        "robot_planner"
+      ],
+      "input_schema": "ComponentResearchInput",
+      "output_schema": "ComponentResearchOutput",
+      "milestone": "M4",
+      "owner_area": "Robotics / Hardware Engineering"
+    },
+    {
+      "name": "electrical_engineering",
+      "display_name": "Electrical Engineering",
+      "description": "Creates pin maps, nets, power budgets, and validates the wiring.",
+      "status": "available",
+      "depends_on": [
+        "robot_planner",
+        "component_research"
+      ],
+      "input_schema": "ElectricalInput",
+      "output_schema": "ElectricalPlan",
+      "milestone": "M5",
+      "owner_area": "Robotics / Electrical Engineering"
+    },
+    {
+      "name": "programming",
+      "display_name": "Programming",
+      "description": "Generates firmware for the selected hardware.",
+      "status": "placeholder",
+      "depends_on": [
+        "robot_planner",
+        "component_research",
+        "electrical_engineering"
+      ],
+      "input_schema": "ProgrammingInput",
+      "output_schema": "ProgrammingOutput",
+      "milestone": "M6",
+      "owner_area": "Robotics / Software Engineering"
+    },
+    {
+      "name": "mechanical_design",
+      "display_name": "Mechanical Design",
+      "description": "Plans the chassis, mounts, and assembly order.",
+      "status": "placeholder",
+      "depends_on": [
+        "robot_planner",
+        "component_research"
+      ],
+      "input_schema": "MechanicalInput",
+      "output_schema": "MechanicalOutput",
+      "milestone": "M7",
+      "owner_area": "Robotics / Mechanical Engineering"
+    },
+    {
+      "name": "cost_estimation",
+      "display_name": "Cost Estimation",
+      "description": "Builds the line-item budget and alternatives.",
+      "status": "placeholder",
+      "depends_on": [
+        "robot_planner",
+        "component_research"
+      ],
+      "input_schema": "CostInput",
+      "output_schema": "CostEstimate",
+      "milestone": "M8",
+      "owner_area": "Robotics / Product Engineering"
+    }
+  ]
+}

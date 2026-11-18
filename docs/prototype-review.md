@@ -91,6 +91,23 @@ Instead:
 | Prompt guardrails | M3/M4 prompt templates | Keep the “proposal is source of truth” and “no invented parts” rules |
 | CLI flow | — | Superseded by the web workspace and API |
 
+## Delivery status (2026-11-18)
+
+The selective adoption has landed in the deterministic pipeline, not by merging the branch:
+
+| Prototype idea | What shipped | Difference |
+| --- | --- | --- |
+| Six sample components | Curated `ComponentProfile` library (`apps/api/app/electrical/library.py`) with controllers, drivers, motors, sensors, IMU, servos, batteries, and regulators | Part data is typed, priced in USD with `Decimal`, and owned by the API package |
+| Role-based selection | `build_reference_bom` + reference designs per robot archetype | Selection is deterministic and respects platform, difficulty, drive type, and budget |
+| Battery/motor voltage check | `motor_overvoltage` and `logic_level_mismatch` findings with remediation text | Adds pin conflicts, missing ground, current headroom, and controller/battery presence |
+| Missing-parts list | BOM `unresolved_requirements` plus per-node notes | Unknown parts are reported, never assigned invented pins |
+| Budget calculation | Reference BOM totals returned with the electrical artifact | M8 still owns supplier pricing, shipping, and contingency |
+| Seed catalog + SQLite | Curated library in code; project/agent state stays in PostgreSQL | No root-level scripts, committed database, or ad-hoc schema changes |
+| Ollama tool loop | Not adopted | Provider boundary remains; the delivered agents are deterministic and offline |
+
+The prototype's prompt guardrails (never invent parts, prices, or compatibility) are enforced here
+by construction: the engine can only emit library parts and computed values.
+
 ## Follow-up issues
 
 The M4/M5 backlog includes explicit tasks for the adoption above. Search the issue tracker for

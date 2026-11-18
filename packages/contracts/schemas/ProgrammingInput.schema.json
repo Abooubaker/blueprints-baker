@@ -262,12 +262,34 @@
     "ElectricalConnection": {
       "additionalProperties": false,
       "properties": {
+        "connector": {
+          "default": "",
+          "title": "Connector",
+          "type": "string"
+        },
         "from_pin": {
           "title": "From Pin",
           "type": "string"
         },
         "from_ref": {
           "title": "From Ref",
+          "type": "string"
+        },
+        "kind": {
+          "default": "signal",
+          "enum": [
+            "power",
+            "ground",
+            "signal",
+            "motor",
+            "bus"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "net": {
+          "default": "",
+          "title": "Net",
           "type": "string"
         },
         "notes": {
@@ -300,6 +322,25 @@
           ],
           "default": null,
           "title": "Voltage V"
+        },
+        "wire_color": {
+          "default": "",
+          "title": "Wire Color",
+          "type": "string"
+        },
+        "wire_gauge_awg": {
+          "anyOf": [
+            {
+              "maximum": 40,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Wire Gauge Awg"
         }
       },
       "required": [
@@ -309,6 +350,48 @@
         "to_pin"
       ],
       "title": "ElectricalConnection",
+      "type": "object"
+    },
+    "ElectricalIssue": {
+      "additionalProperties": false,
+      "description": "A deterministic validation finding shown before power is applied.",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "remediation": {
+          "default": "",
+          "title": "Remediation",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "warning",
+            "info"
+          ],
+          "title": "Severity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "message"
+      ],
+      "title": "ElectricalIssue",
       "type": "object"
     },
     "ElectricalNode": {
@@ -335,6 +418,8 @@
             "driver",
             "sensor",
             "power",
+            "actuator",
+            "regulator",
             "other"
           ],
           "title": "Kind",
@@ -344,9 +429,44 @@
           "title": "Label",
           "type": "string"
         },
+        "library_key": {
+          "default": "",
+          "title": "Library Key",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "peak_current_ma": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Peak Current Ma"
+        },
+        "pins": {
+          "items": {
+            "$ref": "#/$defs/ElectricalNodePin"
+          },
+          "title": "Pins",
+          "type": "array"
+        },
         "ref": {
           "description": "Stable reference, e.g. U1, M1, BAT1.",
           "title": "Ref",
+          "type": "string"
+        },
+        "role": {
+          "default": "",
+          "title": "Role",
           "type": "string"
         },
         "voltage_v": {
@@ -370,6 +490,44 @@
       "title": "ElectricalNode",
       "type": "object"
     },
+    "ElectricalNodePin": {
+      "additionalProperties": false,
+      "description": "A physical pin surfaced for pin maps and netlist export.",
+      "properties": {
+        "connected": {
+          "default": false,
+          "title": "Connected",
+          "type": "boolean"
+        },
+        "kind": {
+          "default": "other",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "voltage_v": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Voltage V"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "ElectricalNodePin",
+      "type": "object"
+    },
     "ElectricalPlan": {
       "additionalProperties": false,
       "properties": {
@@ -379,6 +537,25 @@
           },
           "title": "Connections",
           "type": "array"
+        },
+        "design_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Design Notes",
+          "type": "array"
+        },
+        "issues": {
+          "items": {
+            "$ref": "#/$defs/ElectricalIssue"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "library_version": {
+          "default": "1.0",
+          "title": "Library Version",
+          "type": "string"
         },
         "nodes": {
           "items": {
@@ -396,6 +573,13 @@
         },
         "power_budget": {
           "$ref": "#/$defs/PowerBudget"
+        },
+        "power_rails": {
+          "items": {
+            "$ref": "#/$defs/PowerRail"
+          },
+          "title": "Power Rails",
+          "type": "array"
         },
         "safety_checks": {
           "items": {
@@ -425,6 +609,19 @@
     "PowerBudget": {
       "additionalProperties": false,
       "properties": {
+        "estimated_runtime_min": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Estimated Runtime Min"
+        },
         "margin_percent": {
           "anyOf": [
             {
@@ -475,9 +672,85 @@
           ],
           "default": null,
           "title": "Supply Voltage V"
+        },
+        "typical_current_ma": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Typical Current Ma"
+        },
+        "usable_capacity_mah": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Usable Capacity Mah"
         }
       },
       "title": "PowerBudget",
+      "type": "object"
+    },
+    "PowerRail": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "peak_current_ma": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Peak Current Ma"
+        },
+        "source_ref": {
+          "default": "",
+          "title": "Source Ref",
+          "type": "string"
+        },
+        "voltage_v": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Voltage V"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "PowerRail",
       "type": "object"
     },
     "RobotSpecificationDraft": {

@@ -4,9 +4,14 @@ RoboCraft decomposes robot design into six specialized agents. Each agent owns o
 works against a typed contract. The orchestrator is deterministic: it resolves dependencies, runs
 agents in a fixed order, validates outputs before accepting them, and records every execution.
 
-**Current state:** agents are placeholders. They return `status: "not_implemented"` (or `skipped` if
-a dependency failed) and do not call a model. The orchestration, contracts, API, and persistence are
-fully implemented and tested, so each agent can be filled in without changing the pipeline.
+**Current state:** three agents are implemented and deterministic — `robot_planner`,
+`component_research`, and `electrical_engineering` — and the wiring system exports
+CSV/SVG/Markdown/JSON plus a KiCad netlist. They do not call a model: the curated component
+library and rules engine produce the same result for the same input, which makes every finding
+reproducible and testable offline. `programming`, `mechanical_design`, and `cost_estimation`
+remain placeholders returning `status: "not_implemented"` (or `skipped` if a dependency failed).
+The orchestration, contracts, API, and persistence are fully implemented and tested, so each
+remaining agent can be filled in without changing the pipeline.
 
 ## Why this shape
 
@@ -49,6 +54,10 @@ flowchart TD
 | `programming` | planner, components, electrical | `programming` | M6 | AI Engineering / Firmware |
 | `mechanical_design` | planner, components | `mechanical` | M7 | Mechanical Design |
 | `cost_estimation` | planner, components | `cost` | M8 | AI Engineering / Integrations |
+
+In this release the first three rows run deterministically (no model). The milestone column
+records the roadmap milestone that originally scoped each capability; M3–M5 still own the
+model-backed and supplier-integrated versions.
 
 Pipeline order is fixed (`PIPELINE_ORDER`), even when a request selects a subset. Requested agents
 are expanded with transitive dependencies. For example, requesting `programming` runs the planner,
@@ -159,6 +168,11 @@ persists one `AgentRun` per result. Parameters are stored in `input_payload`; ou
 when they passed validation.
 
 ## Implementing a placeholder agent
+
+Deterministic agents subclass `BaseAgent` and set `status = "available"`; placeholder agents
+keep `status = "placeholder"`. The planner and component research live in
+`app/ai/agents/planner.py` and `component_research.py`; the electrical agent delegates to
+`app/electrical/engine.py` so validation stays independent of the HTTP and agent layers.
 
 1. **Read the agent module** in `apps/api/app/ai/agents/`. Its docstring lists responsibilities and
    the contract it owns.

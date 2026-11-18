@@ -16,7 +16,15 @@ async def test_agent_catalog_lists_six_agents(client: AsyncClient) -> None:
     planner = body["agents"][0]
     assert planner["depends_on"] == []
     assert planner["output_schema"] == "RobotSpecificationDraft"
-    assert all(agent["status"] == "placeholder" for agent in body["agents"])
+    statuses = {agent["name"]: agent["status"] for agent in body["agents"]}
+    assert statuses == {
+        "robot_planner": "available",
+        "component_research": "available",
+        "electrical_engineering": "available",
+        "programming": "placeholder",
+        "mechanical_design": "placeholder",
+        "cost_estimation": "placeholder",
+    }
 
 
 async def test_pipeline_run_is_audited_and_honest(client: AsyncClient) -> None:
@@ -26,12 +34,21 @@ async def test_pipeline_run_is_audited_and_honest(client: AsyncClient) -> None:
     body = response.json()
     assert body["status"] == "not_implemented"
     assert len(body["runs"]) == 6
-    assert body["runs"][0]["agent"] == "robot_planner"
-    assert body["runs"][0]["status"] == "not_implemented"
-    assert all(run["status"] == "skipped" for run in body["runs"][1:])
-    # The project already has a draft specification; the placeholder planner does
-    # not replace it.
+    assert [run["agent"] for run in body["runs"]] == [
+        "robot_planner",
+        "component_research",
+        "electrical_engineering",
+        "programming",
+        "mechanical_design",
+        "cost_estimation",
+    ]
+    assert [run["status"] for run in body["runs"][:3]] == ["succeeded"] * 3
+    assert all(run["status"] == "not_implemented" for run in body["runs"][3:])
+
+    # The planner keeps the approved draft specification rather than overwriting it.
     assert body["shared_context"]["specification"]["summary"].startswith("A small rover")
+    assert body["shared_context"]["component_research"]["bill_of_materials"]
+    assert body["shared_context"]["electrical"]["connections"]
 
     audit = await client.get(f"/api/v1/projects/{project['id']}/agent-runs")
     assert audit.status_code == 200

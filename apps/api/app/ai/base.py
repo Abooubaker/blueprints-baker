@@ -6,7 +6,7 @@ import json
 import time
 from abc import ABC, abstractmethod
 from datetime import UTC, datetime
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING, ClassVar, Literal
 
 from pydantic import BaseModel
 
@@ -44,13 +44,14 @@ class BaseAgent(ABC):
     milestone: ClassVar[str] = "M3"
     owner_area: ClassVar[str] = "AI Engineering"
     requires_specification: ClassVar[bool] = True
+    status: ClassVar[Literal["placeholder", "available"]] = "placeholder"
 
     def descriptor(self) -> AgentDescriptor:
         return AgentDescriptor(
             name=self.name,
             display_name=self.display_name,
             description=self.description,
-            status="placeholder",
+            status=self.status,
             depends_on=list(self.depends_on),
             input_schema=self.input_model.__name__,
             output_schema=self.output_model.__name__,

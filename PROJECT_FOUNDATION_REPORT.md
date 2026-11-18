@@ -9,6 +9,12 @@
 This report records what was built, how it was verified, what is on GitHub, and what remains.
 Claims below are limited to checks that were actually run.
 
+> **Addendum (2026-11-18):** the planner, component research, and electrical/wiring system now
+> work deterministically, including validated nets, power budget, and KiCad/EasyEDA-compatible
+> netlist exports. A static GitHub Pages demo is generated from the same engine. Sections below
+> that call component research or wiring “not implemented” describe the original foundation
+> snapshot. See [docs/electrical.md](docs/electrical.md) and [docs/demo-site.md](docs/demo-site.md).
+
 ## 1. Objective and scope
 
 Build a trustworthy foundation for an AI-assisted robotics platform:

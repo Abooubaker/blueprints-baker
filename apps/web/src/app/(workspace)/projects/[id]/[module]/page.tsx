@@ -4,11 +4,20 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { WiringWorkspace } from "@/components/projects/wiring-workspace";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PROJECT_MODULES } from "@/lib/constants";
+import { DEMO_MODE, DEMO_PROJECT_ID, PROJECT_MODULES } from "@/lib/constants";
 import { titleCase } from "@/lib/utils";
+
+export function generateStaticParams() {
+  if (!DEMO_MODE) return [];
+  return PROJECT_MODULES.map((moduleInfo) => ({
+    id: DEMO_PROJECT_ID,
+    module: moduleInfo.slug,
+  }));
+}
 
 export async function generateMetadata({
   params,
@@ -20,7 +29,7 @@ export async function generateMetadata({
   return { title: moduleInfo?.label ?? "Module" };
 }
 
-export default async function ModulePlaceholderPage({
+export default async function ModulePage({
   params,
 }: {
   params: Promise<{ id: string; module: string }>;
@@ -28,6 +37,10 @@ export default async function ModulePlaceholderPage({
   const { id, module: moduleSlug } = await params;
   const moduleInfo = PROJECT_MODULES.find((item) => item.slug === moduleSlug);
   if (!moduleInfo) notFound();
+
+  if (moduleSlug === "wiring") {
+    return <WiringWorkspace projectId={id} />;
+  }
 
   const index = PROJECT_MODULES.findIndex((item) => item.slug === moduleSlug);
   const next = PROJECT_MODULES[index + 1];

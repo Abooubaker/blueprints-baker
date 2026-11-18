@@ -18,7 +18,7 @@ import { Logo } from "@/components/brand/logo";
 import { BlueprintCard } from "@/components/marketing/blueprint-card";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
-import { CAPABILITIES } from "@/lib/constants";
+import { CAPABILITIES, DEMO_MODE, DEMO_PROJECT_ID } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
@@ -81,11 +81,19 @@ export default function LandingPage() {
             >
               <Github className="size-4" />
             </a>
-            <ButtonLink href="/dashboard" variant="secondary" size="sm" className="hidden sm:flex">
-              Open workspace
+            <ButtonLink
+              href={DEMO_MODE ? `/projects/${DEMO_PROJECT_ID}` : "/dashboard"}
+              variant="secondary"
+              size="sm"
+              className="hidden sm:flex"
+            >
+              {DEMO_MODE ? "Open demo" : "Open workspace"}
             </ButtonLink>
-            <ButtonLink href="/projects/new" size="sm">
-              Start building <ArrowRight className="size-3.5" />
+            <ButtonLink
+              href={DEMO_MODE ? `/projects/${DEMO_PROJECT_ID}/wiring` : "/projects/new"}
+              size="sm"
+            >
+              {DEMO_MODE ? "View wiring" : "Start building"} <ArrowRight className="size-3.5" />
             </ButtonLink>
           </div>
         </div>
@@ -101,7 +109,7 @@ export default function LandingPage() {
               <div className="border-signal/20 bg-signal/[0.06] mb-6 inline-flex items-center gap-2 rounded-full border px-3 py-1.5">
                 <span className="bg-signal pulse-dot size-1.5 rounded-full" />
                 <span className="text-signal font-mono text-[10px] tracking-[0.16em] uppercase">
-                  M1 foundation · agents online
+                  {DEMO_MODE ? "Static demo · real engine output" : "M5 wiring · deterministic"}
                 </span>
               </div>
 
@@ -117,13 +125,29 @@ export default function LandingPage() {
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href="/projects/new" size="lg">
-                  Describe your robot <ArrowRight className="size-4" />
+                <ButtonLink
+                  href={DEMO_MODE ? `/projects/${DEMO_PROJECT_ID}/wiring` : "/projects/new"}
+                  size="lg"
+                >
+                  {DEMO_MODE ? "Explore the wiring demo" : "Describe your robot"}{" "}
+                  <ArrowRight className="size-4" />
                 </ButtonLink>
-                <ButtonLink href="/dashboard" variant="secondary" size="lg">
+                <ButtonLink
+                  href={DEMO_MODE ? `/projects/${DEMO_PROJECT_ID}` : "/dashboard"}
+                  variant="secondary"
+                  size="lg"
+                >
                   Explore the workspace
                 </ButtonLink>
               </div>
+
+              {DEMO_MODE ? (
+                <p className="text-faint mt-4 max-w-lg text-[11px] leading-relaxed">
+                  This Pages build is a read-only demo. The wiring plan and exports were generated
+                  by the same deterministic engine as the full app; project creation and agent runs
+                  need the API.
+                </p>
+              ) : null}
 
               <div className="text-faint mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px]">
                 <span className="flex items-center gap-1.5">

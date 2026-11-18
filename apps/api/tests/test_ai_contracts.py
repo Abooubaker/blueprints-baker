@@ -65,13 +65,20 @@ def test_unknown_agent_is_rejected() -> None:
         orchestrator.order(["does_not_exist"])  # type: ignore[list-item]
 
 
-async def test_placeholder_pipeline_blocks_dependents() -> None:
+async def test_pipeline_runs_deterministic_agents_then_reports_placeholders() -> None:
     orchestrator = AgentOrchestrator(build_agent_registry(MockProvider()))
     result = await orchestrator.run(make_context())
     assert result.status == AgentResultStatus.NOT_IMPLEMENTED
-    assert result.results[0].status == AgentResultStatus.NOT_IMPLEMENTED
-    assert all(item.status == AgentResultStatus.SKIPPED for item in result.results[1:])
-    assert result.context.specification is None
+    assert [item.status for item in result.results[:3]] == [
+        AgentResultStatus.SUCCEEDED,
+        AgentResultStatus.SUCCEEDED,
+        AgentResultStatus.SUCCEEDED,
+    ]
+    assert all(item.status == AgentResultStatus.NOT_IMPLEMENTED for item in result.results[3:])
+    assert result.context.specification is not None
+    assert result.context.component_research is not None
+    assert result.context.electrical is not None
+    assert result.context.electrical.connections
 
 
 async def test_planner_requires_no_spec_but_others_do() -> None:
@@ -80,7 +87,9 @@ async def test_planner_requires_no_spec_but_others_do() -> None:
     electrical = registry[AgentName.ELECTRICAL]
 
     planner_result = await planner.run(AgentRequest(context=make_context()))
-    assert planner_result.status == AgentResultStatus.NOT_IMPLEMENTED
+    assert planner_result.status == AgentResultStatus.SUCCEEDED
+    assert planner_result.output is not None
+    assert planner_result.output["robot_type"] == "rover"
 
     electrical_result = await electrical.run(AgentRequest(context=make_context()))
     assert electrical_result.status == AgentResultStatus.FAILED

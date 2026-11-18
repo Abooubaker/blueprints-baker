@@ -81,13 +81,15 @@ Run from the repository root:
 | `make typecheck` | mypy strict + `tsc --noEmit` |
 | `make build` | Production Next.js build |
 | `make contracts` | Export OpenAPI/schemas and regenerate API types |
+| `make demo-data` | Regenerate the static Pages fixtures from the electrical engine |
+| `make demo-build` | Build the static Pages export and scan it for credentials |
 | `make check` | Every quality gate (`api-check` + `web-check`) |
 | `make clean` | Remove local caches and build output |
 
 Backend commands (from `apps/api`):
 
 ```bash
-uv run pytest                      # 21 tests, SQLite, no network
+uv run pytest                      # 26 tests, SQLite, no network
 uv run pytest -k agent             # focused selection
 uv run pytest --cov=app            # coverage
 uv run ruff check .
@@ -133,6 +135,12 @@ npm run codegen                    # regenerate src/lib/api-schema.ts
 | Variable | Default | Notes |
 | --- | --- | --- |
 | `NEXT_PUBLIC_API_URL` | `http://localhost:8000` | Browser-visible API origin |
+| `NEXT_PUBLIC_DEMO_MODE` | `false` | Read precomputed fixtures and export statically |
+| `NEXT_PUBLIC_BASE_PATH` | empty | Pages project-site prefix, e.g. `/robocraft` |
+
+Never put a provider key in a `NEXT_PUBLIC_*` variable: Next.js inlines those values into the
+browser bundle. Provider keys belong only in the API environment. See
+[demo-site.md](demo-site.md) for the Pages build and `scripts/scan_secrets.sh`.
 
 `.env`, `.env.local`, and variants are git-ignored. Only `.env.example` files belong in git.
 
@@ -178,9 +186,11 @@ not hand-edit generated files.
 | --- | --- | --- |
 | API behavior | pytest + httpx ASGI transport | Health, project lifecycle, validation, specification updates, agent runs, audit history |
 | Agent graph | pytest | Dependency resolution, skip propagation, status aggregation, contract rejection |
+| Electrical | pytest | Plan generation, pin/net wiring, validation findings, all six exports, API round-trip |
 | Contracts | pytest / JSON Schema export | Unknown-field rejection, enum validity, serialization |
 | Frontend | TypeScript, ESLint, Prettier | Type safety, hooks rules, formatting |
 | Build | `next build` | Route compilation and production bundling |
+| Static demo | `next build` + `scripts/scan_secrets.sh` | Pages export, base path, fixtures are current, no credential-shaped strings |
 | Browser | manual/Playwright (outside CI today) | Routes, responsive layout, create/delete project flow |
 
 There is no frontend unit-test runner yet; the build/type/lint gate is the current regression net.
@@ -195,13 +205,18 @@ Adding component tests is tracked in M10.
 
 ## CI
 
-`.github/workflows/ci.yml` runs four jobs on pushes to `main` and every pull request:
+`.github/workflows/ci.yml` runs five jobs on pushes to `main` and every pull request:
 
 1. **Backend** — uv sync, Ruff, format check, mypy strict, pytest with coverage.
 2. **Migrations** — real PostgreSQL 16 service: upgrade head, `alembic check`, downgrade base,
    upgrade again.
 3. **Contracts** — regenerate and fail if committed artifacts drift.
 4. **Frontend** — npm ci, ESLint, TypeScript, Prettier check, production build.
+5. **Demo** — regenerate fixtures, fail on drift, build the static Pages export, scan it for
+   credential-shaped strings.
+
+`.github/workflows/pages.yml` deploys that export to GitHub Pages on pushes to `main`. Enable
+**Settings → Pages → Source: GitHub Actions** once. See [demo-site.md](demo-site.md).
 
 A pull request should not be merged while a required job is failing.
 

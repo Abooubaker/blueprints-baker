@@ -174,6 +174,11 @@ flowchart TB
 The included `docker-compose.yml` only provides PostgreSQL for local development. It is not a
 production deployment definition.
 
+A separate GitHub Pages build publishes a read-only demo. It is the same web app built with
+`NEXT_PUBLIC_DEMO_MODE=true` from precomputed fixtures produced by the deterministic engine, so the
+public artifact contains no API, database, or secrets. It is a showcase, not a deployment
+topology for the product; see [demo-site.md](demo-site.md).
+
 ## Security posture
 
 Current foundation:
@@ -181,7 +186,8 @@ Current foundation:
 - No authentication. Projects are global and `owner_id` is nullable. This is a known, documented
   gap, not an accident.
 - Secrets come from environment variables; `.env` files are git-ignored and `.env.example` contains
-  placeholders only.
+  placeholders only. Browser-visible values are limited to `NEXT_PUBLIC_*`; provider keys never
+  cross that boundary, and the Pages build is scanned for credential-shaped strings before deploy.
 - CORS is allow-listed.
 - Input lengths, numeric ranges, budget ordering, and contract shape are validated.
 - Production hides interactive API docs.

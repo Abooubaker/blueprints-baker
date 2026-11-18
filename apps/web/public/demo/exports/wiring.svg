@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="426" viewBox="0 0 1400 426" role="img" aria-label="RoboCraft wiring overview">
+<defs>
+<pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+<path d="M 24 0 L 0 0 0 24" fill="none" stroke="#152023" stroke-width="1"/>
+</pattern>
+</defs>
+<rect width="1400" height="426" fill="#06090a"/>
+<rect width="1400" height="426" fill="url(#grid)"/>
+<text x="40" y="52" font-family="Menlo, monospace" font-size="18" fill="#edf2ee" text-anchor="start">ROBOCRAFT · WIRING OVERVIEW</text>
+<text x="40" y="78" font-family="Menlo, monospace" font-size="11" fill="#94a29c" text-anchor="start">8 parts · 16 nets · 2330 mA peak</text>
+<path d="M 102 172 C 270 172, 270 172, 438 172" fill="none" stroke="#5f6e68" stroke-width="1.4" opacity="0.18"><title>GND: BT1.NEG → U1.GND</title></path>
+<path d="M 102 172 C 186 172, 186 172, 270 172" fill="none" stroke="#5f6e68" stroke-width="1.4" opacity="0.18"><title>GND: BT1.NEG → VR1.IN-</title></path>
+<path d="M 102 172 C 186 172, 186 172, 270 172" fill="none" stroke="#5f6e68" stroke-width="1.4" opacity="0.18"><title>GND: BT1.NEG → VR1.OUT-</title></path>
+<path d="M 102 172 C 354 172, 354 172, 606 172" fill="none" stroke="#5f6e68" stroke-width="1.4" opacity="0.18"><title>GND: BT1.NEG → U2.GND</title></path>
+<path d="M 102 172 C 522 172, 522 172, 942 172" fill="none" stroke="#5f6e68" stroke-width="1.4" opacity="0.18"><title>GND: BT1.NEG → M3.GND</title></path>
+<path d="M 102 172 C 606 172, 606 172, 1110 172" fill="none" stroke="#5f6e68" stroke-width="1.4" opacity="0.18"><title>GND: BT1.NEG → S1.GND</title></path>
+<path d="M 102 172 C 186 172, 186 172, 270 172" fill="none" stroke="#f26d6d" stroke-width="1.4" opacity="0.55"><title>VBAT: BT1.POS → VR1.IN+</title></path>
+<path d="M 270 172 C 354 172, 354 172, 438 172" fill="none" stroke="#f26d6d" stroke-width="1.4" opacity="0.55"><title>+5V: VR1.OUT+ → U1.VIN</title></path>
+<path d="M 102 172 C 354 172, 354 172, 606 172" fill="none" stroke="#f26d6d" stroke-width="1.4" opacity="0.55"><title>VBAT: BT1.POS → U2.VM</title></path>
+<path d="M 270 172 C 438 172, 438 172, 606 172" fill="none" stroke="#f26d6d" stroke-width="1.4" opacity="0.55"><title>+5V: VR1.OUT+ → U2.VCC</title></path>
+<path d="M 270 172 C 438 172, 438 172, 606 172" fill="none" stroke="#5cdbd3" stroke-width="1.4" opacity="0.55"><title>+5V: VR1.OUT+ → U2.STBY</title></path>
+<path d="M 438 172 C 522 172, 522 172, 606 172" fill="none" stroke="#5cdbd3" stroke-width="1.4" opacity="0.55"><title>MOTOR_1_PWM: U1.GPIO4 → U2.PWMA</title></path>
+<path d="M 438 172 C 522 172, 522 172, 606 172" fill="none" stroke="#5cdbd3" stroke-width="1.4" opacity="0.55"><title>MOTOR_1_DIR1: U1.GPIO5 → U2.AIN1</title></path>
+<path d="M 438 172 C 522 172, 522 172, 606 172" fill="none" stroke="#5cdbd3" stroke-width="1.4" opacity="0.55"><title>MOTOR_1_DIR2: U1.GPIO13 → U2.AIN2</title></path>
+<path d="M 606 172 C 690 172, 690 172, 774 172" fill="none" stroke="#f5b544" stroke-width="1.4" opacity="0.55"><title>MOTOR_1_A: U2.AO1 → M1.M+</title></path>
+<path d="M 606 172 C 690 172, 690 172, 774 172" fill="none" stroke="#f5b544" stroke-width="1.4" opacity="0.55"><title>MOTOR_1_B: U2.AO2 → M1.M-</title></path>
+<path d="M 438 172 C 522 172, 522 172, 606 172" fill="none" stroke="#5cdbd3" stroke-width="1.4" opacity="0.55"><title>MOTOR_2_PWM: U1.GPIO14 → U2.PWMB</title></path>
+<path d="M 438 172 C 522 172, 522 172, 606 172" fill="none" stroke="#5cdbd3" stroke-width="1.4" opacity="0.55"><title>MOTOR_2_DIR1: U1.GPIO15 → U2.BIN1</title></path>
+<path d="M 438 172 C 522 172, 522 172, 606 172" fill="none" stroke="#5cdbd3" stroke-width="1.4" opacity="0.55"><title>MOTOR_2_DIR2: U1.GPIO16 → U2.BIN2</title></path>
+<path d="M 606 172 C 690 172, 690 280, 774 280" fill="none" stroke="#f5b544" stroke-width="1.4" opacity="0.55"><title>MOTOR_2_A: U2.BO1 → M2.M+</title></path>
+<path d="M 606 172 C 690 172, 690 280, 774 280" fill="none" stroke="#f5b544" stroke-width="1.4" opacity="0.55"><title>MOTOR_2_B: U2.BO2 → M2.M-</title></path>
+<path d="M 270 172 C 690 172, 690 172, 1110 172" fill="none" stroke="#f26d6d" stroke-width="1.4" opacity="0.55"><title>+5V: VR1.OUT+ → S1.VCC</title></path>
+<path d="M 438 172 C 774 172, 774 172, 1110 172" fill="none" stroke="#5cdbd3" stroke-width="1.4" opacity="0.55"><title>ULTRASONIC_TRIG: U1.GPIO17 → S1.TRIG</title></path>
+<path d="M 438 172 C 774 172, 774 172, 1110 172" fill="none" stroke="#5cdbd3" stroke-width="1.4" opacity="0.55"><title>ULTRASONIC_ECHO: U1.GPIO18 → S1.ECHO</title></path>
+<path d="M 438 172 C 690 172, 690 172, 942 172" fill="none" stroke="#5cdbd3" stroke-width="1.4" opacity="0.55"><title>SERVO_1_SIG: U1.GPIO19 → M3.SIG</title></path>
+<path d="M 270 172 C 606 172, 606 172, 942 172" fill="none" stroke="#f26d6d" stroke-width="1.4" opacity="0.55"><title>+5V: VR1.OUT+ → M3.VCC</title></path>
+<g><title>2S LiPo battery (7.4 V, 2200 mAh) · BT1</title><rect x="40" y="150" width="150" height="58" rx="8" fill="#1b1113" stroke="#223034"/><text x="50" y="170" font-family="Menlo, monospace" font-size="11" fill="#c9f75a">BT1</text><text x="50" y="188" font-family="Inter, sans-serif" font-size="10" fill="#edf2ee">2S LiPo battery (7.4 V, 22</text><text x="50" y="201" font-family="Menlo, monospace" font-size="8" fill="#5f6e68">POWER</text></g>
+<g><title>5 V 3 A buck converter · VR1</title><rect x="208" y="150" width="150" height="58" rx="8" fill="#101a1a" stroke="#223034"/><text x="218" y="170" font-family="Menlo, monospace" font-size="11" fill="#c9f75a">VR1</text><text x="218" y="188" font-family="Inter, sans-serif" font-size="10" fill="#edf2ee">5 V 3 A buck converter</text><text x="218" y="201" font-family="Menlo, monospace" font-size="8" fill="#5f6e68">REGULATOR</text></g>
+<g><title>ESP32 DevKit V1 · U1</title><rect x="376" y="150" width="150" height="58" rx="8" fill="#141c0d" stroke="#223034"/><text x="386" y="170" font-family="Menlo, monospace" font-size="11" fill="#c9f75a">U1</text><text x="386" y="188" font-family="Inter, sans-serif" font-size="10" fill="#edf2ee">ESP32 DevKit V1</text><text x="386" y="201" font-family="Menlo, monospace" font-size="8" fill="#5f6e68">CONTROLLER</text></g>
+<g><title>TB6612FNG dual motor driver · U2</title><rect x="544" y="150" width="150" height="58" rx="8" fill="#101a1a" stroke="#223034"/><text x="554" y="170" font-family="Menlo, monospace" font-size="11" fill="#c9f75a">U2</text><text x="554" y="188" font-family="Inter, sans-serif" font-size="10" fill="#edf2ee">TB6612FNG dual motor drive</text><text x="554" y="201" font-family="Menlo, monospace" font-size="8" fill="#5f6e68">DRIVER</text></g>
+<g><title>N20 gear motor (6 V) · M1</title><rect x="712" y="150" width="150" height="58" rx="8" fill="#1b1810" stroke="#223034"/><text x="722" y="170" font-family="Menlo, monospace" font-size="11" fill="#c9f75a">M1</text><text x="722" y="188" font-family="Inter, sans-serif" font-size="10" fill="#edf2ee">N20 gear motor (6 V)</text><text x="722" y="201" font-family="Menlo, monospace" font-size="8" fill="#5f6e68">MOTOR</text></g>
+<g><title>N20 gear motor (6 V) · M2</title><rect x="712" y="258" width="150" height="58" rx="8" fill="#1b1810" stroke="#223034"/><text x="722" y="278" font-family="Menlo, monospace" font-size="11" fill="#c9f75a">M2</text><text x="722" y="296" font-family="Inter, sans-serif" font-size="10" fill="#edf2ee">N20 gear motor (6 V)</text><text x="722" y="309" font-family="Menlo, monospace" font-size="8" fill="#5f6e68">MOTOR</text></g>
+<g><title>SG90 micro servo · M3</title><rect x="880" y="150" width="150" height="58" rx="8" fill="#1b1810" stroke="#223034"/><text x="890" y="170" font-family="Menlo, monospace" font-size="11" fill="#c9f75a">M3</text><text x="890" y="188" font-family="Inter, sans-serif" font-size="10" fill="#edf2ee">SG90 micro servo</text><text x="890" y="201" font-family="Menlo, monospace" font-size="8" fill="#5f6e68">ACTUATOR</text></g>
+<g><title>HC-SR04 ultrasonic rangefinder · S1</title><rect x="1048" y="150" width="150" height="58" rx="8" fill="#0f1a1c" stroke="#223034"/><text x="1058" y="170" font-family="Menlo, monospace" font-size="11" fill="#c9f75a">S1</text><text x="1058" y="188" font-family="Inter, sans-serif" font-size="10" fill="#edf2ee">HC-SR04 ultrasonic rangefi</text><text x="1058" y="201" font-family="Menlo, monospace" font-size="8" fill="#5f6e68">SENSOR</text></g>
+<line x1="40" y1="380" x2="58" y2="380" stroke="#f26d6d" stroke-width="2"/>
+<text x="64" y="384" font-family="Menlo, monospace" font-size="10" fill="#94a29c" text-anchor="start">Power</text>
+<line x1="150" y1="380" x2="168" y2="380" stroke="#5f6e68" stroke-width="2"/>
+<text x="174" y="384" font-family="Menlo, monospace" font-size="10" fill="#94a29c" text-anchor="start">Ground</text>
+<line x1="260" y1="380" x2="278" y2="380" stroke="#5cdbd3" stroke-width="2"/>
+<text x="284" y="384" font-family="Menlo, monospace" font-size="10" fill="#94a29c" text-anchor="start">Signal</text>
+<line x1="370" y1="380" x2="388" y2="380" stroke="#f5b544" stroke-width="2"/>
+<text x="394" y="384" font-family="Menlo, monospace" font-size="10" fill="#94a29c" text-anchor="start">Motor</text>
+<line x1="480" y1="380" x2="498" y2="380" stroke="#8fa9ff" stroke-width="2"/>
+<text x="504" y="384" font-family="Menlo, monospace" font-size="10" fill="#94a29c" text-anchor="start">Bus</text>
+<text x="1360" y="406" font-family="Menlo, monospace" font-size="9" fill="#5f6e68" text-anchor="end">LIBRARY v1.0 · CHECK ALL CONNECTIONS BEFORE POWER-ON</text>
+</svg>

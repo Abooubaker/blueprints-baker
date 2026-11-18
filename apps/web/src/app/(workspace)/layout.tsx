@@ -1,5 +1,6 @@
 import { Topbar } from "@/components/layout/topbar";
 import { Sidebar } from "@/components/layout/sidebar";
+import { DemoBanner } from "@/components/layout/demo-banner";
 
 export default function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,6 +8,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       <Sidebar />
       <div className="lg:pl-[248px]">
         <Topbar />
+        <DemoBanner />
         <main className="mx-auto w-full max-w-[1440px] px-4 py-7 sm:px-6 lg:px-8 lg:py-9">
           {children}
         </main>

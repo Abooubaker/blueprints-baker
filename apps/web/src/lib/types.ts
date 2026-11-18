@@ -135,3 +135,133 @@ export interface ApiErrorBody {
     request_id?: string;
   };
 }
+
+export type ConnectionKind = "power" | "ground" | "signal" | "motor" | "bus";
+export type IssueSeverity = "error" | "warning" | "info";
+
+export interface ElectricalNodePin {
+  name: string;
+  kind: string;
+  voltage_v: number | null;
+  connected: boolean;
+}
+
+export interface ElectricalNode {
+  ref: string;
+  label: string;
+  kind: "controller" | "motor" | "driver" | "sensor" | "power" | "actuator" | "regulator" | "other";
+  role: string;
+  library_key: string;
+  voltage_v: number | null;
+  current_ma: number | null;
+  peak_current_ma: number | null;
+  pins: ElectricalNodePin[];
+  notes: string;
+}
+
+export interface ElectricalConnection {
+  from_ref: string;
+  from_pin: string;
+  to_ref: string;
+  to_pin: string;
+  net: string;
+  signal: string;
+  kind: ConnectionKind;
+  voltage_v: number | null;
+  wire_color: string;
+  wire_gauge_awg: number | null;
+  connector: string;
+  notes: string;
+}
+
+export interface ElectricalIssue {
+  code: string;
+  severity: IssueSeverity;
+  message: string;
+  refs: string[];
+  remediation: string;
+}
+
+export interface PowerRail {
+  name: string;
+  voltage_v: number | null;
+  peak_current_ma: number | null;
+  source_ref: string;
+  notes: string;
+}
+
+export interface PowerBudget {
+  supply_voltage_v: number | null;
+  peak_current_ma: number | null;
+  typical_current_ma: number | null;
+  recommended_supply_ma: number | null;
+  margin_percent: number | null;
+  usable_capacity_mah: number | null;
+  estimated_runtime_min: number | null;
+}
+
+export interface ElectricalPlan {
+  nodes: ElectricalNode[];
+  connections: ElectricalConnection[];
+  power_budget: PowerBudget;
+  power_rails: PowerRail[];
+  pin_map: Record<string, string>;
+  issues: ElectricalIssue[];
+  safety_checks: string[];
+  warnings: string[];
+  wiring_steps: string[];
+  design_notes: string[];
+  library_version: string;
+}
+
+export interface ComponentCandidate {
+  name: string;
+  manufacturer: string;
+  model_number: string;
+  category: string;
+  specs: Record<string, unknown>;
+  price_usd: number | string | null;
+  supplier: string;
+  supplier_url: string | null;
+  availability: string;
+  compatibility_notes: string[];
+  score: number;
+}
+
+export interface BomItem {
+  role: string;
+  category: string;
+  quantity: number;
+  required: boolean;
+  selection: ComponentCandidate | null;
+  rationale: string;
+}
+
+export interface ComponentResearchOutput {
+  bill_of_materials: BomItem[];
+  unresolved_requirements: string[];
+  compatibility_notes: string[];
+  total_estimated_usd: number | string | null;
+  sources: string[];
+}
+
+export type ExportFormat = "json" | "wiring-csv" | "bom-csv" | "kicad-netlist" | "svg" | "markdown";
+
+export interface ExportFormatDescriptor {
+  format: ExportFormat;
+  label: string;
+  filename: string;
+  media_type: string;
+  description: string;
+}
+
+export interface ElectricalArtifact {
+  project_id: string;
+  project_name: string;
+  agent_run_id: string;
+  generated_at: string;
+  plan: ElectricalPlan;
+  bom: ComponentResearchOutput | null;
+  total_estimated_usd: number | null;
+  export_formats: ExportFormatDescriptor[];
+}
