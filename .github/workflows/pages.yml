@@ -18,6 +18,8 @@ jobs:
   build:
     name: Build static demo
     runs-on: ubuntu-latest
+    outputs:
+      pages-enabled: ${{ steps.pages.outputs.enabled }}
     steps:
       - uses: actions/checkout@v4
 
@@ -41,9 +43,17 @@ jobs:
         run: uv run python ../../scripts/generate_demo_data.py
         working-directory: apps/api
 
-      - name: Resolve Pages base path
-        id: pages
-        uses: actions/configure-pages@v5
+      # Derive the path without requiring Pages to be enabled yet, so the
+      # static build still validates on repositories without Pages access.
+      - name: Compute Pages base path
+        id: base
+        run: |
+          repo="${GITHUB_REPOSITORY#*/}"
+          if [[ "$repo" == *.github.io ]]; then
+            echo "path=" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=/$repo" >> "$GITHUB_OUTPUT"
+          fi
 
       - run: npm ci
         working-directory: apps/web
@@ -54,22 +64,36 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: "1"
           NEXT_PUBLIC_DEMO_MODE: "true"
-          # Project sites are served from /<repository>. configure-pages
-          # returns an empty string for user/organisation sites.
-          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.base.outputs.path }}
           # Never point the public demo at a live API or inject credentials.
           NEXT_PUBLIC_API_URL: ""
 
       - name: Scan tracked files and export for credentials
         run: bash scripts/scan_secrets.sh
 
+      # Private repositories need a GitHub plan that includes Pages, and Pages
+      # must be enabled with "Source: GitHub Actions" before deployment works.
+      - name: Check Pages availability
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/${GITHUB_REPOSITORY}/pages" >/dev/null 2>&1; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Pages is not enabled::The static export was built but not deployed. Make the repository public (or use a plan with Pages for private repositories), then enable Settings -> Pages -> Source: GitHub Actions."
+          fi
+
       - uses: actions/upload-pages-artifact@v3
+        if: steps.pages.outputs.enabled == 'true'
         with:
           path: apps/web/out
 
   deploy:
     name: Deploy to GitHub Pages
     needs: build
+    if: needs.build.outputs.pages-enabled == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

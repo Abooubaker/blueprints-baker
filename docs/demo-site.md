@@ -86,11 +86,26 @@ Rules:
 `.github/workflows/pages.yml` runs on pushes to `main` and on manual dispatch:
 
 1. install API dependencies and regenerate fixtures;
-2. resolve the Pages base path with `actions/configure-pages`;
+2. derive the Pages base path from the repository name;
 3. `npm ci` and `npm run build` with demo env;
 4. run the credential scan;
-5. upload `apps/web/out` and deploy with `actions/deploy-pages`.
+5. check whether Pages is enabled, then upload `apps/web/out` and deploy with
+   `actions/deploy-pages`.
 
 Enable **Settings → Pages → Source: GitHub Actions** once in the repository. CI
 (`.github/workflows/ci.yml`, job `demo`) builds the same export on every pull request and
 fails if the committed fixtures drift.
+
+### Repository requirements
+
+GitHub Pages must be available for the repository:
+
+- **Public repository:** Pages is free; enable it once with **Source: GitHub Actions**.
+- **Private repository:** requires a GitHub plan that includes Pages for private repositories,
+  and Pages must still be enabled with the GitHub Actions source.
+
+Until then the workflow still builds and scans the static export, prints a notice, and skips
+the deploy job instead of failing. It does not silently publish anything.
+
+The deploy job intentionally has no custom domain or CORS configuration: the demo is entirely
+static and must never call a live API.
