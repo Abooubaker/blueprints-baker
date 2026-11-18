@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
+import json
 from functools import lru_cache
-from typing import Literal
+from typing import Annotated, Literal
 from urllib.parse import parse_qsl, urlencode
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 Environment = Literal["development", "test", "staging", "production"]
 
@@ -33,7 +34,9 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     api_v1_prefix: str = "/api/v1"
 
-    cors_origins: list[str] = Field(
+    # NoDecode keeps pydantic-settings from JSON-decoding the raw env value, so
+    # the comma-separated form documented for hosted providers keeps working.
+    cors_origins: Annotated[list[str], NoDecode] = Field(
         default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000"]
     )
 
@@ -51,6 +54,15 @@ class Settings(BaseSettings):
     @classmethod
     def parse_cors_origins(cls, value: object) -> object:
         if isinstance(value, str):
+            text = value.strip()
+            if text.startswith("["):
+                try:
+                    decoded = json.loads(text)
+                except json.JSONDecodeError:
+                    pass
+                else:
+                    if isinstance(decoded, list):
+                        return [str(origin).strip() for origin in decoded if str(origin).strip()]
             return [origin.strip() for origin in value.split(",") if origin.strip()]
         return value
 

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from app.core.config import Settings
 
 
@@ -47,3 +49,27 @@ def test_cors_origins_accept_comma_separated_string() -> None:
     )
 
     assert settings.cors_origins == ["https://example.com", "https://www.example.com"]
+
+
+def test_cors_origins_accept_comma_separated_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("CORS_ORIGINS", "https://albayraq-web.onrender.com,http://localhost:3000")
+
+    settings = Settings(environment="test")
+
+    assert settings.cors_origins == [
+        "https://albayraq-web.onrender.com",
+        "http://localhost:3000",
+    ]
+
+
+def test_cors_origins_accept_json_array_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv(
+        "CORS_ORIGINS", '["https://albayraq-web.onrender.com","http://localhost:3000"]'
+    )
+
+    settings = Settings(environment="test")
+
+    assert settings.cors_origins == [
+        "https://albayraq-web.onrender.com",
+        "http://localhost:3000",
+    ]
