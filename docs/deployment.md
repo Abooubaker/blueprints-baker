@@ -17,7 +17,7 @@ same if you prefer clicking through.
 ## 1. Create the Neon database
 
 1. Create a Neon project in the region closest to your Render region (this repo's blueprint uses
-   `frankfurt`).
+   `ohio` (US East), matching a Neon project in `us-east-2`).
 2. Copy the **pooled** connection string. It looks like:
 
    ```text

@@ -11,7 +11,7 @@ services:
     name: blueprints-baker-api
     runtime: docker
     plan: free
-    region: frankfurt
+    region: ohio
     dockerContext: ./apps/api
     dockerfilePath: ./apps/api/Dockerfile
     healthCheckPath: /health
@@ -32,7 +32,7 @@ services:
     name: blueprints-baker-web
     runtime: node
     plan: free
-    region: frankfurt
+    region: ohio
     rootDir: apps/web
     buildCommand: npm ci && npm run build
     startCommand: npm run start
