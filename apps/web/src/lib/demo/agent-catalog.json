@@ -5,7 +5,7 @@
     {
       "name": "robot_planner",
       "display_name": "Robot Planner",
-      "description": "Turns a plain-language robot idea into a structured specification.",
+      "description": "Turns a plain-language robot idea into a structured specification: platform, drivetrain, power source, requirements, and constraints.",
       "status": "available",
       "depends_on": [],
       "input_schema": "PlannerInput",
@@ -16,7 +16,7 @@
     {
       "name": "component_research",
       "display_name": "Component Research",
-      "description": "Selects a compatible bill of materials for the robot archetype.",
+      "description": "Selects a compatible bill of materials for the robot archetype, including controllers, drivers, motors, sensors, and power.",
       "status": "available",
       "depends_on": [
         "robot_planner"
@@ -29,7 +29,7 @@
     {
       "name": "electrical_engineering",
       "display_name": "Electrical Engineering",
-      "description": "Creates a full pinout, nets, power budgets, and wiring steps, then validates the wiring.",
+      "description": "Creates a full pinout, nets, power budgets, and wiring steps, then validates voltage, logic-level, grounding, current, and pin conflicts.",
       "status": "available",
       "depends_on": [
         "robot_planner",
@@ -43,8 +43,8 @@
     {
       "name": "programming",
       "display_name": "Programming",
-      "description": "Generates firmware for the selected hardware.",
-      "status": "placeholder",
+      "description": "Generates pin-mapped, multi-file firmware scaffolds for every selected language, with the controller's real pin assignments.",
+      "status": "available",
       "depends_on": [
         "robot_planner",
         "component_research",
@@ -53,13 +53,13 @@
       "input_schema": "ProgrammingInput",
       "output_schema": "ProgrammingOutput",
       "milestone": "M6",
-      "owner_area": "Robotics / Software Engineering"
+      "owner_area": "AI Engineering / Firmware"
     },
     {
       "name": "mechanical_design",
       "display_name": "Mechanical Design",
-      "description": "Plans the chassis, mounts, and assembly order.",
-      "status": "placeholder",
+      "description": "Generates a basic parametric chassis STL, estimates printed weight, and prices it with the JOD material chart.",
+      "status": "available",
       "depends_on": [
         "robot_planner",
         "component_research"
@@ -67,13 +67,13 @@
       "input_schema": "MechanicalInput",
       "output_schema": "MechanicalOutput",
       "milestone": "M7",
-      "owner_area": "Robotics / Mechanical Engineering"
+      "owner_area": "Mechanical Design"
     },
     {
       "name": "cost_estimation",
       "display_name": "Cost Estimation",
-      "description": "Builds the line-item budget and alternatives.",
-      "status": "placeholder",
+      "description": "Rolls up the bill of materials and 3D-print material into a transparent estimate in USD and JOD, with budget alternatives.",
+      "status": "available",
       "depends_on": [
         "robot_planner",
         "component_research"
@@ -81,7 +81,7 @@
       "input_schema": "CostInput",
       "output_schema": "CostEstimate",
       "milestone": "M8",
-      "owner_area": "Robotics / Product Engineering"
+      "owner_area": "AI Engineering / Integrations"
     }
   ]
 }

@@ -2,6 +2,7 @@ import { API_BASE_URL, DEMO_MODE } from "@/lib/constants";
 import {
   demoAgentCatalog,
   demoAgentRuns,
+  demoBuild,
   demoElectrical,
   demoExportPath,
   demoOrchestration,
@@ -13,6 +14,8 @@ import type {
   AgentCatalog,
   AgentName,
   AgentRun,
+  BuildArtifact,
+  BuildPreferences,
   CreateProjectInput,
   ElectricalArtifact,
   ExportFormat,
@@ -20,6 +23,8 @@ import type {
   Page,
   Project,
   ProjectSummary,
+  RobotIdentification,
+  RobotType,
 } from "@/lib/types";
 
 export class ApiError extends Error {
@@ -211,5 +216,67 @@ export const api = {
   exportUrl(projectId: string, format: ExportFormat): string {
     if (DEMO_MODE) return demoExportPath(format);
     return `${API_BASE_URL}/api/v1/projects/${projectId}/electrical/export/${format}`;
+  },
+
+  identifyRobot(description: string, robotType?: RobotType): Promise<RobotIdentification> {
+    if (DEMO_MODE) {
+      return Promise.reject(
+        new ApiError(
+          "Robot identification needs the full API. This Pages build is a read-only demo.",
+          "demo_read_only",
+          405,
+        ),
+      );
+    }
+    return request<RobotIdentification>("/api/v1/intent/identify", {
+      method: "POST",
+      body: JSON.stringify({ description, robot_type: robotType ?? null }),
+    });
+  },
+
+  getPreferences(projectId: string): Promise<BuildPreferences> {
+    if (DEMO_MODE) {
+      if (!isDemoProject(projectId)) {
+        return Promise.reject(new ApiError("Demo project not found.", "not_found", 404));
+      }
+      return Promise.resolve(demoBuild.preferences);
+    }
+    return request<BuildPreferences>(`/api/v1/projects/${projectId}/preferences`);
+  },
+
+  savePreferences(projectId: string, preferences: BuildPreferences): Promise<BuildPreferences> {
+    if (DEMO_MODE) {
+      return Promise.reject(
+        new ApiError(
+          "Saving guided answers needs the full API. This Pages build is read-only.",
+          "demo_read_only",
+          405,
+        ),
+      );
+    }
+    return request<BuildPreferences>(`/api/v1/projects/${projectId}/preferences`, {
+      method: "PUT",
+      body: JSON.stringify(preferences),
+    });
+  },
+
+  generateBuild(projectId: string): Promise<BuildArtifact> {
+    if (DEMO_MODE) {
+      if (!isDemoProject(projectId)) {
+        return Promise.reject(new ApiError("Demo project not found.", "not_found", 404));
+      }
+      return Promise.resolve(demoBuild);
+    }
+    return request<BuildArtifact>(`/api/v1/projects/${projectId}/build`, { method: "POST" });
+  },
+
+  getBuild(projectId: string): Promise<BuildArtifact> {
+    if (DEMO_MODE) {
+      if (!isDemoProject(projectId)) {
+        return Promise.reject(new ApiError("Demo project not found.", "not_found", 404));
+      }
+      return Promise.resolve(demoBuild);
+    }
+    return request<BuildArtifact>(`/api/v1/projects/${projectId}/build`);
   },
 };

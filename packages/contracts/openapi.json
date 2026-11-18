@@ -428,6 +428,306 @@
         "title": "BudgetAlternative",
         "type": "object"
       },
+      "BuildArtifactRead": {
+        "properties": {
+          "cost": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CostEstimate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "documentation": {
+            "$ref": "#/components/schemas/ProjectDocumentation"
+          },
+          "electrical": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ElectricalPlan"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "generated_at": {
+            "format": "date-time",
+            "title": "Generated At",
+            "type": "string"
+          },
+          "identification": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RobotIdentification"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mechanical": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MechanicalOutput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "missing": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing",
+            "type": "array"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/BuildPreferences-Output"
+          },
+          "programming": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProgrammingOutput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "project_id": {
+            "format": "uuid",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "project_name": {
+            "title": "Project Name",
+            "type": "string"
+          },
+          "research": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ComponentResearchOutput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "specification": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RobotSpecificationDraft"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "enum": [
+              "ready",
+              "partial",
+              "empty"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Warnings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "project_id",
+          "project_name",
+          "status",
+          "generated_at",
+          "preferences"
+        ],
+        "title": "BuildArtifactRead",
+        "type": "object"
+      },
+      "BuildPreferences-Input": {
+        "additionalProperties": false,
+        "description": "Persisted answers from the guided project flow.\n\nThe configuration lives in ``project_configurations.configuration`` as JSON so\nit can evolve without a migration. Every downstream agent reads it through\nrequest parameters.",
+        "properties": {
+          "budget_max_usd": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Budget Max Usd"
+          },
+          "confirmed": {
+            "default": false,
+            "title": "Confirmed",
+            "type": "boolean"
+          },
+          "controller_notes": {
+            "default": "",
+            "title": "Controller Notes",
+            "type": "string"
+          },
+          "controllers": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Controllers",
+            "type": "array"
+          },
+          "custom_pcb": {
+            "default": false,
+            "title": "Custom Pcb",
+            "type": "boolean"
+          },
+          "description": {
+            "default": "",
+            "title": "Description",
+            "type": "string"
+          },
+          "difficulty": {
+            "$ref": "#/components/schemas/Difficulty",
+            "default": "beginner"
+          },
+          "identification_confidence": {
+            "default": 0.0,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Identification Confidence",
+            "type": "number"
+          },
+          "identification_rationale": {
+            "default": "",
+            "title": "Identification Rationale",
+            "type": "string"
+          },
+          "languages": {
+            "items": {
+              "$ref": "#/components/schemas/CodeLanguage"
+            },
+            "title": "Languages",
+            "type": "array"
+          },
+          "robot_name": {
+            "default": "",
+            "title": "Robot Name",
+            "type": "string"
+          },
+          "robot_type": {
+            "$ref": "#/components/schemas/RobotType",
+            "default": "custom"
+          },
+          "shops": {
+            "items": {
+              "$ref": "#/components/schemas/StoreName"
+            },
+            "title": "Shops",
+            "type": "array"
+          }
+        },
+        "title": "BuildPreferences",
+        "type": "object"
+      },
+      "BuildPreferences-Output": {
+        "additionalProperties": false,
+        "description": "Persisted answers from the guided project flow.\n\nThe configuration lives in ``project_configurations.configuration`` as JSON so\nit can evolve without a migration. Every downstream agent reads it through\nrequest parameters.",
+        "properties": {
+          "budget_max_usd": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Budget Max Usd"
+          },
+          "confirmed": {
+            "default": false,
+            "title": "Confirmed",
+            "type": "boolean"
+          },
+          "controller_notes": {
+            "default": "",
+            "title": "Controller Notes",
+            "type": "string"
+          },
+          "controllers": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Controllers",
+            "type": "array"
+          },
+          "custom_pcb": {
+            "default": false,
+            "title": "Custom Pcb",
+            "type": "boolean"
+          },
+          "description": {
+            "default": "",
+            "title": "Description",
+            "type": "string"
+          },
+          "difficulty": {
+            "$ref": "#/components/schemas/Difficulty",
+            "default": "beginner"
+          },
+          "identification_confidence": {
+            "default": 0.0,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Identification Confidence",
+            "type": "number"
+          },
+          "identification_rationale": {
+            "default": "",
+            "title": "Identification Rationale",
+            "type": "string"
+          },
+          "languages": {
+            "items": {
+              "$ref": "#/components/schemas/CodeLanguage"
+            },
+            "title": "Languages",
+            "type": "array"
+          },
+          "robot_name": {
+            "default": "",
+            "title": "Robot Name",
+            "type": "string"
+          },
+          "robot_type": {
+            "$ref": "#/components/schemas/RobotType",
+            "default": "custom"
+          },
+          "shops": {
+            "items": {
+              "$ref": "#/components/schemas/StoreName"
+            },
+            "title": "Shops",
+            "type": "array"
+          }
+        },
+        "title": "BuildPreferences",
+        "type": "object"
+      },
       "CodeFile": {
         "additionalProperties": false,
         "properties": {
@@ -457,6 +757,20 @@
         "title": "CodeFile",
         "type": "object"
       },
+      "CodeLanguage": {
+        "description": "Programming languages the generated bundle can scaffold.",
+        "enum": [
+          "python",
+          "cpp",
+          "c",
+          "stm32_assembly",
+          "verilog",
+          "vhdl",
+          "other"
+        ],
+        "title": "CodeLanguage",
+        "type": "string"
+      },
       "ComponentAvailability": {
         "enum": [
           "in_stock",
@@ -479,6 +793,27 @@
             "title": "Category",
             "type": "string"
           },
+          "cheapest_price_jod": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cheapest Price Jod"
+          },
+          "cheapest_store": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StoreName"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "compatibility_notes": {
             "items": {
               "type": "string"
@@ -499,6 +834,14 @@
           "name": {
             "title": "Name",
             "type": "string"
+          },
+          "offers": {
+            "description": "Store estimates sorted cheapest to most expensive.",
+            "items": {
+              "$ref": "#/components/schemas/StoreOffer"
+            },
+            "title": "Offers",
+            "type": "array"
           },
           "price_usd": {
             "anyOf": [
@@ -689,12 +1032,35 @@
             "title": "Compatibility Notes",
             "type": "array"
           },
+          "currency": {
+            "default": "JOD",
+            "title": "Currency",
+            "type": "string"
+          },
+          "selected_shops": {
+            "items": {
+              "$ref": "#/components/schemas/StoreName"
+            },
+            "title": "Selected Shops",
+            "type": "array"
+          },
           "sources": {
             "items": {
               "type": "string"
             },
             "title": "Sources",
             "type": "array"
+          },
+          "total_estimated_jod": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Estimated Jod"
           },
           "total_estimated_usd": {
             "anyOf": [
@@ -760,12 +1126,28 @@
             ],
             "title": "Contingency Usd"
           },
+          "currency": {
+            "default": "JOD",
+            "title": "Currency",
+            "type": "string"
+          },
           "line_items": {
             "items": {
               "$ref": "#/components/schemas/CostLineItem"
             },
             "title": "Line Items",
             "type": "array"
+          },
+          "print_cost_jod": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Print Cost Jod"
           },
           "shipping_usd": {
             "anyOf": [
@@ -778,6 +1160,17 @@
             ],
             "title": "Shipping Usd"
           },
+          "subtotal_jod": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subtotal Jod"
+          },
           "subtotal_usd": {
             "anyOf": [
               {
@@ -788,6 +1181,17 @@
               }
             ],
             "title": "Subtotal Usd"
+          },
+          "total_jod": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Jod"
           },
           "total_usd": {
             "anyOf": [
@@ -821,6 +1225,17 @@
             "title": "Label",
             "type": "string"
           },
+          "line_total_jod": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Line Total Jod"
+          },
           "line_total_usd": {
             "anyOf": [
               {
@@ -842,6 +1257,17 @@
             "default": "",
             "title": "Supplier",
             "type": "string"
+          },
+          "unit_price_jod": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit Price Jod"
           },
           "unit_price_usd": {
             "anyOf": [
@@ -911,6 +1337,30 @@
           }
         },
         "title": "Dimensions",
+        "type": "object"
+      },
+      "DocumentationFile": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "title",
+          "content"
+        ],
+        "title": "DocumentationFile",
         "type": "object"
       },
       "DriveType": {
@@ -1513,6 +1963,85 @@
         "title": "HealthResponse",
         "type": "object"
       },
+      "IdentifyRequest": {
+        "properties": {
+          "description": {
+            "maxLength": 5000,
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          },
+          "robot_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RobotType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "description"
+        ],
+        "title": "IdentifyRequest",
+        "type": "object"
+      },
+      "LanguageBundle": {
+        "additionalProperties": false,
+        "description": "All files generated for one selected programming language.",
+        "properties": {
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/CodeFile"
+            },
+            "title": "Files",
+            "type": "array"
+          },
+          "framework": {
+            "default": "",
+            "title": "Framework",
+            "type": "string"
+          },
+          "language": {
+            "$ref": "#/components/schemas/CodeLanguage"
+          },
+          "libraries": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Libraries",
+            "type": "array"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notes",
+            "type": "array"
+          },
+          "status": {
+            "default": "scaffold",
+            "enum": [
+              "complete",
+              "scaffold"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "language",
+          "display_name"
+        ],
+        "title": "LanguageBundle",
+        "type": "object"
+      },
       "MechanicalOutput": {
         "additionalProperties": false,
         "properties": {
@@ -1533,6 +2062,9 @@
               }
             ]
           },
+          "dimensions_mm": {
+            "$ref": "#/components/schemas/Dimensions"
+          },
           "drawings": {
             "description": "References/paths, not CAD payloads.",
             "items": {
@@ -1541,11 +2073,25 @@
             "title": "Drawings",
             "type": "array"
           },
+          "infill_percent": {
+            "default": 35,
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Infill Percent",
+            "type": "integer"
+          },
           "manufacturing_notes": {
             "items": {
               "type": "string"
             },
             "title": "Manufacturing Notes",
+            "type": "array"
+          },
+          "material_quotes": {
+            "items": {
+              "$ref": "#/components/schemas/PrintMaterialQuote"
+            },
+            "title": "Material Quotes",
             "type": "array"
           },
           "parts": {
@@ -1554,6 +2100,28 @@
             },
             "title": "Parts",
             "type": "array"
+          },
+          "pricing_notes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Pricing Notes",
+            "type": "array"
+          },
+          "stl_ascii": {
+            "default": "",
+            "title": "Stl Ascii",
+            "type": "string"
+          },
+          "stl_filename": {
+            "default": "",
+            "title": "Stl Filename",
+            "type": "string"
+          },
+          "volume_cm3": {
+            "default": "0",
+            "title": "Volume Cm3",
+            "type": "string"
           },
           "warnings": {
             "items": {
@@ -1908,9 +2476,72 @@
         "title": "PowerRail",
         "type": "object"
       },
+      "PrintMaterial": {
+        "description": "Materials carried by the 3D-print price chart.",
+        "enum": [
+          "PLA",
+          "PETG",
+          "ABS",
+          "Resin",
+          "TPU"
+        ],
+        "title": "PrintMaterial",
+        "type": "string"
+      },
+      "PrintMaterialQuote": {
+        "additionalProperties": false,
+        "description": "Cost to print the generated model in one material.",
+        "properties": {
+          "base_jod": {
+            "title": "Base Jod",
+            "type": "string"
+          },
+          "is_cheapest": {
+            "default": false,
+            "title": "Is Cheapest",
+            "type": "boolean"
+          },
+          "material": {
+            "$ref": "#/components/schemas/PrintMaterial"
+          },
+          "minimum_jod": {
+            "title": "Minimum Jod",
+            "type": "string"
+          },
+          "price_per_gram_jod": {
+            "title": "Price Per Gram Jod",
+            "type": "string"
+          },
+          "total_jod": {
+            "title": "Total Jod",
+            "type": "string"
+          },
+          "weight_g": {
+            "title": "Weight G",
+            "type": "string"
+          }
+        },
+        "required": [
+          "material",
+          "price_per_gram_jod",
+          "base_jod",
+          "minimum_jod",
+          "weight_g",
+          "total_jod"
+        ],
+        "title": "PrintMaterialQuote",
+        "type": "object"
+      },
       "ProgrammingOutput": {
         "additionalProperties": false,
         "properties": {
+          "bundles": {
+            "items": {
+              "$ref": "#/components/schemas/LanguageBundle"
+            },
+            "title": "Bundles",
+            "type": "array"
+          },
           "files": {
             "items": {
               "$ref": "#/components/schemas/CodeFile"
@@ -2046,6 +2677,32 @@
           "name"
         ],
         "title": "ProjectCreate",
+        "type": "object"
+      },
+      "ProjectDocumentation": {
+        "additionalProperties": false,
+        "properties": {
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/DocumentationFile"
+            },
+            "title": "Files",
+            "type": "array"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Notes",
+            "type": "array"
+          },
+          "summary": {
+            "default": "",
+            "title": "Summary",
+            "type": "string"
+          }
+        },
+        "title": "ProjectDocumentation",
         "type": "object"
       },
       "ProjectRead": {
@@ -2342,6 +2999,59 @@
         "title": "ReadinessResponse",
         "type": "object"
       },
+      "RobotIdentification": {
+        "additionalProperties": false,
+        "description": "Result of the guided-flow research step before a project exists.",
+        "properties": {
+          "confidence": {
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence",
+            "type": "number"
+          },
+          "key_requirements": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Key Requirements",
+            "type": "array"
+          },
+          "needs_confirmation": {
+            "default": true,
+            "title": "Needs Confirmation",
+            "type": "boolean"
+          },
+          "proposed_name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Proposed Name",
+            "type": "string"
+          },
+          "rationale": {
+            "default": "",
+            "title": "Rationale",
+            "type": "string"
+          },
+          "robot_type": {
+            "$ref": "#/components/schemas/RobotType"
+          },
+          "suggested_difficulty": {
+            "$ref": "#/components/schemas/Difficulty",
+            "default": "beginner"
+          },
+          "suggested_platform": {
+            "$ref": "#/components/schemas/TargetPlatform",
+            "default": "arduino"
+          }
+        },
+        "required": [
+          "proposed_name",
+          "robot_type",
+          "confidence"
+        ],
+        "title": "RobotIdentification",
+        "type": "object"
+      },
       "RobotSpecificationDraft": {
         "additionalProperties": false,
         "description": "Structured, buildable interpretation of the user's request.",
@@ -2476,6 +3186,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/CostEstimate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "documentation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProjectDocumentation"
               },
               {
                 "type": "null"
@@ -2731,6 +3451,63 @@
         "title": "SpecificationUpdate",
         "type": "object"
       },
+      "StoreName": {
+        "description": "Stores the guided flow can price a part against.",
+        "enum": [
+          "temu",
+          "mikroelectron",
+          "waslleh",
+          "amazon",
+          "aliexpress",
+          "ghanimjo"
+        ],
+        "title": "StoreName",
+        "type": "string"
+      },
+      "StoreOffer": {
+        "additionalProperties": false,
+        "description": "One store's estimate for a part, in Jordanian dinars.",
+        "properties": {
+          "availability": {
+            "default": "unknown",
+            "title": "Availability",
+            "type": "string"
+          },
+          "is_estimate": {
+            "default": true,
+            "title": "Is Estimate",
+            "type": "boolean"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "note": {
+            "default": "",
+            "title": "Note",
+            "type": "string"
+          },
+          "price_jod": {
+            "title": "Price Jod",
+            "type": "string"
+          },
+          "product_url": {
+            "default": "",
+            "title": "Product Url",
+            "type": "string"
+          },
+          "store": {
+            "$ref": "#/components/schemas/StoreName"
+          }
+        },
+        "required": [
+          "store",
+          "label",
+          "price_jod"
+        ],
+        "title": "StoreOffer",
+        "type": "object"
+      },
       "TargetPlatform": {
         "enum": [
           "arduino",
@@ -2899,6 +3676,47 @@
         "summary": "List catalog components",
         "tags": [
           "components"
+        ]
+      }
+    },
+    "/api/v1/intent/identify": {
+      "post": {
+        "operationId": "identify_api_v1_intent_identify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IdentifyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RobotIdentification"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Identify the robot from a plain-language description",
+        "tags": [
+          "guided build"
         ]
       }
     },
@@ -3294,6 +4112,91 @@
         ]
       }
     },
+    "/api/v1/projects/{project_id}/build": {
+      "get": {
+        "operationId": "get_build_api_v1_projects__project_id__build_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuildArtifactRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read the latest full build artifact",
+        "tags": [
+          "guided build"
+        ]
+      },
+      "post": {
+        "description": "Runs planner, component research, electrical, programming, mechanical, and cost agents, then returns one artifact with sourced prices, schematic, code bundles, 3D/weight/price, and documentation.",
+        "operationId": "generate_build_api_v1_projects__project_id__build_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuildArtifactRead"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Run the full build pipeline",
+        "tags": [
+          "guided build"
+        ]
+      }
+    },
     "/api/v1/projects/{project_id}/electrical": {
       "get": {
         "operationId": "get_electrical_api_v1_projects__project_id__electrical_get",
@@ -3438,6 +4341,140 @@
         "summary": "Download an export",
         "tags": [
           "electrical"
+        ]
+      }
+    },
+    "/api/v1/projects/{project_id}/mechanical/stl": {
+      "get": {
+        "operationId": "download_stl_api_v1_projects__project_id__mechanical_stl_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "model/stl": {},
+              "text/plain": {}
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Download the generated chassis STL",
+        "tags": [
+          "guided build"
+        ]
+      }
+    },
+    "/api/v1/projects/{project_id}/preferences": {
+      "get": {
+        "operationId": "get_preferences_api_v1_projects__project_id__preferences_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuildPreferences-Output"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Read the saved guided-flow answers",
+        "tags": [
+          "guided build"
+        ]
+      },
+      "put": {
+        "operationId": "save_preferences_api_v1_projects__project_id__preferences_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuildPreferences-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuildPreferences-Output"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save the confirmed guided-flow answers",
+        "tags": [
+          "guided build"
         ]
       }
     },

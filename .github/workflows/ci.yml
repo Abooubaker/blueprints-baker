@@ -118,6 +118,14 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: "1"
 
+  docker:
+    name: API container image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build production image
+        run: docker build --tag blueprints-baker-api:ci apps/api
+
   demo:
     name: Static demo build (GitHub Pages)
     runs-on: ubuntu-latest

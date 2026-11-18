@@ -82,6 +82,12 @@ Validation detail entries look like:
 | POST | `/api/v1/projects/{project_id}/electrical` | Generate and persist the electrical plan |
 | GET | `/api/v1/projects/{project_id}/electrical` | Read the latest electrical plan |
 | GET | `/api/v1/projects/{project_id}/electrical/export/{format}` | Download an export |
+| POST | `/api/v1/intent/identify` | Identify a robot from a plain-language description |
+| GET | `/api/v1/projects/{project_id}/preferences` | Read the saved guided-flow answers |
+| PUT | `/api/v1/projects/{project_id}/preferences` | Save stores, languages, controllers, PCB choice |
+| POST | `/api/v1/projects/{project_id}/build` | Run the full build and persist the artifact |
+| GET | `/api/v1/projects/{project_id}/build` | Read the latest build artifact |
+| GET | `/api/v1/projects/{project_id}/mechanical/stl` | Download the generated reference STL |
 
 ## Health
 
@@ -257,7 +263,7 @@ curl http://localhost:8000/api/v1/agents
       "name": "robot_planner",
       "display_name": "Robot Planner",
       "description": "Turns a natural-language idea into a structured, buildable specification.",
-      "status": "placeholder",
+      "status": "available",
       "depends_on": [],
       "input_schema": "PlannerInput",
       "output_schema": "RobotSpecificationDraft",
@@ -278,29 +284,27 @@ curl http://localhost:8000/api/v1/agents
 
 - Omit `agents` to request the full pipeline.
 - Requested agents are expanded with transitive dependencies and executed in pipeline order.
-- In the foundation release every specialized agent returns `not_implemented`; dependents are
-  `skipped`, so an orchestration response will contain one `not_implemented` run and five `skipped`
-  runs unless a subset is requested.
-- A failed/skipped/not-implemented dependency blocks dependents but does not abort independent
-  branches.
+- Every agent is implemented and deterministic; the catalog reports `available`.
+- A failed dependency marks dependents `skipped` but does not abort independent branches.
+- `POST /api/v1/projects/{project_id}/build` is the higher-level call that runs the full pipeline
+  and assembles the artifact the web workspace renders.
 
 Response (`OrchestrationRead`):
 
 ```json
 {
   "project_id": "bef286cd-2987-4032-b7ca-c4fc99046c16",
-  "status": "not_implemented",
+  "status": "succeeded",
   "runs": [
     {
       "id": "b0f4…",
       "project_id": "bef286cd-2987-4032-b7ca-c4fc99046c16",
       "agent": "robot_planner",
-      "status": "not_implemented",
+      "status": "succeeded",
       "provider": "mock",
       "model": "placeholder",
-      "summary": "Robot Planner is a placeholder in the foundation release.",
-      "output_payload": null,
-      "error_message": "Specialized agent logic is not implemented yet.",
+      "summary": "Specification generated deterministically from the project brief.",
+      "output_payload": { "summary": "…", "confidence": 0.9 },
       "prompt_tokens": 0,
       "completion_tokens": 0,
       "latency_ms": 0,
@@ -310,7 +314,7 @@ Response (`OrchestrationRead`):
     }
   ],
   "shared_context": {
-    "specification": { "summary": "…", "confidence": 0.0 },
+    "specification": { "summary": "…", "confidence": 0.9 },
     "component_research": null,
     "electrical": null,
     "programming": null,
@@ -385,6 +389,93 @@ schematic with embedded symbols and a labelled wire on every physical pin. EasyE
 KiCad can import both.
 See [electrical.md](electrical.md) for validation rules and the full contract.
 
+## Guided build
+
+The guided flow is four calls: identify → save preferences → generate build → read the artifact.
+Everything the web workspace renders comes from the last build response.
+
+### Identify a robot
+
+`POST /api/v1/intent/identify`
+
+```json
+{
+  "description": "A small four-wheel rover that avoids obstacles and streams distance over Wi-Fi."
+}
+```
+
+```json
+{
+  "proposed_name": "Patio Scout",
+  "robot_type": "rover",
+  "confidence": 0.72,
+  "rationale": "Four wheels and obstacle avoidance describe a rover…",
+  "key_requirements": ["Wi-Fi telemetry", "Obstacle avoidance"],
+  "suggested_difficulty": "beginner",
+  "suggested_platform": "esp32"
+}
+```
+
+The identification is deterministic and offline; it proposes a name and type for the user to
+confirm or correct. Nothing is persisted by this call.
+
+### Save preferences
+
+`PUT /api/v1/projects/{project_id}/preferences` replaces the saved answers:
+
+```json
+{
+  "description": "…",
+  "robot_name": "Patio Scout",
+  "robot_type": "rover",
+  "difficulty": "beginner",
+  "shops": ["temu", "mikroelectron", "waslleh", "amazon"],
+  "languages": ["python", "cpp", "c"],
+  "controllers": ["ESP32"],
+  "controller_notes": "I have a spare L298N driver",
+  "custom_pcb": false,
+  "confirmed": true,
+  "budget_max_usd": 80,
+  "identification_rationale": "…",
+  "identification_confidence": 0.72
+}
+```
+
+Preferences are stored in `ProjectConfiguration.configuration` so every later agent reads the same
+confirmed answers. `GET` returns the saved values or the project defaults.
+
+### Generate and read the build
+
+`POST /api/v1/projects/{project_id}/build` runs component research → electrical → programming →
+mechanical → cost → documentation and returns a `BuildArtifactRead` (`201`). `status` is `ready`,
+`partial`, or `empty`; `missing` lists artifacts that could not be produced.
+
+```json
+{
+  "project_id": "…",
+  "project_name": "Patio Scout",
+  "status": "ready",
+  "generated_at": "2026-11-18T09:30:00Z",
+  "preferences": {},
+  "identification": {},
+  "specification": {},
+  "research": { "selected_shops": [], "bill_of_materials": [] },
+  "electrical": {},
+  "programming": { "bundles": [] },
+  "mechanical": { "material_quotes": [], "stl_filename": "patio-scout.stl" },
+  "cost": {},
+  "documentation": { "files": [] },
+  "missing": [],
+  "warnings": []
+}
+```
+
+`GET /api/v1/projects/{project_id}/build` returns the latest artifact or `404` before the first run.
+`GET /api/v1/projects/{project_id}/mechanical/stl` returns the same STL as an attachment.
+
+Every BOM candidate carries `offers` sorted cheapest → most expensive. Store prices are curated
+JOD planning estimates, not live supplier quotes, and each response says so.
+
 ## Enum reference
 
 | Enum | Values |
@@ -398,6 +489,9 @@ See [electrical.md](electrical.md) for validation rules and the full contract.
 | `AgentName` | `robot_planner`, `component_research`, `electrical_engineering`, `programming`, `mechanical_design`, `cost_estimation` |
 | `AgentRunStatus` | `queued`, `running`, `succeeded`, `failed`, `cancelled`, `skipped`, `not_implemented` |
 | `AgentResultStatus` | `succeeded`, `failed`, `skipped`, `not_implemented` |
+| `StoreName` | `temu`, `mikroelectron`, `waslleh`, `amazon`, `aliexpress`, `ghanimjo` |
+| `CodeLanguage` | `python`, `cpp`, `c`, `stm32_assembly`, `verilog`, `vhdl`, `other` |
+| `PrintMaterial` | `PLA`, `PETG`, `ABS`, `Resin`, `TPU` |
 
 ## Versioning policy
 

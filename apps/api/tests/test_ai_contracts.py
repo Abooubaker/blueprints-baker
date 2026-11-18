@@ -65,20 +65,21 @@ def test_unknown_agent_is_rejected() -> None:
         orchestrator.order(["does_not_exist"])  # type: ignore[list-item]
 
 
-async def test_pipeline_runs_deterministic_agents_then_reports_placeholders() -> None:
+async def test_pipeline_runs_every_deterministic_agent() -> None:
     orchestrator = AgentOrchestrator(build_agent_registry(MockProvider()))
     result = await orchestrator.run(make_context())
-    assert result.status == AgentResultStatus.NOT_IMPLEMENTED
-    assert [item.status for item in result.results[:3]] == [
-        AgentResultStatus.SUCCEEDED,
-        AgentResultStatus.SUCCEEDED,
-        AgentResultStatus.SUCCEEDED,
-    ]
-    assert all(item.status == AgentResultStatus.NOT_IMPLEMENTED for item in result.results[3:])
+    assert result.status == AgentResultStatus.SUCCEEDED
+    assert all(item.status == AgentResultStatus.SUCCEEDED for item in result.results)
     assert result.context.specification is not None
     assert result.context.component_research is not None
     assert result.context.electrical is not None
     assert result.context.electrical.connections
+    assert result.context.programming is not None
+    assert result.context.programming.bundles
+    assert result.context.mechanical is not None
+    assert result.context.mechanical.material_quotes
+    assert result.context.cost is not None
+    assert result.context.cost.total_jod is not None
 
 
 async def test_planner_requires_no_spec_but_others_do() -> None:

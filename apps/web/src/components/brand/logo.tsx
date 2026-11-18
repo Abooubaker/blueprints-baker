@@ -7,19 +7,21 @@ export function LogoMark({ className }: { className?: string }) {
     <svg viewBox="0 0 32 32" aria-hidden="true" className={cn("size-8", className)} fill="none">
       <rect x="1" y="1" width="30" height="30" rx="7" fill="#0b2f4f" stroke="#7fa8c8" />
       <path
-        d="M6 6h6M6 6v6M26 6h-6M26 6v6M6 26h6M6 26v-6M26 26h-6M26 26v-6"
+        d="M6 6h5M6 6v5M26 6h-5M26 6v5M6 26h5M6 26v-5M26 26h-5M26 26v-5"
         stroke="#eaf6ff"
-        strokeWidth="1.2"
+        strokeWidth="1.1"
+        strokeOpacity="0.7"
       />
       <path
-        d="M11 22V11h5.2a3.7 3.7 0 0 1 .2 7.4H11"
+        d="M10.4 22.6v-6.8c-2.1-.7-3-2.7-2.2-4.5.8-1.8 3-2.3 4.5-1.2.4-2.1 2.3-3.2 4-2.6 1.7-.9 3.9-.2 4.5 1.6 2-.2 3.5 1.3 3.5 3.3 0 1.5-1 2.8-2.4 3.3v6.9Z"
+        fill="none"
         stroke="#eaf6ff"
-        strokeWidth="1.8"
+        strokeWidth="1.7"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path d="m16.6 18.5 4.4 3.5" stroke="#eaf6ff" strokeWidth="1.8" strokeLinecap="round" />
-      <circle cx="22.6" cy="10.4" r="1.6" fill="#6fd6ff" />
+      <path d="M10.4 20.4h11.9" stroke="#eaf6ff" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="23.2" cy="9.2" r="1.4" fill="#6fd6ff" />
     </svg>
   );
 }

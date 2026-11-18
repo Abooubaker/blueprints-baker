@@ -10,8 +10,9 @@ the repository name, so a project site is served from `/<repository>/`.
 
 - One project, **Patio Scout** (ESP32 obstacle avoider), with a generated specification,
   bill of materials, agent-run audit trail, and a complete schematic with a full pinout.
-- The schematic, pinout, exports, validation findings, and power budget are all real output
-  from the deterministic engine in `apps/api/app/electrical/`.
+- Sourced part prices at four stores (cheapest first), multi-file code bundles, a reference STL
+  with the JOD print-material chart, a budget, and the full documentation set.
+- All of it is real output from the deterministic engine in `apps/api`, not hand-written fixtures.
 - The dashboard, project overview, and every module route render from the same JSON.
 
 ## What the demo is not
@@ -23,7 +24,8 @@ the repository name, so a project site is served from `/<repository>/`.
 
 ## How it is generated
 
-`scripts/generate_demo_data.py` imports the API's electrical engine and writes:
+`scripts/generate_demo_data.py` runs the real build pipeline (preferences → research → electrical →
+programming → mechanical → cost → documentation) and writes:
 
 ```text
 apps/web/src/lib/demo/project.json          project + specification
@@ -31,6 +33,7 @@ apps/web/src/lib/demo/agent-runs.json       audit trail for the six agents
 apps/web/src/lib/demo/agent-catalog.json    agent roster with real statuses
 apps/web/src/lib/demo/electrical.json       ElectricalArtifact (plan + BOM + formats)
 apps/web/src/lib/demo/orchestration.json    shared pipeline context
+apps/web/src/lib/demo/build.json            BuildArtifact (prices, code, STL, docs)
 apps/web/public/demo/exports/*              the eight downloadable exports
 apps/web/public/demo/exports/manifest.json  engine summary
 ```

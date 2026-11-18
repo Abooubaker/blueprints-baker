@@ -1,0 +1,3461 @@
+{
+  "project_id": "11111111-1111-4111-8111-111111111111",
+  "project_name": "Patio Scout",
+  "status": "ready",
+  "generated_at": "2026-11-18T09:31:00Z",
+  "preferences": {
+    "description": "An ESP32 obstacle-avoiding rover with ultrasonic distance sensing, a scanning servo, and a fused 2S LiPo power tree.",
+    "robot_name": "Patio Scout",
+    "robot_type": "obstacle_avoider",
+    "difficulty": "intermediate",
+    "shops": [
+      "temu",
+      "mikroelectron",
+      "waslleh",
+      "amazon",
+      "aliexpress",
+      "ghanimjo"
+    ],
+    "languages": [
+      "python",
+      "cpp",
+      "c",
+      "verilog"
+    ],
+    "controllers": [
+      "ESP32 DevKit"
+    ],
+    "controller_notes": "Using an ESP32 DevKit already on the bench.",
+    "custom_pcb": false,
+    "confirmed": true,
+    "budget_max_usd": "150",
+    "identification_rationale": "Matched obstacle, ultrasonic, and rover keywords in the description.",
+    "identification_confidence": 0.86
+  },
+  "identification": {
+    "proposed_name": "Patio Scout",
+    "robot_type": "obstacle_avoider",
+    "confidence": 0.86,
+    "rationale": "Matched obstacle, ultrasonic, and rover keywords in the description.",
+    "suggested_platform": "esp32",
+    "suggested_difficulty": "intermediate",
+    "key_requirements": [
+      "Detect obstacles before contact",
+      "Turn or stop without losing control",
+      "Stream distance readings over Wi-Fi"
+    ],
+    "needs_confirmation": false
+  },
+  "specification": {
+    "summary": "A compact ESP32 obstacle-avoiding rover that scans ahead with an HC-SR04, steers around furniture, and reports distance over Wi-Fi.",
+    "use_case": "Indoor patio and hallway inspection demonstrations.",
+    "robot_type": "obstacle_avoider",
+    "difficulty": "intermediate",
+    "target_platform": "esp32",
+    "drive_type": "differential",
+    "environment": "indoor",
+    "power_source": "2S LiPo (7.4 V) with a regulated 5 V rail",
+    "dimensions": {
+      "length_mm": null,
+      "width_mm": null,
+      "height_mm": null
+    },
+    "payload_capacity_kg": "0.5",
+    "requirements": [
+      "Detect obstacles before contact",
+      "Turn or stop without losing control",
+      "Stream distance readings over Wi-Fi"
+    ],
+    "constraints": [
+      "Total component cost must stay below $150.00.",
+      "All electronics must run from a single 2S LiPo pack."
+    ],
+    "success_criteria": [
+      "All electrical validation checks pass before power-on",
+      "The robot completes its stated task in a supervised test"
+    ],
+    "open_questions": [],
+    "confidence": 0.85
+  },
+  "research": {
+    "bill_of_materials": [
+      {
+        "role": "controller",
+        "category": "controller",
+        "quantity": 1,
+        "required": true,
+        "selection": {
+          "name": "ESP32 DevKit V1",
+          "manufacturer": "Espressif",
+          "model_number": "ESP32-DEVKITC-32D",
+          "category": "controller",
+          "specs": {
+            "library_key": "esp32_devkit",
+            "logic_voltage_v": 3.3,
+            "supply_min_v": 4.5,
+            "supply_max_v": 6.0,
+            "typical_current_ma": 80.0,
+            "peak_current_ma": 240.0,
+            "interfaces": [
+              "gpio",
+              "pwm",
+              "adc",
+              "i2c",
+              "uart",
+              "wifi",
+              "bluetooth"
+            ],
+            "pins": [
+              "VIN",
+              "3V3",
+              "GND",
+              "GPIO4",
+              "GPIO5",
+              "GPIO13",
+              "GPIO14",
+              "GPIO15",
+              "GPIO16",
+              "GPIO17",
+              "GPIO18",
+              "GPIO19",
+              "GPIO21",
+              "GPIO22",
+              "GPIO23",
+              "GPIO25",
+              "GPIO26",
+              "GPIO27",
+              "GPIO32",
+              "GPIO33"
+            ],
+            "electrical_notes": "3.3 V logic. Power VIN from a regulated 5 V rail; inputs are not 5 V tolerant."
+          },
+          "price_usd": "9.50",
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Espressif+ESP32-DEVKITC-32D",
+          "availability": "in_stock",
+          "compatibility_notes": [
+            "3.3 V logic. Power VIN from a regulated 5 V rail; inputs are not 5 V tolerant."
+          ],
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "4.18",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Espressif+ESP32-DEVKITC-32D",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "4.58",
+              "product_url": "https://www.aliexpress.com/w/wholesale-esp32-devkit-v1.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "6.47",
+              "product_url": "https://mikroelectron.com/search?q=Espressif+ESP32-DEVKITC-32D",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "6.94",
+              "product_url": "https://waslleh.com/?s=Espressif+ESP32-DEVKITC-32D",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "7.54",
+              "product_url": "https://ghanimjo.com/?s=Espressif+ESP32-DEVKITC-32D",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "8.35",
+              "product_url": "https://www.amazon.com/s?k=Espressif+ESP32-DEVKITC-32D",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "4.18"
+        },
+        "alternatives": [],
+        "rationale": "Runs the control loop and exposes the GPIO/PWM/I2C pins used below."
+      },
+      {
+        "role": "motor_driver",
+        "category": "motor_driver",
+        "quantity": 1,
+        "required": true,
+        "selection": {
+          "name": "TB6612FNG dual motor driver",
+          "manufacturer": "Toshiba",
+          "model_number": "TB6612FNG",
+          "category": "motor_driver",
+          "specs": {
+            "library_key": "tb6612fng",
+            "logic_voltage_v": null,
+            "supply_min_v": 2.5,
+            "supply_max_v": 13.5,
+            "typical_current_ma": 2.0,
+            "peak_current_ma": 10.0,
+            "interfaces": [
+              "pwm",
+              "gpio"
+            ],
+            "pins": [
+              "VM",
+              "VCC",
+              "GND",
+              "STBY",
+              "AIN1",
+              "AIN2",
+              "PWMA",
+              "BIN1",
+              "BIN2",
+              "PWMB",
+              "AO1",
+              "AO2",
+              "BO1",
+              "BO2"
+            ],
+            "electrical_notes": "1.2 A continuous per channel; heatsink above 0.8 A. STBY must be pulled high."
+          },
+          "price_usd": "6.20",
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Toshiba+TB6612FNG",
+          "availability": "in_stock",
+          "compatibility_notes": [
+            "1.2 A continuous per channel; heatsink above 0.8 A. STBY must be pulled high."
+          ],
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "2.86",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Toshiba+TB6612FNG",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "3.14",
+              "product_url": "https://www.aliexpress.com/w/wholesale-tb6612fng-dual-motor-driver.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "4.43",
+              "product_url": "https://mikroelectron.com/search?q=Toshiba+TB6612FNG",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "4.75",
+              "product_url": "https://waslleh.com/?s=Toshiba+TB6612FNG",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "5.17",
+              "product_url": "https://ghanimjo.com/?s=Toshiba+TB6612FNG",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "5.72",
+              "product_url": "https://www.amazon.com/s?k=Toshiba+TB6612FNG",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "2.86"
+        },
+        "alternatives": [],
+        "rationale": "Provides the current gain and flyback protection a motor needs."
+      },
+      {
+        "role": "drive_motor",
+        "category": "motor",
+        "quantity": 2,
+        "required": true,
+        "selection": {
+          "name": "N20 gear motor (6 V)",
+          "manufacturer": "Generic",
+          "model_number": "N20-6V-100RPM",
+          "category": "motor",
+          "specs": {
+            "library_key": "n20_6v",
+            "logic_voltage_v": null,
+            "supply_min_v": 3.0,
+            "supply_max_v": 6.0,
+            "typical_current_ma": 100.0,
+            "peak_current_ma": 700.0,
+            "interfaces": [
+              "dc_motor"
+            ],
+            "pins": [
+              "M+",
+              "M-"
+            ],
+            "electrical_notes": "Stall current is much higher than the no-load rating. Never connect directly to a controller pin."
+          },
+          "price_usd": "5.40",
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Generic+N20-6V-100RPM",
+          "availability": "in_stock",
+          "compatibility_notes": [
+            "Stall current is much higher than the no-load rating. Never connect directly to a controller pin."
+          ],
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "2.30",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Generic+N20-6V-100RPM",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "2.53",
+              "product_url": "https://www.aliexpress.com/w/wholesale-n20-gear-motor-%286-v%29.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "3.57",
+              "product_url": "https://mikroelectron.com/search?q=Generic+N20-6V-100RPM",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "3.83",
+              "product_url": "https://waslleh.com/?s=Generic+N20-6V-100RPM",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "4.16",
+              "product_url": "https://ghanimjo.com/?s=Generic+N20-6V-100RPM",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "4.61",
+              "product_url": "https://www.amazon.com/s?k=Generic+N20-6V-100RPM",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "2.30"
+        },
+        "alternatives": [],
+        "rationale": "Selected for the wheeled drivetrain in this robot archetype."
+      },
+      {
+        "role": "distance_sensor",
+        "category": "sensor",
+        "quantity": 1,
+        "required": true,
+        "selection": {
+          "name": "HC-SR04 ultrasonic rangefinder",
+          "manufacturer": "Generic",
+          "model_number": "HC-SR04",
+          "category": "sensor",
+          "specs": {
+            "library_key": "hc_sr04",
+            "logic_voltage_v": null,
+            "supply_min_v": 4.5,
+            "supply_max_v": 5.5,
+            "typical_current_ma": 15.0,
+            "peak_current_ma": 20.0,
+            "interfaces": [
+              "digital"
+            ],
+            "pins": [
+              "VCC",
+              "TRIG",
+              "ECHO",
+              "GND"
+            ],
+            "electrical_notes": "ECHO is a 5 V output. Use a divider or level shifter with 3.3 V logic."
+          },
+          "price_usd": "2.30",
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Generic+HC-SR04",
+          "availability": "in_stock",
+          "compatibility_notes": [
+            "ECHO is a 5 V output. Use a divider or level shifter with 3.3 V logic."
+          ],
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "0.96",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Generic+HC-SR04",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "1.05",
+              "product_url": "https://www.aliexpress.com/w/wholesale-hc-sr04-ultrasonic-rangefinder.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "1.49",
+              "product_url": "https://mikroelectron.com/search?q=Generic+HC-SR04",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "1.60",
+              "product_url": "https://waslleh.com/?s=Generic+HC-SR04",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "1.74",
+              "product_url": "https://ghanimjo.com/?s=Generic+HC-SR04",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "1.92",
+              "product_url": "https://www.amazon.com/s?k=Generic+HC-SR04",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "0.96"
+        },
+        "alternatives": [],
+        "rationale": "Adds a forward obstacle/distance measurement."
+      },
+      {
+        "role": "servo",
+        "category": "actuator",
+        "quantity": 1,
+        "required": true,
+        "selection": {
+          "name": "SG90 micro servo",
+          "manufacturer": "TowerPro",
+          "model_number": "SG90",
+          "category": "actuator",
+          "specs": {
+            "library_key": "sg90",
+            "logic_voltage_v": null,
+            "supply_min_v": 4.8,
+            "supply_max_v": 6.0,
+            "typical_current_ma": 100.0,
+            "peak_current_ma": 650.0,
+            "interfaces": [
+              "pwm"
+            ],
+            "pins": [
+              "VCC",
+              "GND",
+              "SIG"
+            ],
+            "electrical_notes": "Power servos from a separate 5 V rail, not the controller's regulator. Add a bulk capacitor."
+          },
+          "price_usd": "3.40",
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=TowerPro+SG90",
+          "availability": "in_stock",
+          "compatibility_notes": [
+            "Power servos from a separate 5 V rail, not the controller's regulator. Add a bulk capacitor."
+          ],
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "1.48",
+              "product_url": "https://www.temu.com/search_result.html?search_key=TowerPro+SG90",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "1.62",
+              "product_url": "https://www.aliexpress.com/w/wholesale-sg90-micro-servo.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "2.29",
+              "product_url": "https://mikroelectron.com/search?q=TowerPro+SG90",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "2.46",
+              "product_url": "https://waslleh.com/?s=TowerPro+SG90",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "2.67",
+              "product_url": "https://ghanimjo.com/?s=TowerPro+SG90",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "2.96",
+              "product_url": "https://www.amazon.com/s?k=TowerPro+SG90",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "1.48"
+        },
+        "alternatives": [],
+        "rationale": "Provides one positional degree of freedom."
+      },
+      {
+        "role": "battery",
+        "category": "power",
+        "quantity": 1,
+        "required": true,
+        "selection": {
+          "name": "2S LiPo battery (7.4 V, 2200 mAh)",
+          "manufacturer": "Generic",
+          "model_number": "2S-2200",
+          "category": "power",
+          "specs": {
+            "library_key": "battery_2s_lipo",
+            "logic_voltage_v": null,
+            "supply_min_v": 6.0,
+            "supply_max_v": 8.4,
+            "typical_current_ma": 0.0,
+            "peak_current_ma": 0.0,
+            "interfaces": [
+              "jst_xh"
+            ],
+            "pins": [
+              "POS",
+              "NEG"
+            ],
+            "electrical_notes": "Nominal 7.4 V, 8.4 V full charge. Use a fused XT30/JST connector and a low-voltage alarm."
+          },
+          "price_usd": "18.00",
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Generic+2S-2200",
+          "availability": "in_stock",
+          "compatibility_notes": [
+            "Nominal 7.4 V, 8.4 V full charge. Use a fused XT30/JST connector and a low-voltage alarm."
+          ],
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "7.75",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Generic+2S-2200",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "8.50",
+              "product_url": "https://www.aliexpress.com/w/wholesale-2s-lipo-battery-%287.4-v%2C-2200-mah%29.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "12.01",
+              "product_url": "https://mikroelectron.com/search?q=Generic+2S-2200",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "12.88",
+              "product_url": "https://waslleh.com/?s=Generic+2S-2200",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "14.01",
+              "product_url": "https://ghanimjo.com/?s=Generic+2S-2200",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "15.51",
+              "product_url": "https://www.amazon.com/s?k=Generic+2S-2200",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "7.75"
+        },
+        "alternatives": [],
+        "rationale": "Supplies the pack voltage; the engine validates it against every load."
+      },
+      {
+        "role": "regulator",
+        "category": "power",
+        "quantity": 1,
+        "required": true,
+        "selection": {
+          "name": "5 V 3 A buck converter",
+          "manufacturer": "Generic",
+          "model_number": "MP1584EN-5V",
+          "category": "power",
+          "specs": {
+            "library_key": "buck_5v_3a",
+            "logic_voltage_v": null,
+            "supply_min_v": 6.0,
+            "supply_max_v": 24.0,
+            "typical_current_ma": 5.0,
+            "peak_current_ma": 10.0,
+            "interfaces": [
+              "screw_terminal"
+            ],
+            "pins": [
+              "IN+",
+              "IN-",
+              "OUT+",
+              "OUT-"
+            ],
+            "electrical_notes": "Set the output to 5.0 V before connecting logic. Verify with a meter under load."
+          },
+          "price_usd": "4.20",
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Generic+MP1584EN-5V",
+          "availability": "in_stock",
+          "compatibility_notes": [
+            "Set the output to 5.0 V before connecting logic. Verify with a meter under load."
+          ],
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "1.86",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Generic+MP1584EN-5V",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "2.05",
+              "product_url": "https://www.aliexpress.com/w/wholesale-5-v-3-a-buck-converter.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "2.89",
+              "product_url": "https://mikroelectron.com/search?q=Generic+MP1584EN-5V",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "3.10",
+              "product_url": "https://waslleh.com/?s=Generic+MP1584EN-5V",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "3.37",
+              "product_url": "https://ghanimjo.com/?s=Generic+MP1584EN-5V",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "3.73",
+              "product_url": "https://www.amazon.com/s?k=Generic+MP1584EN-5V",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "1.86"
+        },
+        "alternatives": [],
+        "rationale": "Creates a stable 5 V rail for logic and servos."
+      }
+    ],
+    "unresolved_requirements": [],
+    "compatibility_notes": [
+      "Controller: ESP32 DevKit V1",
+      "All selected parts are in the curated electrical library, so pin-level wiring can be generated.",
+      "Store prices are deterministic planning estimates in JOD, sorted cheapest first. Confirm live price and stock before ordering."
+    ],
+    "total_estimated_usd": "54.40",
+    "total_estimated_jod": "23.69",
+    "selected_shops": [
+      "temu",
+      "mikroelectron",
+      "waslleh",
+      "amazon",
+      "aliexpress",
+      "ghanimjo"
+    ],
+    "currency": "JOD",
+    "sources": [
+      "Blueprints Baker curated component library v1.0"
+    ]
+  },
+  "electrical": {
+    "nodes": [
+      {
+        "ref": "U1",
+        "label": "ESP32 DevKit V1",
+        "kind": "controller",
+        "role": "controller",
+        "library_key": "esp32_devkit",
+        "voltage_v": 3.3,
+        "current_ma": 80.0,
+        "peak_current_ma": 240.0,
+        "pins": [
+          {
+            "name": "VIN",
+            "kind": "power",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "3V3",
+            "kind": "power",
+            "voltage_v": 3.3,
+            "connected": false
+          },
+          {
+            "name": "GND",
+            "kind": "ground",
+            "voltage_v": 0.0,
+            "connected": true
+          },
+          {
+            "name": "GPIO4",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": true
+          },
+          {
+            "name": "GPIO5",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": true
+          },
+          {
+            "name": "GPIO13",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": true
+          },
+          {
+            "name": "GPIO14",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": true
+          },
+          {
+            "name": "GPIO15",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": true
+          },
+          {
+            "name": "GPIO16",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": true
+          },
+          {
+            "name": "GPIO17",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": true
+          },
+          {
+            "name": "GPIO18",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": true
+          },
+          {
+            "name": "GPIO19",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": true
+          },
+          {
+            "name": "GPIO21",
+            "kind": "i2c_sda",
+            "voltage_v": 3.3,
+            "connected": false
+          },
+          {
+            "name": "GPIO22",
+            "kind": "i2c_scl",
+            "voltage_v": 3.3,
+            "connected": false
+          },
+          {
+            "name": "GPIO23",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": false
+          },
+          {
+            "name": "GPIO25",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": false
+          },
+          {
+            "name": "GPIO26",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": false
+          },
+          {
+            "name": "GPIO27",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": false
+          },
+          {
+            "name": "GPIO32",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": false
+          },
+          {
+            "name": "GPIO33",
+            "kind": "gpio",
+            "voltage_v": 3.3,
+            "connected": false
+          }
+        ],
+        "notes": "3.3 V logic. Power VIN from a regulated 5 V rail; inputs are not 5 V tolerant."
+      },
+      {
+        "ref": "BT1",
+        "label": "2S LiPo battery (7.4 V, 2200 mAh)",
+        "kind": "power",
+        "role": "battery",
+        "library_key": "battery_2s_lipo",
+        "voltage_v": 7.4,
+        "current_ma": 0.0,
+        "peak_current_ma": 0.0,
+        "pins": [
+          {
+            "name": "POS",
+            "kind": "power",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "NEG",
+            "kind": "ground",
+            "voltage_v": 0.0,
+            "connected": true
+          }
+        ],
+        "notes": "Nominal 7.4 V, 8.4 V full charge. Use a fused XT30/JST connector and a low-voltage alarm."
+      },
+      {
+        "ref": "VR1",
+        "label": "5 V 3 A buck converter",
+        "kind": "regulator",
+        "role": "regulator",
+        "library_key": "buck_5v_3a",
+        "voltage_v": 5.0,
+        "current_ma": 5.0,
+        "peak_current_ma": 10.0,
+        "pins": [
+          {
+            "name": "IN+",
+            "kind": "power",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "IN-",
+            "kind": "ground",
+            "voltage_v": 0.0,
+            "connected": true
+          },
+          {
+            "name": "OUT+",
+            "kind": "power",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "OUT-",
+            "kind": "ground",
+            "voltage_v": 0.0,
+            "connected": true
+          }
+        ],
+        "notes": "Set the output to 5.0 V before connecting logic. Verify with a meter under load."
+      },
+      {
+        "ref": "U2",
+        "label": "TB6612FNG dual motor driver",
+        "kind": "driver",
+        "role": "motor_driver",
+        "library_key": "tb6612fng",
+        "voltage_v": 8.0,
+        "current_ma": 2.0,
+        "peak_current_ma": 10.0,
+        "pins": [
+          {
+            "name": "VM",
+            "kind": "power",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "VCC",
+            "kind": "power",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "GND",
+            "kind": "ground",
+            "voltage_v": 0.0,
+            "connected": true
+          },
+          {
+            "name": "STBY",
+            "kind": "gpio",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "AIN1",
+            "kind": "gpio",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "AIN2",
+            "kind": "gpio",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "PWMA",
+            "kind": "gpio",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "BIN1",
+            "kind": "gpio",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "BIN2",
+            "kind": "gpio",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "PWMB",
+            "kind": "gpio",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "AO1",
+            "kind": "motor_out",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "AO2",
+            "kind": "motor_out",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "BO1",
+            "kind": "motor_out",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "BO2",
+            "kind": "motor_out",
+            "voltage_v": null,
+            "connected": true
+          }
+        ],
+        "notes": "1.2 A continuous per channel; heatsink above 0.8 A. STBY must be pulled high."
+      },
+      {
+        "ref": "M3",
+        "label": "SG90 micro servo",
+        "kind": "actuator",
+        "role": "servo",
+        "library_key": "sg90",
+        "voltage_v": 5.4,
+        "current_ma": 100.0,
+        "peak_current_ma": 650.0,
+        "pins": [
+          {
+            "name": "VCC",
+            "kind": "power",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "GND",
+            "kind": "ground",
+            "voltage_v": 0.0,
+            "connected": true
+          },
+          {
+            "name": "SIG",
+            "kind": "gpio",
+            "voltage_v": null,
+            "connected": true
+          }
+        ],
+        "notes": "Power servos from a separate 5 V rail, not the controller's regulator. Add a bulk capacitor."
+      },
+      {
+        "ref": "M1",
+        "label": "N20 gear motor (6 V)",
+        "kind": "motor",
+        "role": "drive_motor",
+        "library_key": "n20_6v",
+        "voltage_v": 4.5,
+        "current_ma": 100.0,
+        "peak_current_ma": 700.0,
+        "pins": [
+          {
+            "name": "M+",
+            "kind": "motor_in",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "M-",
+            "kind": "motor_in",
+            "voltage_v": null,
+            "connected": true
+          }
+        ],
+        "notes": "Stall current is much higher than the no-load rating. Never connect directly to a controller pin."
+      },
+      {
+        "ref": "M2",
+        "label": "N20 gear motor (6 V)",
+        "kind": "motor",
+        "role": "drive_motor",
+        "library_key": "n20_6v",
+        "voltage_v": 4.5,
+        "current_ma": 100.0,
+        "peak_current_ma": 700.0,
+        "pins": [
+          {
+            "name": "M+",
+            "kind": "motor_in",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "M-",
+            "kind": "motor_in",
+            "voltage_v": null,
+            "connected": true
+          }
+        ],
+        "notes": "Stall current is much higher than the no-load rating. Never connect directly to a controller pin."
+      },
+      {
+        "ref": "S1",
+        "label": "HC-SR04 ultrasonic rangefinder",
+        "kind": "sensor",
+        "role": "distance_sensor",
+        "library_key": "hc_sr04",
+        "voltage_v": 5.0,
+        "current_ma": 15.0,
+        "peak_current_ma": 20.0,
+        "pins": [
+          {
+            "name": "VCC",
+            "kind": "power",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "TRIG",
+            "kind": "gpio",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "ECHO",
+            "kind": "gpio",
+            "voltage_v": null,
+            "connected": true
+          },
+          {
+            "name": "GND",
+            "kind": "ground",
+            "voltage_v": 0.0,
+            "connected": true
+          }
+        ],
+        "notes": "ECHO is a 5 V output. Use a divider or level shifter with 3.3 V logic."
+      }
+    ],
+    "connections": [
+      {
+        "from_ref": "BT1",
+        "from_pin": "NEG",
+        "to_ref": "U1",
+        "to_pin": "GND",
+        "net": "GND",
+        "signal": "Common ground",
+        "kind": "ground",
+        "voltage_v": 0.0,
+        "wire_color": "black",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "BT1",
+        "from_pin": "NEG",
+        "to_ref": "VR1",
+        "to_pin": "IN-",
+        "net": "GND",
+        "signal": "Common ground",
+        "kind": "ground",
+        "voltage_v": 0.0,
+        "wire_color": "black",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "BT1",
+        "from_pin": "NEG",
+        "to_ref": "VR1",
+        "to_pin": "OUT-",
+        "net": "GND",
+        "signal": "Common ground",
+        "kind": "ground",
+        "voltage_v": 0.0,
+        "wire_color": "black",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "BT1",
+        "from_pin": "NEG",
+        "to_ref": "U2",
+        "to_pin": "GND",
+        "net": "GND",
+        "signal": "Common ground",
+        "kind": "ground",
+        "voltage_v": 0.0,
+        "wire_color": "black",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "BT1",
+        "from_pin": "NEG",
+        "to_ref": "M3",
+        "to_pin": "GND",
+        "net": "GND",
+        "signal": "Common ground",
+        "kind": "ground",
+        "voltage_v": 0.0,
+        "wire_color": "black",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "BT1",
+        "from_pin": "NEG",
+        "to_ref": "S1",
+        "to_pin": "GND",
+        "net": "GND",
+        "signal": "Common ground",
+        "kind": "ground",
+        "voltage_v": 0.0,
+        "wire_color": "black",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "BT1",
+        "from_pin": "POS",
+        "to_ref": "VR1",
+        "to_pin": "IN+",
+        "net": "VBAT",
+        "signal": "Battery input to regulator",
+        "kind": "power",
+        "voltage_v": 7.4,
+        "wire_color": "red",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "VR1",
+        "from_pin": "OUT+",
+        "to_ref": "U1",
+        "to_pin": "VIN",
+        "net": "+5V",
+        "signal": "Regulated 5 V logic supply",
+        "kind": "power",
+        "voltage_v": 5.0,
+        "wire_color": "red",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "BT1",
+        "from_pin": "POS",
+        "to_ref": "U2",
+        "to_pin": "VM",
+        "net": "VBAT",
+        "signal": "Motor supply",
+        "kind": "power",
+        "voltage_v": 7.4,
+        "wire_color": "red",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "VR1",
+        "from_pin": "OUT+",
+        "to_ref": "U2",
+        "to_pin": "VCC",
+        "net": "+5V",
+        "signal": "Driver logic supply",
+        "kind": "power",
+        "voltage_v": 5.0,
+        "wire_color": "red",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "VR1",
+        "from_pin": "OUT+",
+        "to_ref": "U2",
+        "to_pin": "STBY",
+        "net": "+5V",
+        "signal": "Driver standby (tied high)",
+        "kind": "signal",
+        "voltage_v": 5.0,
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U1",
+        "from_pin": "GPIO4",
+        "to_ref": "U2",
+        "to_pin": "PWMA",
+        "net": "MOTOR_1_PWM",
+        "signal": "Motor 1 speed",
+        "kind": "signal",
+        "voltage_v": 3.3,
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U1",
+        "from_pin": "GPIO5",
+        "to_ref": "U2",
+        "to_pin": "AIN1",
+        "net": "MOTOR_1_DIR1",
+        "signal": "Motor 1 direction 1",
+        "kind": "signal",
+        "voltage_v": 3.3,
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U1",
+        "from_pin": "GPIO13",
+        "to_ref": "U2",
+        "to_pin": "AIN2",
+        "net": "MOTOR_1_DIR2",
+        "signal": "Motor 1 direction 2",
+        "kind": "signal",
+        "voltage_v": 3.3,
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U2",
+        "from_pin": "AO1",
+        "to_ref": "M1",
+        "to_pin": "M+",
+        "net": "MOTOR_1_A",
+        "signal": "Motor 1 phase A",
+        "kind": "motor",
+        "voltage_v": 7.4,
+        "wire_color": "orange",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U2",
+        "from_pin": "AO2",
+        "to_ref": "M1",
+        "to_pin": "M-",
+        "net": "MOTOR_1_B",
+        "signal": "Motor 1 phase B",
+        "kind": "motor",
+        "voltage_v": 7.4,
+        "wire_color": "orange",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U1",
+        "from_pin": "GPIO14",
+        "to_ref": "U2",
+        "to_pin": "PWMB",
+        "net": "MOTOR_2_PWM",
+        "signal": "Motor 2 speed",
+        "kind": "signal",
+        "voltage_v": 3.3,
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U1",
+        "from_pin": "GPIO15",
+        "to_ref": "U2",
+        "to_pin": "BIN1",
+        "net": "MOTOR_2_DIR1",
+        "signal": "Motor 2 direction 1",
+        "kind": "signal",
+        "voltage_v": 3.3,
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U1",
+        "from_pin": "GPIO16",
+        "to_ref": "U2",
+        "to_pin": "BIN2",
+        "net": "MOTOR_2_DIR2",
+        "signal": "Motor 2 direction 2",
+        "kind": "signal",
+        "voltage_v": 3.3,
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U2",
+        "from_pin": "BO1",
+        "to_ref": "M2",
+        "to_pin": "M+",
+        "net": "MOTOR_2_A",
+        "signal": "Motor 2 phase A",
+        "kind": "motor",
+        "voltage_v": 7.4,
+        "wire_color": "orange",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U2",
+        "from_pin": "BO2",
+        "to_ref": "M2",
+        "to_pin": "M-",
+        "net": "MOTOR_2_B",
+        "signal": "Motor 2 phase B",
+        "kind": "motor",
+        "voltage_v": 7.4,
+        "wire_color": "orange",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "VR1",
+        "from_pin": "OUT+",
+        "to_ref": "S1",
+        "to_pin": "VCC",
+        "net": "+5V",
+        "signal": "Sensor supply",
+        "kind": "power",
+        "voltage_v": 5.0,
+        "wire_color": "red",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U1",
+        "from_pin": "GPIO17",
+        "to_ref": "S1",
+        "to_pin": "TRIG",
+        "net": "ULTRASONIC_TRIG",
+        "signal": "Ultrasonic trigger",
+        "kind": "signal",
+        "voltage_v": 3.3,
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U1",
+        "from_pin": "GPIO18",
+        "to_ref": "S1",
+        "to_pin": "ECHO",
+        "net": "ULTRASONIC_ECHO",
+        "signal": "Ultrasonic echo",
+        "kind": "signal",
+        "voltage_v": 3.3,
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "U1",
+        "from_pin": "GPIO19",
+        "to_ref": "M3",
+        "to_pin": "SIG",
+        "net": "SERVO_1_SIG",
+        "signal": "Servo 1 signal",
+        "kind": "signal",
+        "voltage_v": 3.3,
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24,
+        "connector": "",
+        "notes": ""
+      },
+      {
+        "from_ref": "VR1",
+        "from_pin": "OUT+",
+        "to_ref": "M3",
+        "to_pin": "VCC",
+        "net": "+5V",
+        "signal": "Servo supply",
+        "kind": "power",
+        "voltage_v": 5.0,
+        "wire_color": "red",
+        "wire_gauge_awg": 18,
+        "connector": "",
+        "notes": ""
+      }
+    ],
+    "pinout": [
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "VIN",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Regulated 5 V logic supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "OUT+",
+            "net": "+5V",
+            "signal": "Regulated 5 V logic supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "3V3",
+        "pin_kind": "power",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GND",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO4",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_1_PWM",
+        "signal": "Motor 1 speed",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "PWMA",
+            "net": "MOTOR_1_PWM",
+            "signal": "Motor 1 speed",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO5",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_1_DIR1",
+        "signal": "Motor 1 direction 1",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "AIN1",
+            "net": "MOTOR_1_DIR1",
+            "signal": "Motor 1 direction 1",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO13",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_1_DIR2",
+        "signal": "Motor 1 direction 2",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "AIN2",
+            "net": "MOTOR_1_DIR2",
+            "signal": "Motor 1 direction 2",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO14",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_2_PWM",
+        "signal": "Motor 2 speed",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "PWMB",
+            "net": "MOTOR_2_PWM",
+            "signal": "Motor 2 speed",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO15",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_2_DIR1",
+        "signal": "Motor 2 direction 1",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "BIN1",
+            "net": "MOTOR_2_DIR1",
+            "signal": "Motor 2 direction 1",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO16",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "MOTOR_2_DIR2",
+        "signal": "Motor 2 direction 2",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "BIN2",
+            "net": "MOTOR_2_DIR2",
+            "signal": "Motor 2 direction 2",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO17",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "ULTRASONIC_TRIG",
+        "signal": "Ultrasonic trigger",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "S1",
+            "pin": "TRIG",
+            "net": "ULTRASONIC_TRIG",
+            "signal": "Ultrasonic trigger",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO18",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "ULTRASONIC_ECHO",
+        "signal": "Ultrasonic echo",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "S1",
+            "pin": "ECHO",
+            "net": "ULTRASONIC_ECHO",
+            "signal": "Ultrasonic echo",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO19",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "SERVO_1_SIG",
+        "signal": "Servo 1 signal",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "M3",
+            "pin": "SIG",
+            "net": "SERVO_1_SIG",
+            "signal": "Servo 1 signal",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO21",
+        "pin_kind": "i2c_sda",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO22",
+        "pin_kind": "i2c_scl",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO23",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO25",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO26",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO27",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO32",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "U1",
+        "part": "ESP32 DevKit V1",
+        "role": "controller",
+        "pin": "GPIO33",
+        "pin_kind": "gpio",
+        "voltage_v": 3.3,
+        "net": "",
+        "signal": "",
+        "connected": false,
+        "destinations": [],
+        "wire_color": "",
+        "wire_gauge_awg": null
+      },
+      {
+        "ref": "BT1",
+        "part": "2S LiPo battery (7.4 V, 2200 mAh)",
+        "role": "battery",
+        "pin": "POS",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "VBAT",
+        "signal": "Battery input to regulator",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "IN+",
+            "net": "VBAT",
+            "signal": "Battery input to regulator",
+            "kind": "power",
+            "connector": ""
+          },
+          {
+            "ref": "U2",
+            "pin": "VM",
+            "net": "VBAT",
+            "signal": "Motor supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "BT1",
+        "part": "2S LiPo battery (7.4 V, 2200 mAh)",
+        "role": "battery",
+        "pin": "NEG",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GND",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          },
+          {
+            "ref": "VR1",
+            "pin": "IN-",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          },
+          {
+            "ref": "VR1",
+            "pin": "OUT-",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          },
+          {
+            "ref": "U2",
+            "pin": "GND",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          },
+          {
+            "ref": "M3",
+            "pin": "GND",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          },
+          {
+            "ref": "S1",
+            "pin": "GND",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "VR1",
+        "part": "5 V 3 A buck converter",
+        "role": "regulator",
+        "pin": "IN+",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "VBAT",
+        "signal": "Battery input to regulator",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "POS",
+            "net": "VBAT",
+            "signal": "Battery input to regulator",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "VR1",
+        "part": "5 V 3 A buck converter",
+        "role": "regulator",
+        "pin": "IN-",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "VR1",
+        "part": "5 V 3 A buck converter",
+        "role": "regulator",
+        "pin": "OUT+",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Regulated 5 V logic supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "VIN",
+            "net": "+5V",
+            "signal": "Regulated 5 V logic supply",
+            "kind": "power",
+            "connector": ""
+          },
+          {
+            "ref": "U2",
+            "pin": "VCC",
+            "net": "+5V",
+            "signal": "Driver logic supply",
+            "kind": "power",
+            "connector": ""
+          },
+          {
+            "ref": "U2",
+            "pin": "STBY",
+            "net": "+5V",
+            "signal": "Driver standby (tied high)",
+            "kind": "signal",
+            "connector": ""
+          },
+          {
+            "ref": "S1",
+            "pin": "VCC",
+            "net": "+5V",
+            "signal": "Sensor supply",
+            "kind": "power",
+            "connector": ""
+          },
+          {
+            "ref": "M3",
+            "pin": "VCC",
+            "net": "+5V",
+            "signal": "Servo supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "VR1",
+        "part": "5 V 3 A buck converter",
+        "role": "regulator",
+        "pin": "OUT-",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "VM",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "VBAT",
+        "signal": "Motor supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "POS",
+            "net": "VBAT",
+            "signal": "Motor supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "VCC",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Driver logic supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "OUT+",
+            "net": "+5V",
+            "signal": "Driver logic supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "GND",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "STBY",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Driver standby (tied high)",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "OUT+",
+            "net": "+5V",
+            "signal": "Driver standby (tied high)",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "AIN1",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_1_DIR1",
+        "signal": "Motor 1 direction 1",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO5",
+            "net": "MOTOR_1_DIR1",
+            "signal": "Motor 1 direction 1",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "AIN2",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_1_DIR2",
+        "signal": "Motor 1 direction 2",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO13",
+            "net": "MOTOR_1_DIR2",
+            "signal": "Motor 1 direction 2",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "PWMA",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_1_PWM",
+        "signal": "Motor 1 speed",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO4",
+            "net": "MOTOR_1_PWM",
+            "signal": "Motor 1 speed",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "BIN1",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_2_DIR1",
+        "signal": "Motor 2 direction 1",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO15",
+            "net": "MOTOR_2_DIR1",
+            "signal": "Motor 2 direction 1",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "BIN2",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_2_DIR2",
+        "signal": "Motor 2 direction 2",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO16",
+            "net": "MOTOR_2_DIR2",
+            "signal": "Motor 2 direction 2",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "PWMB",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "MOTOR_2_PWM",
+        "signal": "Motor 2 speed",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO14",
+            "net": "MOTOR_2_PWM",
+            "signal": "Motor 2 speed",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "AO1",
+        "pin_kind": "motor_out",
+        "voltage_v": null,
+        "net": "MOTOR_1_A",
+        "signal": "Motor 1 phase A",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "M1",
+            "pin": "M+",
+            "net": "MOTOR_1_A",
+            "signal": "Motor 1 phase A",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "AO2",
+        "pin_kind": "motor_out",
+        "voltage_v": null,
+        "net": "MOTOR_1_B",
+        "signal": "Motor 1 phase B",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "M1",
+            "pin": "M-",
+            "net": "MOTOR_1_B",
+            "signal": "Motor 1 phase B",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "BO1",
+        "pin_kind": "motor_out",
+        "voltage_v": null,
+        "net": "MOTOR_2_A",
+        "signal": "Motor 2 phase A",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "M2",
+            "pin": "M+",
+            "net": "MOTOR_2_A",
+            "signal": "Motor 2 phase A",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "U2",
+        "part": "TB6612FNG dual motor driver",
+        "role": "motor_driver",
+        "pin": "BO2",
+        "pin_kind": "motor_out",
+        "voltage_v": null,
+        "net": "MOTOR_2_B",
+        "signal": "Motor 2 phase B",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "M2",
+            "pin": "M-",
+            "net": "MOTOR_2_B",
+            "signal": "Motor 2 phase B",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M3",
+        "part": "SG90 micro servo",
+        "role": "servo",
+        "pin": "VCC",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Servo supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "OUT+",
+            "net": "+5V",
+            "signal": "Servo supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M3",
+        "part": "SG90 micro servo",
+        "role": "servo",
+        "pin": "GND",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M3",
+        "part": "SG90 micro servo",
+        "role": "servo",
+        "pin": "SIG",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "SERVO_1_SIG",
+        "signal": "Servo 1 signal",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO19",
+            "net": "SERVO_1_SIG",
+            "signal": "Servo 1 signal",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "M1",
+        "part": "N20 gear motor (6 V)",
+        "role": "drive_motor",
+        "pin": "M+",
+        "pin_kind": "motor_in",
+        "voltage_v": null,
+        "net": "MOTOR_1_A",
+        "signal": "Motor 1 phase A",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "AO1",
+            "net": "MOTOR_1_A",
+            "signal": "Motor 1 phase A",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M1",
+        "part": "N20 gear motor (6 V)",
+        "role": "drive_motor",
+        "pin": "M-",
+        "pin_kind": "motor_in",
+        "voltage_v": null,
+        "net": "MOTOR_1_B",
+        "signal": "Motor 1 phase B",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "AO2",
+            "net": "MOTOR_1_B",
+            "signal": "Motor 1 phase B",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M2",
+        "part": "N20 gear motor (6 V)",
+        "role": "drive_motor",
+        "pin": "M+",
+        "pin_kind": "motor_in",
+        "voltage_v": null,
+        "net": "MOTOR_2_A",
+        "signal": "Motor 2 phase A",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "BO1",
+            "net": "MOTOR_2_A",
+            "signal": "Motor 2 phase A",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "M2",
+        "part": "N20 gear motor (6 V)",
+        "role": "drive_motor",
+        "pin": "M-",
+        "pin_kind": "motor_in",
+        "voltage_v": null,
+        "net": "MOTOR_2_B",
+        "signal": "Motor 2 phase B",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U2",
+            "pin": "BO2",
+            "net": "MOTOR_2_B",
+            "signal": "Motor 2 phase B",
+            "kind": "motor",
+            "connector": ""
+          }
+        ],
+        "wire_color": "orange",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "S1",
+        "part": "HC-SR04 ultrasonic rangefinder",
+        "role": "distance_sensor",
+        "pin": "VCC",
+        "pin_kind": "power",
+        "voltage_v": null,
+        "net": "+5V",
+        "signal": "Sensor supply",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "VR1",
+            "pin": "OUT+",
+            "net": "+5V",
+            "signal": "Sensor supply",
+            "kind": "power",
+            "connector": ""
+          }
+        ],
+        "wire_color": "red",
+        "wire_gauge_awg": 18
+      },
+      {
+        "ref": "S1",
+        "part": "HC-SR04 ultrasonic rangefinder",
+        "role": "distance_sensor",
+        "pin": "TRIG",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "ULTRASONIC_TRIG",
+        "signal": "Ultrasonic trigger",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO17",
+            "net": "ULTRASONIC_TRIG",
+            "signal": "Ultrasonic trigger",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "S1",
+        "part": "HC-SR04 ultrasonic rangefinder",
+        "role": "distance_sensor",
+        "pin": "ECHO",
+        "pin_kind": "gpio",
+        "voltage_v": null,
+        "net": "ULTRASONIC_ECHO",
+        "signal": "Ultrasonic echo",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "U1",
+            "pin": "GPIO18",
+            "net": "ULTRASONIC_ECHO",
+            "signal": "Ultrasonic echo",
+            "kind": "signal",
+            "connector": ""
+          }
+        ],
+        "wire_color": "yellow",
+        "wire_gauge_awg": 24
+      },
+      {
+        "ref": "S1",
+        "part": "HC-SR04 ultrasonic rangefinder",
+        "role": "distance_sensor",
+        "pin": "GND",
+        "pin_kind": "ground",
+        "voltage_v": 0.0,
+        "net": "GND",
+        "signal": "Common ground",
+        "connected": true,
+        "destinations": [
+          {
+            "ref": "BT1",
+            "pin": "NEG",
+            "net": "GND",
+            "signal": "Common ground",
+            "kind": "ground",
+            "connector": ""
+          }
+        ],
+        "wire_color": "black",
+        "wire_gauge_awg": 18
+      }
+    ],
+    "power_budget": {
+      "supply_voltage_v": 7.4,
+      "peak_current_ma": 2330.0,
+      "typical_current_ma": 402.0,
+      "recommended_supply_ma": 3100.0,
+      "margin_percent": 38.0,
+      "usable_capacity_mah": 1760.0,
+      "estimated_runtime_min": 263.0
+    },
+    "power_rails": [
+      {
+        "name": "VBAT",
+        "voltage_v": 7.4,
+        "peak_current_ma": 2330.0,
+        "source_ref": "BT1",
+        "notes": "Pack rail. Motors and the buck input connect here."
+      },
+      {
+        "name": "GND",
+        "voltage_v": 0.0,
+        "peak_current_ma": 2330.0,
+        "source_ref": "BT1",
+        "notes": "Single star-point ground at the battery negative terminal."
+      },
+      {
+        "name": "+5V",
+        "voltage_v": 5.0,
+        "peak_current_ma": 920.0,
+        "source_ref": "VR1",
+        "notes": "Regulated logic/servo rail."
+      },
+      {
+        "name": "3V3_CTRL",
+        "voltage_v": 3.3,
+        "peak_current_ma": 0.0,
+        "source_ref": "U1",
+        "notes": "Controller 3.3 V output; 3.3 V-only sensors live here."
+      },
+      {
+        "name": "DRIVER_LOGIC",
+        "voltage_v": 3.3,
+        "peak_current_ma": 10.0,
+        "source_ref": "U2",
+        "notes": "TB6612 VCC/STBY logic reference."
+      }
+    ],
+    "pin_map": {
+      "OUT+": "U2.VCC/STBY · logic rail",
+      "GPIO4": "U2.PWMA · Motor 1 speed",
+      "GPIO5": "U2.AIN1 · Motor 1 direction 1",
+      "GPIO13": "U2.AIN2 · Motor 1 direction 2",
+      "GPIO14": "U2.PWMB · Motor 2 speed",
+      "GPIO15": "U2.BIN1 · Motor 2 direction 1",
+      "GPIO16": "U2.BIN2 · Motor 2 direction 2",
+      "GPIO17": "S1.TRIG · Ultrasonic trigger",
+      "GPIO18": "S1.ECHO · Ultrasonic echo",
+      "GPIO19": "M3.SIG · Servo 1 signal"
+    },
+    "issues": [
+      {
+        "code": "motor_overvoltage",
+        "severity": "warning",
+        "message": "N20 gear motor (6 V) (M1) is rated to 6 V but is connected to 7.4 V.",
+        "refs": [
+          "M1"
+        ],
+        "remediation": "Use a lower-voltage pack, insert a buck regulator, or choose a part rated for this rail. Re-check stall current at the higher voltage."
+      },
+      {
+        "code": "motor_overvoltage",
+        "severity": "warning",
+        "message": "N20 gear motor (6 V) (M2) is rated to 6 V but is connected to 7.4 V.",
+        "refs": [
+          "M2"
+        ],
+        "remediation": "Use a lower-voltage pack, insert a buck regulator, or choose a part rated for this rail. Re-check stall current at the higher voltage."
+      },
+      {
+        "code": "logic_level_mismatch",
+        "severity": "warning",
+        "message": "HC-SR04 ultrasonic rangefinder (S1) can output 5 V into a 3.3 V controller input.",
+        "refs": [
+          "S1",
+          "U1"
+        ],
+        "remediation": "Use a resistor divider or bidirectional level shifter, or power the sensor from the 3.3 V rail when it supports it."
+      }
+    ],
+    "safety_checks": [
+      "Every placed part's supply rail was checked against its rated range.",
+      "Common ground verified across 6 parts at the battery star point.",
+      "No physical pin is assigned to more than one net.",
+      "Every DC motor is driven through a current-rated H-bridge.",
+      "Peak load 2.33 A is within the 5.0 A pack limit.",
+      "Servo signal pins were assigned to hardware PWM channels."
+    ],
+    "warnings": [
+      "N20 gear motor (6 V) (M1) is rated to 6 V but is connected to 7.4 V.",
+      "N20 gear motor (6 V) (M2) is rated to 6 V but is connected to 7.4 V.",
+      "HC-SR04 ultrasonic rangefinder (S1) can output 5 V into a 3.3 V controller input."
+    ],
+    "wiring_steps": [
+      "Power off and disconnect the battery before touching any conductor.",
+      "Mount U1 (ESP32 DevKit V1) on insulated standoffs and keep USB and header pins clear.",
+      "Mount U2 (TB6612FNG dual motor driver) so the heatsink has airflow and the motor terminals cannot short against the chassis.",
+      "Build the ground bus first: BT1.NEG to a single star point, then to every GND pin. BT1 negative is the only reference.",
+      "Connect BT1.POS through a fuse to the motor supply and buck input. Leave the battery unplugged until the continuity check passes.",
+      "Wire the motor outputs: driver AO1/AO2 to the first motor, BO1/BO2 to the second. Keep the pair twisted; reverse one pair if a wheel spins backwards.",
+      "Connect the controller PWM and direction pins to PWMA/AIN1/AIN2 and PWMB/BIN1/BIN2. Tie STBY high through the logic rail.",
+      "Wire sensors last, following the pin map one net at a time. Power 3.3 V-only sensors from the 3.3 V rail and fit a level shifter where flagged.",
+      "Inspect for stray strands, reversed polarity, and any pin assigned to two nets.",
+      "Power on with a current-limited supply or the fuse fitted. Measure the 5 V rail under load before enabling the motors.",
+      "Run each actuator at low duty first, then verify emergency stop and battery low-voltage cutoff before a full-speed test."
+    ],
+    "design_notes": [
+      "Generated deterministically from the curated component library v1.0. Every net is derived from a datasheet-shaped profile, not from free-form text."
+    ],
+    "library_version": "1.0"
+  },
+  "programming": {
+    "platform": "esp32",
+    "language": "python",
+    "framework": "MicroPython",
+    "files": [
+      {
+        "path": "config.py",
+        "language": "python",
+        "content": "\"\"\"Pin map generated from the electrical plan. Do not edit by hand.\"\"\"\n\nSERIAL_BAUD = 115200\nLOOP_HZ = 50\n\nPINS = {\nCOMMON_GROUND = \"GND\"\nMOTOR_1_DIRECTION_1 = \"GPIO5\"\nMOTOR_1_DIRECTION_2 = \"GPIO13\"\nMOTOR_1_SPEED = \"GPIO4\"\nMOTOR_2_DIRECTION_1 = \"GPIO15\"\nMOTOR_2_DIRECTION_2 = \"GPIO16\"\nMOTOR_2_SPEED = \"GPIO14\"\nREGULATED_5_V_LOGIC_SUPPLY = \"VIN\"\nSERVO_1_SIGNAL = \"GPIO19\"\nULTRASONIC_ECHO = \"GPIO18\"\nULTRASONIC_TRIGGER = \"GPIO17\"\n}\n",
+        "explanation": "Pin constants."
+      },
+      {
+        "path": "robot.py",
+        "language": "python",
+        "content": "\"\"\"Robot behaviour for Patio Scout.\"\"\"\n\nfrom config import LOOP_HZ, SERIAL_BAUD, PINS\nimport time\n\n\nclass Robot:\n    \"\"\"Starter control loop generated from the Blueprints Baker pin map.\"\"\"\n\n    def __init__(self) -> None:\n        self.running = False\n\n    def setup(self) -> None:\n        print(\"Booting Patio Scout\")\n        # TODO: initialise motors, sensors, and safe output states for your board.\n        self.running = True\n\n    def step(self) -> None:\n        \"\"\"Run one control iteration.\"\"\"\n        # TODO: read sensors, compute an error, and command the motors.\n        # Pin names are available through ``PINS`` in config.py.\n        time.sleep(1 / LOOP_HZ)\n\n    def stop(self) -> None:\n        self.running = False\n        # TODO: drive every motor output to a safe low state.\n        print(\"Stopped\")\n\n\ndef make_robot() -> Robot:\n    return Robot()\n",
+        "explanation": "Control-loop skeleton with setup, step, and stop hooks."
+      },
+      {
+        "path": "main.py",
+        "language": "python",
+        "content": "\"\"\"Entry point. Copy this project to the board, then run main.py.\"\"\"\n\nfrom robot import make_robot\n\n\ndef main() -> None:\n    robot = make_robot()\n    robot.setup()\n    try:\n        while robot.running:\n            robot.step()\n    except KeyboardInterrupt:\n        pass\n    finally:\n        robot.stop()\n\n\nif __name__ == \"__main__\":\n    main()\n",
+        "explanation": "Entry point."
+      },
+      {
+        "path": "README.md",
+        "language": "markdown",
+        "content": "# Patio Scout — MicroPython starter\n\n1. Flash MicroPython to the controller.\n2. Copy `config.py`, `robot.py`, and `main.py` to the board.\n3. Open a serial console at 115200 baud and run `main.py`.\n4. Fill in the TODO blocks in `robot.py` before connecting motors.\n\nThis is a scaffold generated from the validated pin map; verify every pin on\nyour own board before applying power.\n",
+        "explanation": "Run steps."
+      }
+    ],
+    "bundles": [
+      {
+        "language": "python",
+        "display_name": "Python",
+        "framework": "MicroPython",
+        "status": "scaffold",
+        "files": [
+          {
+            "path": "config.py",
+            "language": "python",
+            "content": "\"\"\"Pin map generated from the electrical plan. Do not edit by hand.\"\"\"\n\nSERIAL_BAUD = 115200\nLOOP_HZ = 50\n\nPINS = {\nCOMMON_GROUND = \"GND\"\nMOTOR_1_DIRECTION_1 = \"GPIO5\"\nMOTOR_1_DIRECTION_2 = \"GPIO13\"\nMOTOR_1_SPEED = \"GPIO4\"\nMOTOR_2_DIRECTION_1 = \"GPIO15\"\nMOTOR_2_DIRECTION_2 = \"GPIO16\"\nMOTOR_2_SPEED = \"GPIO14\"\nREGULATED_5_V_LOGIC_SUPPLY = \"VIN\"\nSERVO_1_SIGNAL = \"GPIO19\"\nULTRASONIC_ECHO = \"GPIO18\"\nULTRASONIC_TRIGGER = \"GPIO17\"\n}\n",
+            "explanation": "Pin constants."
+          },
+          {
+            "path": "robot.py",
+            "language": "python",
+            "content": "\"\"\"Robot behaviour for Patio Scout.\"\"\"\n\nfrom config import LOOP_HZ, SERIAL_BAUD, PINS\nimport time\n\n\nclass Robot:\n    \"\"\"Starter control loop generated from the Blueprints Baker pin map.\"\"\"\n\n    def __init__(self) -> None:\n        self.running = False\n\n    def setup(self) -> None:\n        print(\"Booting Patio Scout\")\n        # TODO: initialise motors, sensors, and safe output states for your board.\n        self.running = True\n\n    def step(self) -> None:\n        \"\"\"Run one control iteration.\"\"\"\n        # TODO: read sensors, compute an error, and command the motors.\n        # Pin names are available through ``PINS`` in config.py.\n        time.sleep(1 / LOOP_HZ)\n\n    def stop(self) -> None:\n        self.running = False\n        # TODO: drive every motor output to a safe low state.\n        print(\"Stopped\")\n\n\ndef make_robot() -> Robot:\n    return Robot()\n",
+            "explanation": "Control-loop skeleton with setup, step, and stop hooks."
+          },
+          {
+            "path": "main.py",
+            "language": "python",
+            "content": "\"\"\"Entry point. Copy this project to the board, then run main.py.\"\"\"\n\nfrom robot import make_robot\n\n\ndef main() -> None:\n    robot = make_robot()\n    robot.setup()\n    try:\n        while robot.running:\n            robot.step()\n    except KeyboardInterrupt:\n        pass\n    finally:\n        robot.stop()\n\n\nif __name__ == \"__main__\":\n    main()\n",
+            "explanation": "Entry point."
+          },
+          {
+            "path": "README.md",
+            "language": "markdown",
+            "content": "# Patio Scout — MicroPython starter\n\n1. Flash MicroPython to the controller.\n2. Copy `config.py`, `robot.py`, and `main.py` to the board.\n3. Open a serial console at 115200 baud and run `main.py`.\n4. Fill in the TODO blocks in `robot.py` before connecting motors.\n\nThis is a scaffold generated from the validated pin map; verify every pin on\nyour own board before applying power.\n",
+            "explanation": "Run steps."
+          }
+        ],
+        "libraries": [],
+        "notes": [
+          "Generated from the validated electrical pin map.",
+          "Scaffold only: complete the TODO blocks and verify every pin on hardware."
+        ]
+      },
+      {
+        "language": "cpp",
+        "display_name": "C++ (Arduino)",
+        "framework": "Arduino / PlatformIO",
+        "status": "scaffold",
+        "files": [
+          {
+            "path": "platformio.ini",
+            "language": "ini",
+            "content": "[env:blueprints_baker]\nplatform = atmelavr\nboard = uno\nframework = arduino\nmonitor_speed = 115200\nbuild_flags = -DROBOT_NAME=\\\"Patio Scout\\\"\n",
+            "explanation": "PlatformIO project configuration."
+          },
+          {
+            "path": "include/config.h",
+            "language": "cpp",
+            "content": "#pragma once\n\n#include <Arduino.h>\n\n// Generated pin map. Non-numeric controller pins are kept in the comment and\n// must be mapped to the board variant before compiling.\nconstexpr uint8_t PIN_COMMON_GROUND = 0;  // GND\nconstexpr uint8_t PIN_MOTOR_1_DIRECTION_1 = 0;  // GPIO5\nconstexpr uint8_t PIN_MOTOR_1_DIRECTION_2 = 0;  // GPIO13\nconstexpr uint8_t PIN_MOTOR_1_SPEED = 0;  // GPIO4\nconstexpr uint8_t PIN_MOTOR_2_DIRECTION_1 = 0;  // GPIO15\nconstexpr uint8_t PIN_MOTOR_2_DIRECTION_2 = 0;  // GPIO16\nconstexpr uint8_t PIN_MOTOR_2_SPEED = 0;  // GPIO14\nconstexpr uint8_t PIN_REGULATED_5_V_LOGIC_SUPPLY = 0;  // VIN\nconstexpr uint8_t PIN_SERVO_1_SIGNAL = 0;  // GPIO19\nconstexpr uint8_t PIN_ULTRASONIC_ECHO = 0;  // GPIO18\nconstexpr uint8_t PIN_ULTRASONIC_TRIGGER = 0;  // GPIO17\n",
+            "explanation": "Generated pin constants."
+          },
+          {
+            "path": "src/main.cpp",
+            "language": "cpp",
+            "content": "#include <Arduino.h>\n#include \"config.h\"\n\n// Patio Scout — pin-mapped starter firmware.\n\nvoid setup() {\n  Serial.begin(115200);\n  delay(200);\n  Serial.println(\"Patio Scout booting\");\n  // TODO: configure each PIN_* with pinMode() for your board.\n}\n\nvoid loop() {\n  // TODO: read sensors, compute an error, and command the motor driver.\n  // Keep a watchdog and a safe stop path before running motors at speed.\n  delay(20);\n}\n",
+            "explanation": "Arduino setup/loop skeleton."
+          },
+          {
+            "path": "README.md",
+            "language": "markdown",
+            "content": "# Patio Scout — Arduino C++ starter\n\n1. Install PlatformIO (or the Arduino IDE).\n2. Check `include/config.h` against your controller variant.\n3. Build and upload with `pio run -t upload`.\n4. Fill in the TODO blocks in `src/main.cpp` before powering motors.\n\nThis is a pin-mapped scaffold, not verified firmware.\n",
+            "explanation": "Upload steps."
+          }
+        ],
+        "libraries": [
+          "Arduino core"
+        ],
+        "notes": [
+          "Generated from the validated electrical pin map.",
+          "Scaffold only: complete the TODO blocks and verify every pin on hardware."
+        ]
+      },
+      {
+        "language": "c",
+        "display_name": "C (STM32 HAL)",
+        "framework": "STM32 HAL",
+        "status": "scaffold",
+        "files": [
+          {
+            "path": "Core/Inc/config.h",
+            "language": "c",
+            "content": "#ifndef ROBOT_CONFIG_H\n#define ROBOT_CONFIG_H\n\n// Pin names are strings because STM32 port/pin assignment depends on the board.\n#define PIN_COMMON_GROUND \"GND\"\n#define PIN_MOTOR_1_DIRECTION_1 \"GPIO5\"\n#define PIN_MOTOR_1_DIRECTION_2 \"GPIO13\"\n#define PIN_MOTOR_1_SPEED \"GPIO4\"\n#define PIN_MOTOR_2_DIRECTION_1 \"GPIO15\"\n#define PIN_MOTOR_2_DIRECTION_2 \"GPIO16\"\n#define PIN_MOTOR_2_SPEED \"GPIO14\"\n#define PIN_REGULATED_5_V_LOGIC_SUPPLY \"VIN\"\n#define PIN_SERVO_1_SIGNAL \"GPIO19\"\n#define PIN_ULTRASONIC_ECHO \"GPIO18\"\n#define PIN_ULTRASONIC_TRIGGER \"GPIO17\"\n\n#endif\n",
+            "explanation": "Generated pin constants."
+          },
+          {
+            "path": "Core/Src/main.c",
+            "language": "c",
+            "content": "#include \"main.h\"\n#include \"config.h\"\n\n// Patio Scout — STM32 HAL starter.\n\nvoid SystemClock_Config(void);\nstatic void MX_GPIO_Init(void);\n\nint main(void) {\n  HAL_Init();\n  SystemClock_Config();\n  MX_GPIO_Init();\n\n  while (1) {\n    // TODO: read sensors and command the motor driver through HAL_GPIO_WritePin.\n    HAL_Delay(20);\n  }\n}\n\nstatic void MX_GPIO_Init(void) {\n  // TODO: enable the GPIO clocks and configure every mapped pin.\n  __HAL_RCC_GPIOA_CLK_ENABLE();\n}\n",
+            "explanation": "HAL main loop skeleton."
+          },
+          {
+            "path": "README.md",
+            "language": "markdown",
+            "content": "# Patio Scout — STM32 C starter\n\n1. Create an STM32CubeIDE project for your exact MCU.\n2. Copy `Core/Inc/config.h` and `Core/Src/main.c` into it.\n3. Implement `SystemClock_Config()` and the GPIO initialisation TODO.\n4. Build, flash, and verify every pin with a meter before connecting loads.\n\nThe pin map is generated from the electrical plan; the HAL calls are a\nscaffold and must match your board package.\n",
+            "explanation": "Board steps."
+          }
+        ],
+        "libraries": [
+          "STM32 HAL"
+        ],
+        "notes": [
+          "Generated from the validated electrical pin map.",
+          "Scaffold only: complete the TODO blocks and verify every pin on hardware."
+        ]
+      },
+      {
+        "language": "verilog",
+        "display_name": "Verilog",
+        "framework": "RTL",
+        "status": "scaffold",
+        "files": [
+          {
+            "path": "rtl/top.v",
+            "language": "verilog",
+            "content": "// Patio Scout — RTL scaffold.\nmodule top (\n    input  wire clk,\n    input  wire rst_n,\n    output wire common_ground,\n    output wire motor_1_direction_1,\n    output wire motor_1_direction_2,\n    output wire motor_1_speed,\n    output wire motor_2_direction_1,\n    output wire motor_2_direction_2,\n    output wire motor_2_speed,\n    output wire regulated_5_v_logic_supply,\n    output wire servo_1_signal,\n    output wire ultrasonic_echo,\n    output wire ultrasonic_trigger\n);\n\n    // TODO: implement the control law and drive each output.\n    assign common_ground = 1'b0;\n\nendmodule\n",
+            "explanation": "Top module."
+          },
+          {
+            "path": "tb/top_tb.v",
+            "language": "verilog",
+            "content": "`timescale 1ns/1ps\nmodule top_tb;\n    reg clk = 0;\n    reg rst_n = 0;\n    always #5 clk = ~clk;\n    initial begin\n        #20 rst_n = 1;\n        #200 $finish;\n    end\n    // TODO: instantiate top and add assertions.\nendmodule\n",
+            "explanation": "Testbench."
+          },
+          {
+            "path": "README.md",
+            "language": "markdown",
+            "content": "# Patio Scout — Verilog scaffold\n\n1. Add `rtl/top.v` to your FPGA project and map the ports to real pins.\n2. Implement the control law behind the TODO.\n3. Simulate `tb/top_tb.v`, then synthesise for your target board.\n\nThis RTL is a scaffold; it does not implement a complete robotics controller.\n",
+            "explanation": "FPGA steps."
+          }
+        ],
+        "libraries": [],
+        "notes": [
+          "Generated from the validated electrical pin map.",
+          "Scaffold only: complete the TODO blocks and verify every pin on hardware."
+        ]
+      }
+    ],
+    "libraries": [
+      "Arduino core",
+      "STM32 HAL"
+    ],
+    "pin_assignments": {
+      "COMMON_GROUND": "GND",
+      "MOTOR_1_DIRECTION_1": "GPIO5",
+      "MOTOR_1_DIRECTION_2": "GPIO13",
+      "MOTOR_1_SPEED": "GPIO4",
+      "MOTOR_2_DIRECTION_1": "GPIO15",
+      "MOTOR_2_DIRECTION_2": "GPIO16",
+      "MOTOR_2_SPEED": "GPIO14",
+      "REGULATED_5_V_LOGIC_SUPPLY": "VIN",
+      "SERVO_1_SIGNAL": "GPIO19",
+      "ULTRASONIC_ECHO": "GPIO18",
+      "ULTRASONIC_TRIGGER": "GPIO17"
+    },
+    "setup_steps": [
+      "Install the toolchain named in each bundle README.",
+      "Compare every pin in the generated config against your board pinout.",
+      "Complete the TODO blocks before connecting motors or high-current loads."
+    ],
+    "upload_steps": [
+      "Compile the bundle and resolve any board-specific library errors.",
+      "Flash or copy the files to the controller.",
+      "Run at low power and verify the emergency stop path."
+    ],
+    "validation_notes": [
+      "All pin names come from the electrical plan, not free-form generation.",
+      "Generated code is untrusted scaffold input; review it before running.",
+      "Unsupported languages are provided as structured scaffolds with explicit TODOs."
+    ]
+  },
+  "mechanical": {
+    "chassis": {
+      "name": "Chassis plate",
+      "category": "structure",
+      "quantity": 1,
+      "material": "PLA",
+      "dimensions_mm": {
+        "length_mm": 160.0,
+        "width_mm": 110.0,
+        "height_mm": 5.0
+      },
+      "notes": "Basic rectangular reference plate. Add motor mounts, sensor ears, and fastener holes before printing the final part."
+    },
+    "parts": [
+      {
+        "name": "Chassis plate",
+        "category": "structure",
+        "quantity": 1,
+        "material": "PLA",
+        "dimensions_mm": {
+          "length_mm": 160.0,
+          "width_mm": 110.0,
+          "height_mm": 5.0
+        },
+        "notes": "Basic rectangular reference plate. Add motor mounts, sensor ears, and fastener holes before printing the final part."
+      },
+      {
+        "name": "M3 standoff",
+        "category": "fastener",
+        "quantity": 4,
+        "material": "Brass",
+        "dimensions_mm": {
+          "length_mm": 6.0,
+          "width_mm": 6.0,
+          "height_mm": 10.0
+        },
+        "notes": "Raises the electronics plate above the chassis."
+      },
+      {
+        "name": "M3 x 10 mm screw",
+        "category": "fastener",
+        "quantity": 8,
+        "material": "Steel",
+        "dimensions_mm": {
+          "length_mm": null,
+          "width_mm": null,
+          "height_mm": null
+        },
+        "notes": "Four screws for the plate, four for the motors."
+      }
+    ],
+    "assembly_steps": [
+      {
+        "order": 1,
+        "title": "Print and inspect the chassis",
+        "instructions": "Print the generated STL at the stated dimensions, remove supports, and check that the plate is flat.",
+        "tools": [
+          "3D printer",
+          "deburring tool"
+        ],
+        "parts": [
+          "Chassis plate"
+        ],
+        "safety_notes": [
+          "Let the bed cool before removing a thin plate."
+        ]
+      },
+      {
+        "order": 2,
+        "title": "Fit standoffs and electronics",
+        "instructions": "Install the four M3 standoffs, place the controller and driver on the plate, and mark any additional mounting holes.",
+        "tools": [
+          "Hex key",
+          "marker",
+          "drill"
+        ],
+        "parts": [
+          "M3 standoff",
+          "M3 x 10 mm screw"
+        ],
+        "safety_notes": [
+          "Unplug power before drilling or fitting hardware."
+        ]
+      },
+      {
+        "order": 3,
+        "title": "Mount the drivetrain",
+        "instructions": "Attach the motors and wheels, route wires away from the wheels, and spin each wheel by hand before applying power.",
+        "tools": [
+          "Screwdriver",
+          "wire clips"
+        ],
+        "parts": [
+          "M3 x 10 mm screw"
+        ],
+        "safety_notes": [
+          "Keep fingers clear of the wheels during the first spin test."
+        ]
+      },
+      {
+        "order": 4,
+        "title": "Check mass and centre of gravity",
+        "instructions": "Weigh the assembled chassis, compare it with the estimate, and move the battery to balance the robot before the first drive.",
+        "tools": [
+          "Scale"
+        ],
+        "parts": [],
+        "safety_notes": [
+          "Support the robot so it cannot drive off the bench."
+        ]
+      }
+    ],
+    "drawings": [
+      "stl:patio-scout-chassis.stl"
+    ],
+    "manufacturing_notes": [
+      "STL units are millimetres.",
+      "Material weights use the required JOD print chart with a 40% effective material fraction for a 35% infill print.",
+      "Cheapest estimate: PLA at 3.556 JOD."
+    ],
+    "warnings": [
+      "The STL is a reference plate, not a production-ready enclosure.",
+      "Weigh the actual print; the price chart uses an effective 40% material fraction."
+    ],
+    "dimensions_mm": {
+      "length_mm": 160.0,
+      "width_mm": 110.0,
+      "height_mm": 5.0
+    },
+    "volume_cm3": "88.000",
+    "infill_percent": 35,
+    "stl_ascii": "solid patio-scout-chassis\n  facet normal 0.0 0.0 -1.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 0.000 110.000 0.000\n      vertex 160.000 110.000 0.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 -1.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 110.000 0.000\n      vertex 160.000 0.000 0.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 1.0\n    outer loop\n      vertex 0.000 0.000 5.000\n      vertex 160.000 0.000 5.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 0.0 1.0\n    outer loop\n      vertex 0.000 0.000 5.000\n      vertex 160.000 110.000 5.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 -1.0 0.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 0.000 0.000\n      vertex 160.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 -1.0 0.0\n    outer loop\n      vertex 0.000 0.000 0.000\n      vertex 160.000 0.000 5.000\n      vertex 0.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 1.0 0.0\n    outer loop\n      vertex 160.000 110.000 0.000\n      vertex 0.000 110.000 0.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 0.0 1.0 0.0\n    outer loop\n      vertex 160.000 110.000 0.000\n      vertex 0.000 110.000 5.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal -1.0 0.0 0.0\n    outer loop\n      vertex 0.000 110.000 0.000\n      vertex 0.000 0.000 0.000\n      vertex 0.000 0.000 5.000\n    endloop\n  endfacet\n  facet normal -1.0 0.0 0.0\n    outer loop\n      vertex 0.000 110.000 0.000\n      vertex 0.000 0.000 5.000\n      vertex 0.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 1.0 0.0 0.0\n    outer loop\n      vertex 160.000 0.000 0.000\n      vertex 160.000 110.000 0.000\n      vertex 160.000 110.000 5.000\n    endloop\n  endfacet\n  facet normal 1.0 0.0 0.0\n    outer loop\n      vertex 160.000 0.000 0.000\n      vertex 160.000 110.000 5.000\n      vertex 160.000 0.000 5.000\n    endloop\n  endfacet\nendsolid patio-scout-chassis\n",
+    "stl_filename": "patio-scout-chassis.stl",
+    "material_quotes": [
+      {
+        "material": "PLA",
+        "price_per_gram_jod": "0.070",
+        "base_jod": "0.500",
+        "minimum_jod": "1.000",
+        "weight_g": "43.65",
+        "total_jod": "3.556",
+        "is_cheapest": true
+      },
+      {
+        "material": "PETG",
+        "price_per_gram_jod": "0.120",
+        "base_jod": "0.500",
+        "minimum_jod": "1.200",
+        "weight_g": "44.70",
+        "total_jod": "5.864",
+        "is_cheapest": false
+      },
+      {
+        "material": "ABS",
+        "price_per_gram_jod": "0.120",
+        "base_jod": "0.500",
+        "minimum_jod": "1.000",
+        "weight_g": "36.61",
+        "total_jod": "4.893",
+        "is_cheapest": false
+      },
+      {
+        "material": "Resin",
+        "price_per_gram_jod": "0.300",
+        "base_jod": "0.500",
+        "minimum_jod": "1.500",
+        "weight_g": "38.72",
+        "total_jod": "12.116",
+        "is_cheapest": false
+      },
+      {
+        "material": "TPU",
+        "price_per_gram_jod": "0.200",
+        "base_jod": "2.000",
+        "minimum_jod": "1.200",
+        "weight_g": "42.59",
+        "total_jod": "10.518",
+        "is_cheapest": false
+      }
+    ],
+    "pricing_notes": [
+      "PLA: 0.070 JOD/g, base 0.500, minimum 1.000.",
+      "PETG: 0.120 JOD/g, base 0.500, minimum 1.200.",
+      "ABS: 0.120 JOD/g, base 0.500, minimum 1.000.",
+      "Resin: 0.300 JOD/g, base 0.500, minimum 1.500.",
+      "TPU: 0.200 JOD/g, base 2.000, minimum 1.200."
+    ]
+  },
+  "cost": {
+    "line_items": [
+      {
+        "label": "ESP32 DevKit V1",
+        "category": "controller",
+        "quantity": 1,
+        "unit_price_usd": "9.50",
+        "line_total_usd": "9.50",
+        "unit_price_jod": "4.18",
+        "line_total_jod": "4.18",
+        "supplier": "temu",
+        "is_estimate": true
+      },
+      {
+        "label": "TB6612FNG dual motor driver",
+        "category": "motor_driver",
+        "quantity": 1,
+        "unit_price_usd": "6.20",
+        "line_total_usd": "6.20",
+        "unit_price_jod": "2.86",
+        "line_total_jod": "2.86",
+        "supplier": "temu",
+        "is_estimate": true
+      },
+      {
+        "label": "N20 gear motor (6 V)",
+        "category": "motor",
+        "quantity": 2,
+        "unit_price_usd": "5.40",
+        "line_total_usd": "10.80",
+        "unit_price_jod": "2.30",
+        "line_total_jod": "4.60",
+        "supplier": "temu",
+        "is_estimate": true
+      },
+      {
+        "label": "HC-SR04 ultrasonic rangefinder",
+        "category": "sensor",
+        "quantity": 1,
+        "unit_price_usd": "2.30",
+        "line_total_usd": "2.30",
+        "unit_price_jod": "0.96",
+        "line_total_jod": "0.96",
+        "supplier": "temu",
+        "is_estimate": true
+      },
+      {
+        "label": "SG90 micro servo",
+        "category": "actuator",
+        "quantity": 1,
+        "unit_price_usd": "3.40",
+        "line_total_usd": "3.40",
+        "unit_price_jod": "1.48",
+        "line_total_jod": "1.48",
+        "supplier": "temu",
+        "is_estimate": true
+      },
+      {
+        "label": "2S LiPo battery (7.4 V, 2200 mAh)",
+        "category": "power",
+        "quantity": 1,
+        "unit_price_usd": "18.00",
+        "line_total_usd": "18.00",
+        "unit_price_jod": "7.75",
+        "line_total_jod": "7.75",
+        "supplier": "temu",
+        "is_estimate": true
+      },
+      {
+        "label": "5 V 3 A buck converter",
+        "category": "power",
+        "quantity": 1,
+        "unit_price_usd": "4.20",
+        "line_total_usd": "4.20",
+        "unit_price_jod": "1.86",
+        "line_total_jod": "1.86",
+        "supplier": "temu",
+        "is_estimate": true
+      },
+      {
+        "label": "3D-printed chassis (cheapest material)",
+        "category": "mechanical",
+        "quantity": 1,
+        "unit_price_usd": null,
+        "line_total_usd": null,
+        "unit_price_jod": "3.556",
+        "line_total_jod": "3.556",
+        "supplier": "local 3D print",
+        "is_estimate": true
+      }
+    ],
+    "subtotal_usd": "54.40",
+    "subtotal_jod": "23.69",
+    "shipping_usd": "0",
+    "contingency_usd": "2.72",
+    "print_cost_jod": "3.56",
+    "total_usd": "57.12",
+    "total_jod": "27.25",
+    "currency": "JOD",
+    "budget": {
+      "min_usd": null,
+      "max_usd": "150",
+      "currency": "USD"
+    },
+    "budget_status": "within",
+    "alternatives": [
+      {
+        "description": "Use the cheapest selected store for every part.",
+        "savings_usd": null,
+        "tradeoffs": [
+          "Longer shipping and less predictable stock."
+        ]
+      },
+      {
+        "description": "Print the chassis in PLA instead of resin.",
+        "savings_usd": "1.14",
+        "tradeoffs": [
+          "Lower heat resistance and a less smooth finish."
+        ]
+      }
+    ],
+    "assumptions": [
+      "Component prices are curated planning estimates in JOD, not live quotes.",
+      "Shipping is excluded because the selected stores ship differently.",
+      "A 5% contingency is added to the component subtotal.",
+      "Print pricing uses the required PLA/PETG/ABS/Resin/TPU chart."
+    ]
+  },
+  "documentation": {
+    "files": [
+      {
+        "path": "README.md",
+        "title": "Project overview",
+        "content": "# Patio Scout\n\nAn ESP32 obstacle-avoiding rover with ultrasonic distance sensing, a scanning servo, and a fused 2S LiPo power tree.\n\n## Guided decisions\n\n| Decision | Answer |\n| --- | --- |\n| Identified robot | obstacle_avoider |\n| Stores | temu, mikroelectron, waslleh, amazon, aliexpress, ghanimjo |\n| Languages | python, cpp, c, verilog |\n| Controllers | ESP32 DevKit |\n| Custom PCB | no |\n| Platform | esp32 |\n| Print material | cheapest of the required chart |\n\n## What is included\n\n- Sourced component estimates, cheapest store first.\n- A validated electrical pinout and schematic exports.\n- Multi-file code scaffolds for every selected language.\n- A parametric chassis STL, weight estimate, and print price.\n- This documentation set.\n\n## Honest limits\n\n- Store prices are estimates, not live supplier quotes.\n- Generated code is a scaffold and must be verified on hardware.\n- The STL is a reference plate for price and weight, not a production enclosure.\n"
+      },
+      {
+        "path": "docs/sourcing.md",
+        "title": "Sourcing and BOM",
+        "content": "# Sourcing\n\nStores selected: **temu, mikroelectron, waslleh, amazon, aliexpress, ghanimjo**.\n\n| Part | Qty | Cheapest store | Price | Other offers |\n| --- | ---: | --- | ---: | --- |\n| ESP32 DevKit V1 | 1 | temu | 4.18 JOD | AliExpress 4.58 JOD, MikroElectron 6.47 JOD, Waslleh 6.94 JOD, Ghanim Jo 7.54 JOD, Amazon 8.35 JOD |\n| TB6612FNG dual motor driver | 1 | temu | 2.86 JOD | AliExpress 3.14 JOD, MikroElectron 4.43 JOD, Waslleh 4.75 JOD, Ghanim Jo 5.17 JOD, Amazon 5.72 JOD |\n| N20 gear motor (6 V) | 2 | temu | 2.30 JOD | AliExpress 2.53 JOD, MikroElectron 3.57 JOD, Waslleh 3.83 JOD, Ghanim Jo 4.16 JOD, Amazon 4.61 JOD |\n| HC-SR04 ultrasonic rangefinder | 1 | temu | 0.96 JOD | AliExpress 1.05 JOD, MikroElectron 1.49 JOD, Waslleh 1.60 JOD, Ghanim Jo 1.74 JOD, Amazon 1.92 JOD |\n| SG90 micro servo | 1 | temu | 1.48 JOD | AliExpress 1.62 JOD, MikroElectron 2.29 JOD, Waslleh 2.46 JOD, Ghanim Jo 2.67 JOD, Amazon 2.96 JOD |\n| 2S LiPo battery (7.4 V, 2200 mAh) | 1 | temu | 7.75 JOD | AliExpress 8.50 JOD, MikroElectron 12.01 JOD, Waslleh 12.88 JOD, Ghanim Jo 14.01 JOD, Amazon 15.51 JOD |\n| 5 V 3 A buck converter | 1 | temu | 1.86 JOD | AliExpress 2.05 JOD, MikroElectron 2.89 JOD, Waslleh 3.10 JOD, Ghanim Jo 3.37 JOD, Amazon 3.73 JOD |\n\nEstimated component subtotal: **23.69 JOD**.\n\n> Store prices are curated estimates sorted cheapest first. Confirm stock and price before ordering.\n"
+      },
+      {
+        "path": "docs/wiring.md",
+        "title": "Wiring",
+        "content": "# Wiring and electrical plan\n\n- Nodes: 8\n- Connections: 26\n- Nets: 16\n- Validation findings: 3\n- Peak current: 2330 mA\n\n\n| Ref | Part | Pin | Net | Destinations |\n| --- | --- | --- | --- | --- |\n| U1 | ESP32 DevKit V1 | VIN | +5V | VR1.OUT+ |\n| U1 | ESP32 DevKit V1 | GND | GND | BT1.NEG |\n| U1 | ESP32 DevKit V1 | GPIO4 | MOTOR_1_PWM | U2.PWMA |\n| U1 | ESP32 DevKit V1 | GPIO5 | MOTOR_1_DIR1 | U2.AIN1 |\n| U1 | ESP32 DevKit V1 | GPIO13 | MOTOR_1_DIR2 | U2.AIN2 |\n| U1 | ESP32 DevKit V1 | GPIO14 | MOTOR_2_PWM | U2.PWMB |\n| U1 | ESP32 DevKit V1 | GPIO15 | MOTOR_2_DIR1 | U2.BIN1 |\n| U1 | ESP32 DevKit V1 | GPIO16 | MOTOR_2_DIR2 | U2.BIN2 |\n| U1 | ESP32 DevKit V1 | GPIO17 | ULTRASONIC_TRIG | S1.TRIG |\n| U1 | ESP32 DevKit V1 | GPIO18 | ULTRASONIC_ECHO | S1.ECHO |\n| U1 | ESP32 DevKit V1 | GPIO19 | SERVO_1_SIG | M3.SIG |\n| BT1 | 2S LiPo battery (7.4 V, 2200 mAh) | POS | VBAT | VR1.IN+, U2.VM |\n| BT1 | 2S LiPo battery (7.4 V, 2200 mAh) | NEG | GND | U1.GND, VR1.IN-, VR1.OUT-, U2.GND, M3.GND, S1.GND |\n| VR1 | 5 V 3 A buck converter | IN+ | VBAT | BT1.POS |\n| VR1 | 5 V 3 A buck converter | IN- | GND | BT1.NEG |\n| VR1 | 5 V 3 A buck converter | OUT+ | +5V | U1.VIN, U2.VCC, U2.STBY, S1.VCC, M3.VCC |\n| VR1 | 5 V 3 A buck converter | OUT- | GND | BT1.NEG |\n| U2 | TB6612FNG dual motor driver | VM | VBAT | BT1.POS |\n| U2 | TB6612FNG dual motor driver | VCC | +5V | VR1.OUT+ |\n| U2 | TB6612FNG dual motor driver | GND | GND | BT1.NEG |\n| U2 | TB6612FNG dual motor driver | STBY | +5V | VR1.OUT+ |\n| U2 | TB6612FNG dual motor driver | AIN1 | MOTOR_1_DIR1 | U1.GPIO5 |\n| U2 | TB6612FNG dual motor driver | AIN2 | MOTOR_1_DIR2 | U1.GPIO13 |\n| U2 | TB6612FNG dual motor driver | PWMA | MOTOR_1_PWM | U1.GPIO4 |\n| U2 | TB6612FNG dual motor driver | BIN1 | MOTOR_2_DIR1 | U1.GPIO15 |\n| U2 | TB6612FNG dual motor driver | BIN2 | MOTOR_2_DIR2 | U1.GPIO16 |\n| U2 | TB6612FNG dual motor driver | PWMB | MOTOR_2_PWM | U1.GPIO14 |\n| U2 | TB6612FNG dual motor driver | AO1 | MOTOR_1_A | M1.M+ |\n| U2 | TB6612FNG dual motor driver | AO2 | MOTOR_1_B | M1.M- |\n| U2 | TB6612FNG dual motor driver | BO1 | MOTOR_2_A | M2.M+ |\n| U2 | TB6612FNG dual motor driver | BO2 | MOTOR_2_B | M2.M- |\n| M3 | SG90 micro servo | VCC | +5V | VR1.OUT+ |\n| M3 | SG90 micro servo | GND | GND | BT1.NEG |\n| M3 | SG90 micro servo | SIG | SERVO_1_SIG | U1.GPIO19 |\n| M1 | N20 gear motor (6 V) | M+ | MOTOR_1_A | U2.AO1 |\n| M1 | N20 gear motor (6 V) | M- | MOTOR_1_B | U2.AO2 |\n| M2 | N20 gear motor (6 V) | M+ | MOTOR_2_A | U2.BO1 |\n| M2 | N20 gear motor (6 V) | M- | MOTOR_2_B | U2.BO2 |\n| S1 | HC-SR04 ultrasonic rangefinder | VCC | +5V | VR1.OUT+ |\n| S1 | HC-SR04 ultrasonic rangefinder | TRIG | ULTRASONIC_TRIG | U1.GPIO17 |\n| S1 | HC-SR04 ultrasonic rangefinder | ECHO | ULTRASONIC_ECHO | U1.GPIO18 |\n| S1 | HC-SR04 ultrasonic rangefinder | GND | GND | BT1.NEG |\n\n- **WARNING** `motor_overvoltage`: N20 gear motor (6 V) (M1) is rated to 6 V but is connected to 7.4 V.\n- **WARNING** `motor_overvoltage`: N20 gear motor (6 V) (M2) is rated to 6 V but is connected to 7.4 V.\n- **WARNING** `logic_level_mismatch`: HC-SR04 ultrasonic rangefinder (S1) can output 5 V into a 3.3 V controller input.\n"
+      },
+      {
+        "path": "docs/firmware.md",
+        "title": "Firmware",
+        "content": "# Firmware\n\nSelected languages: **python, cpp, c, verilog**.\n\n| Language | Framework | Files | Status |\n| --- | --- | ---: | --- |\n| Python | MicroPython | 4 | scaffold |\n| C++ (Arduino) | Arduino / PlatformIO | 4 | scaffold |\n| C (STM32 HAL) | STM32 HAL | 3 | scaffold |\n| Verilog | RTL | 3 | scaffold |\n\nEvery bundle is generated from the validated controller pin map. Complete the\nTODO blocks, compile, and verify each pin before applying power.\n"
+      },
+      {
+        "path": "docs/mechanical.md",
+        "title": "Mechanical and pricing",
+        "content": "# Mechanical and 3D print price\n\n- Model: `patio-scout-chassis.stl`\n- Dimensions: 160.0 x 110.0 x 5.0 mm\n- Volume: 88.000 cm³\n- Infill: 35%\n\n| Material | JOD/g | Base | Minimum | Weight | Total |\n| --- | ---: | ---: | ---: | ---: | ---: |\n| PLA (cheapest) | 0.070 | 0.500 | 1.000 | 43.65 g | 3.556 JOD |\n| PETG | 0.120 | 0.500 | 1.200 | 44.70 g | 5.864 JOD |\n| ABS | 0.120 | 0.500 | 1.000 | 36.61 g | 4.893 JOD |\n| Resin | 0.300 | 0.500 | 1.500 | 38.72 g | 12.116 JOD |\n| TPU | 0.200 | 2.000 | 1.200 | 42.59 g | 10.518 JOD |\n"
+      },
+      {
+        "path": "docs/safety.md",
+        "title": "Safety",
+        "content": "# Safety checklist\n\n- Keep the battery unplugged while wiring.\n- Check continuity and polarity before the first power-on.\n- Use a current-limited supply or the specified fuse.\n- Test motors with the wheels raised.\n- Keep a physical power disconnect within reach.\n- Do not run unattended until the robot has completed a supervised test.\n"
+      },
+      {
+        "path": "docs/decisions.md",
+        "title": "Decision log",
+        "content": "# Decision log\n\n- Robot identification: manual selection.\n- Shops: temu, mikroelectron, waslleh, amazon, aliexpress, ghanimjo.\n- Languages: python, cpp, c, verilog.\n- Controllers: ESP32 DevKit.\n- Custom PCB: no.\n- Budget: 150.00 JOD.\n"
+      },
+      {
+        "path": "docs/budget.md",
+        "title": "Budget",
+        "content": "# Budget\n\n- Components: 23.69 JOD\n- 3D print: 3.56 JOD\n- Total: 27.25 JOD\n- Budget status: within\n\n- Component prices are curated planning estimates in JOD, not live quotes.\n- Shipping is excluded because the selected stores ship differently.\n- A 5% contingency is added to the component subtotal.\n- Print pricing uses the required PLA/PETG/ABS/Resin/TPU chart."
+      }
+    ],
+    "summary": "Generated documentation covers sourcing, wiring, firmware, mechanical pricing, safety, and the guided decisions.",
+    "notes": [
+      "Docs are rebuilt from the latest successful agent artifacts."
+    ]
+  },
+  "missing": [],
+  "warnings": []
+}

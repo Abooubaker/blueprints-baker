@@ -2128,13 +2128,71 @@
             "electrical_notes": "3.3 V logic. Power VIN from a regulated 5 V rail; inputs are not 5 V tolerant."
           },
           "price_usd": "9.50",
-          "supplier": "Blueprints Baker curated library",
-          "supplier_url": null,
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Espressif+ESP32-DEVKITC-32D",
           "availability": "in_stock",
           "compatibility_notes": [
             "3.3 V logic. Power VIN from a regulated 5 V rail; inputs are not 5 V tolerant."
           ],
-          "score": 0.9
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "4.18",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Espressif+ESP32-DEVKITC-32D",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "4.58",
+              "product_url": "https://www.aliexpress.com/w/wholesale-esp32-devkit-v1.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "6.47",
+              "product_url": "https://mikroelectron.com/search?q=Espressif+ESP32-DEVKITC-32D",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "6.94",
+              "product_url": "https://waslleh.com/?s=Espressif+ESP32-DEVKITC-32D",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "7.54",
+              "product_url": "https://ghanimjo.com/?s=Espressif+ESP32-DEVKITC-32D",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "8.35",
+              "product_url": "https://www.amazon.com/s?k=Espressif+ESP32-DEVKITC-32D",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "4.18"
         },
         "alternatives": [],
         "rationale": "Runs the control loop and exposes the GPIO/PWM/I2C pins used below."
@@ -2179,13 +2237,71 @@
             "electrical_notes": "1.2 A continuous per channel; heatsink above 0.8 A. STBY must be pulled high."
           },
           "price_usd": "6.20",
-          "supplier": "Blueprints Baker curated library",
-          "supplier_url": null,
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Toshiba+TB6612FNG",
           "availability": "in_stock",
           "compatibility_notes": [
             "1.2 A continuous per channel; heatsink above 0.8 A. STBY must be pulled high."
           ],
-          "score": 0.9
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "2.86",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Toshiba+TB6612FNG",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "3.14",
+              "product_url": "https://www.aliexpress.com/w/wholesale-tb6612fng-dual-motor-driver.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "4.43",
+              "product_url": "https://mikroelectron.com/search?q=Toshiba+TB6612FNG",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "4.75",
+              "product_url": "https://waslleh.com/?s=Toshiba+TB6612FNG",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "5.17",
+              "product_url": "https://ghanimjo.com/?s=Toshiba+TB6612FNG",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "5.72",
+              "product_url": "https://www.amazon.com/s?k=Toshiba+TB6612FNG",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "2.86"
         },
         "alternatives": [],
         "rationale": "Provides the current gain and flyback protection a motor needs."
@@ -2217,13 +2333,71 @@
             "electrical_notes": "Stall current is much higher than the no-load rating. Never connect directly to a controller pin."
           },
           "price_usd": "5.40",
-          "supplier": "Blueprints Baker curated library",
-          "supplier_url": null,
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Generic+N20-6V-100RPM",
           "availability": "in_stock",
           "compatibility_notes": [
             "Stall current is much higher than the no-load rating. Never connect directly to a controller pin."
           ],
-          "score": 0.9
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "2.30",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Generic+N20-6V-100RPM",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "2.53",
+              "product_url": "https://www.aliexpress.com/w/wholesale-n20-gear-motor-%286-v%29.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "3.57",
+              "product_url": "https://mikroelectron.com/search?q=Generic+N20-6V-100RPM",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "3.83",
+              "product_url": "https://waslleh.com/?s=Generic+N20-6V-100RPM",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "4.16",
+              "product_url": "https://ghanimjo.com/?s=Generic+N20-6V-100RPM",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "4.61",
+              "product_url": "https://www.amazon.com/s?k=Generic+N20-6V-100RPM",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "2.30"
         },
         "alternatives": [],
         "rationale": "Selected for the wheeled drivetrain in this robot archetype."
@@ -2257,13 +2431,71 @@
             "electrical_notes": "ECHO is a 5 V output. Use a divider or level shifter with 3.3 V logic."
           },
           "price_usd": "2.30",
-          "supplier": "Blueprints Baker curated library",
-          "supplier_url": null,
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Generic+HC-SR04",
           "availability": "in_stock",
           "compatibility_notes": [
             "ECHO is a 5 V output. Use a divider or level shifter with 3.3 V logic."
           ],
-          "score": 0.9
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "0.96",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Generic+HC-SR04",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "1.05",
+              "product_url": "https://www.aliexpress.com/w/wholesale-hc-sr04-ultrasonic-rangefinder.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "1.49",
+              "product_url": "https://mikroelectron.com/search?q=Generic+HC-SR04",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "1.60",
+              "product_url": "https://waslleh.com/?s=Generic+HC-SR04",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "1.74",
+              "product_url": "https://ghanimjo.com/?s=Generic+HC-SR04",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "1.92",
+              "product_url": "https://www.amazon.com/s?k=Generic+HC-SR04",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "0.96"
         },
         "alternatives": [],
         "rationale": "Adds a forward obstacle/distance measurement."
@@ -2296,13 +2528,71 @@
             "electrical_notes": "Power servos from a separate 5 V rail, not the controller's regulator. Add a bulk capacitor."
           },
           "price_usd": "3.40",
-          "supplier": "Blueprints Baker curated library",
-          "supplier_url": null,
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=TowerPro+SG90",
           "availability": "in_stock",
           "compatibility_notes": [
             "Power servos from a separate 5 V rail, not the controller's regulator. Add a bulk capacitor."
           ],
-          "score": 0.9
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "1.48",
+              "product_url": "https://www.temu.com/search_result.html?search_key=TowerPro+SG90",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "1.62",
+              "product_url": "https://www.aliexpress.com/w/wholesale-sg90-micro-servo.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "2.29",
+              "product_url": "https://mikroelectron.com/search?q=TowerPro+SG90",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "2.46",
+              "product_url": "https://waslleh.com/?s=TowerPro+SG90",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "2.67",
+              "product_url": "https://ghanimjo.com/?s=TowerPro+SG90",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "2.96",
+              "product_url": "https://www.amazon.com/s?k=TowerPro+SG90",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "1.48"
         },
         "alternatives": [],
         "rationale": "Provides one positional degree of freedom."
@@ -2334,13 +2624,71 @@
             "electrical_notes": "Nominal 7.4 V, 8.4 V full charge. Use a fused XT30/JST connector and a low-voltage alarm."
           },
           "price_usd": "18.00",
-          "supplier": "Blueprints Baker curated library",
-          "supplier_url": null,
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Generic+2S-2200",
           "availability": "in_stock",
           "compatibility_notes": [
             "Nominal 7.4 V, 8.4 V full charge. Use a fused XT30/JST connector and a low-voltage alarm."
           ],
-          "score": 0.9
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "7.75",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Generic+2S-2200",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "8.50",
+              "product_url": "https://www.aliexpress.com/w/wholesale-2s-lipo-battery-%287.4-v%2C-2200-mah%29.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "12.01",
+              "product_url": "https://mikroelectron.com/search?q=Generic+2S-2200",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "12.88",
+              "product_url": "https://waslleh.com/?s=Generic+2S-2200",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "14.01",
+              "product_url": "https://ghanimjo.com/?s=Generic+2S-2200",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "15.51",
+              "product_url": "https://www.amazon.com/s?k=Generic+2S-2200",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "7.75"
         },
         "alternatives": [],
         "rationale": "Supplies the pack voltage; the engine validates it against every load."
@@ -2374,13 +2722,71 @@
             "electrical_notes": "Set the output to 5.0 V before connecting logic. Verify with a meter under load."
           },
           "price_usd": "4.20",
-          "supplier": "Blueprints Baker curated library",
-          "supplier_url": null,
+          "supplier": "Blueprints Baker curated estimate catalog",
+          "supplier_url": "https://www.temu.com/search_result.html?search_key=Generic+MP1584EN-5V",
           "availability": "in_stock",
           "compatibility_notes": [
             "Set the output to 5.0 V before connecting logic. Verify with a meter under load."
           ],
-          "score": 0.9
+          "score": 0.9,
+          "offers": [
+            {
+              "store": "temu",
+              "label": "Temu",
+              "price_jod": "1.86",
+              "product_url": "https://www.temu.com/search_result.html?search_key=Generic+MP1584EN-5V",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "aliexpress",
+              "label": "AliExpress",
+              "price_jod": "2.05",
+              "product_url": "https://www.aliexpress.com/w/wholesale-5-v-3-a-buck-converter.html",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "mikroelectron",
+              "label": "MikroElectron",
+              "price_jod": "2.89",
+              "product_url": "https://mikroelectron.com/search?q=Generic+MP1584EN-5V",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "waslleh",
+              "label": "Waslleh",
+              "price_jod": "3.10",
+              "product_url": "https://waslleh.com/?s=Generic+MP1584EN-5V",
+              "availability": "low_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "ghanimjo",
+              "label": "Ghanim Jo",
+              "price_jod": "3.37",
+              "product_url": "https://ghanimjo.com/?s=Generic+MP1584EN-5V",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            },
+            {
+              "store": "amazon",
+              "label": "Amazon",
+              "price_jod": "3.73",
+              "product_url": "https://www.amazon.com/s?k=Generic+MP1584EN-5V",
+              "availability": "in_stock",
+              "is_estimate": true,
+              "note": "Curated estimate; confirm live price and stock before ordering."
+            }
+          ],
+          "cheapest_store": "temu",
+          "cheapest_price_jod": "1.86"
         },
         "alternatives": [],
         "rationale": "Creates a stable 5 V rail for logic and servos."
@@ -2390,9 +2796,19 @@
     "compatibility_notes": [
       "Controller: ESP32 DevKit V1",
       "All selected parts are in the curated electrical library, so pin-level wiring can be generated.",
-      "Prices are planning estimates in USD, not live supplier quotes."
+      "Store prices are deterministic planning estimates in JOD, sorted cheapest first. Confirm live price and stock before ordering."
     ],
     "total_estimated_usd": "54.40",
+    "total_estimated_jod": "23.69",
+    "selected_shops": [
+      "temu",
+      "mikroelectron",
+      "waslleh",
+      "amazon",
+      "aliexpress",
+      "ghanimjo"
+    ],
+    "currency": "JOD",
     "sources": [
       "Blueprints Baker curated component library v1.0"
     ]

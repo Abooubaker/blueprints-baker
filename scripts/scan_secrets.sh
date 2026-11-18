@@ -30,10 +30,13 @@ for pattern in "${patterns[@]}"; do
 done
 
 # Database URLs only matter when they point at a non-loopback host. The dev
-# compose credentials (blueprints-baker:blueprints-baker@localhost) are intentionally public.
+# compose credentials (blueprints-baker:blueprints-baker@localhost) are intentionally public,
+# as are documentation placeholders USER:PASSWORD@HOST and *.example.com test fixtures.
 db_pattern='postgresql(\+asyncpg)?://[^[:space:]]+:[^[:space:]@]+@'
 if matches=$(git grep -I -n -E -- "$db_pattern" -- . 2>/dev/null \
-  | grep -vE '@(localhost|127\.0\.0\.1|db|postgres)([:/]|$)'); then
+  | grep -vE '@(localhost|127\.0\.0\.1|db|postgres|host\.docker\.internal)([:/]|$)' \
+  | grep -vE '://USER:PASSWORD@' \
+  | grep -vE '@[^@[:space:]]*\.example\.(com|net|org)([:/]|$)'); then
   echo "Potential secret matched /$db_pattern/:" >&2
   echo "$matches" >&2
   status=1

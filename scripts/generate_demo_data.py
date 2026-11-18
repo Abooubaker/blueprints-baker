@@ -1,9 +1,10 @@
 """Generate the static GitHub Pages demo fixtures.
 
 The demo is built from the same deterministic engine as the API, so the wiring
-diagram, exports, validation results, and BOM shown on GitHub Pages are real
-engine output rather than hand-written mock data. The generated files contain no
-credentials and no live API responses.
+diagram, exports, validation results, BOM, code bundles, 3D pricing, and
+documentation shown on GitHub Pages are real engine output rather than
+hand-written mock data. The generated files contain no credentials and no live
+API responses.
 
 Run from the repository root:
 
@@ -12,6 +13,7 @@ Run from the repository root:
 
 from __future__ import annotations
 
+import asyncio
 import json
 import sys
 from datetime import datetime
@@ -26,23 +28,28 @@ WEB_ROOT = ROOT / "apps" / "web"
 sys.path.insert(0, str(API_ROOT))
 
 from app.ai.contracts import (  # noqa: E402
-    BillOfMaterialsItem,
-    ComponentCandidate,
-    ComponentResearchOutput,
-    ElectricalPlan,
+    AgentRequest,
+    BuildPreferences,
+    ProjectContext,
     RobotSpecificationDraft,
+    SharedProjectContext,
 )
-from app.electrical.engine import build_electrical_plan  # noqa: E402
+from app.ai.documentation import build_documentation  # noqa: E402
+from app.ai.orchestrator import (  # noqa: E402
+    PIPELINE_ORDER,
+    AgentOrchestrator,
+    build_agent_registry,
+    get_agent_descriptors,
+)
+from app.ai.provider import MockProvider  # noqa: E402
 from app.electrical.exporters import EXPORT_SPECS, export_artifact  # noqa: E402
-from app.electrical.library import (  # noqa: E402
-    COMPONENT_LIBRARY,
-    build_reference_bom,
-)
 from app.models.enums import (  # noqa: E402
+    CodeLanguage,
     Difficulty,
     DriveType,
     ProjectStatus,
     RobotType,
+    StoreName,
     TargetPlatform,
 )
 
@@ -88,7 +95,7 @@ def _specification() -> RobotSpecificationDraft:
         drive_type=DriveType.DIFFERENTIAL,
         environment="indoor",
         power_source="2S LiPo (7.4 V) with a regulated 5 V rail",
-        payload_capacity_kg=0.5,
+        payload_capacity_kg=Decimal("0.5"),
         requirements=[
             "Detect obstacles before contact",
             "Turn or stop without losing control",
@@ -107,152 +114,114 @@ def _specification() -> RobotSpecificationDraft:
     )
 
 
-def _research() -> ComponentResearchOutput:
-    parts, unresolved = build_reference_bom(
+def _preferences() -> BuildPreferences:
+    return BuildPreferences(
+        description=(
+            "An ESP32 obstacle-avoiding rover with ultrasonic distance sensing, "
+            "a scanning servo, and a fused 2S LiPo power tree."
+        ),
+        robot_name="Patio Scout",
         robot_type=RobotType.OBSTACLE_AVOIDER,
-        target_platform=TargetPlatform.ESP32.value,
-        difficulty=Difficulty.INTERMEDIATE.value,
-        drive_type=DriveType.DIFFERENTIAL.value,
-        budget_max_usd=None,
-    )
-    items: list[BillOfMaterialsItem] = []
-    total = 0
-    for part in parts:
-        profile = part.profile
-        total += int(profile.price_usd * 100) * part.quantity
-        items.append(
-            BillOfMaterialsItem(
-                role=part.role,
-                category=profile.category.value,
-                quantity=part.quantity,
-                required=True,
-                selection=ComponentCandidate(
-                    name=profile.name,
-                    manufacturer=profile.manufacturer,
-                    model_number=profile.model_number,
-                    category=profile.category.value,
-                    specs={
-                        "library_key": profile.key,
-                        "logic_voltage_v": profile.logic_voltage_v,
-                        "supply_min_v": profile.supply_min_v,
-                        "supply_max_v": profile.supply_max_v,
-                        "typical_current_ma": profile.current_ma_typical,
-                        "peak_current_ma": profile.current_ma_peak,
-                        "interfaces": list(profile.interfaces),
-                        "pins": [pin.name for pin in profile.pins],
-                        "electrical_notes": profile.notes,
-                    },
-                    price_usd=profile.price_usd,
-                    supplier="Blueprints Baker curated library",
-                    supplier_url=None,
-                    availability="in_stock",
-                    compatibility_notes=[profile.notes] if profile.notes else [],
-                    score=0.9,
-                ),
-                rationale=part.rationale,
-            )
-        )
-    return ComponentResearchOutput(
-        bill_of_materials=items,
-        unresolved_requirements=unresolved,
-        compatibility_notes=[
-            f"Controller: {COMPONENT_LIBRARY['esp32_devkit'].name}",
-            "All selected parts are in the curated electrical library, so pin-level "
-            "wiring can be generated.",
-            "Prices are planning estimates in USD, not live supplier quotes.",
+        difficulty=Difficulty.INTERMEDIATE,
+        shops=[
+            StoreName.TEMU,
+            StoreName.MIKROELECTRON,
+            StoreName.WASLLEH,
+            StoreName.AMAZON,
+            StoreName.ALIEXPRESS,
+            StoreName.GHANIMJO,
         ],
-        total_estimated_usd=f"{total // 100}.{total % 100:02d}",
-        sources=["Blueprints Baker curated component library v1.0"],
+        languages=[
+            CodeLanguage.PYTHON,
+            CodeLanguage.CPP,
+            CodeLanguage.C,
+            CodeLanguage.VERILOG,
+        ],
+        controllers=["ESP32 DevKit"],
+        controller_notes="Using an ESP32 DevKit already on the bench.",
+        custom_pcb=False,
+        confirmed=True,
+        budget_max_usd=Decimal("150"),
+        identification_rationale=(
+            "Matched obstacle, ultrasonic, and rover keywords in the description."
+        ),
+        identification_confidence=0.86,
     )
 
 
-def _agent_descriptor(
-    name: str,
-    display_name: str,
-    description: str,
-    status: str,
-    depends_on: list[str],
-    input_schema: str,
-    output_schema: str,
-    milestone: str,
-    owner_area: str,
-) -> dict[str, Any]:
-    return {
-        "name": name,
-        "display_name": display_name,
-        "description": description,
-        "status": status,
-        "depends_on": depends_on,
-        "input_schema": input_schema,
-        "output_schema": output_schema,
-        "milestone": milestone,
-        "owner_area": owner_area,
+def _agent_descriptors(provider: MockProvider) -> list[dict[str, Any]]:
+    return [descriptor.model_dump(mode="json") for descriptor in get_agent_descriptors(provider)]
+
+
+async def _run_pipeline(
+    specification: RobotSpecificationDraft, preferences: BuildPreferences
+) -> tuple[Any, Any, Any, Any, Any, Any]:
+    provider = MockProvider("deterministic-v1")
+    orchestrator = AgentOrchestrator(build_agent_registry(provider))
+    context = ProjectContext(
+        project_id=PROJECT_ID,
+        project_name=preferences.robot_name,
+        robot_type=preferences.robot_type,
+        description=preferences.description,
+        budget={"max_usd": preferences.budget_max_usd, "currency": "USD"},
+        shared=SharedProjectContext(specification=specification),
+    )
+    parameters = {
+        "preferred_suppliers": [store.value for store in preferences.shops],
+        "languages": [language.value for language in preferences.languages],
+        "controllers": preferences.controllers,
+        "controller_notes": preferences.controller_notes,
+        "custom_pcb": preferences.custom_pcb,
+        "skill_level": preferences.difficulty.value,
     }
+    result = await orchestrator.run(context, parameters=parameters)
+    shared = result.context
+    return (
+        shared.specification,
+        shared.component_research,
+        shared.electrical,
+        shared.programming,
+        shared.mechanical,
+        shared.cost,
+    )
 
 
-def _agent_runs() -> list[dict[str, Any]]:
-    definitions = [
-        (
-            "robot_planner",
-            "succeeded",
-            "Robot Planner completed.",
-            None,
-            24,
-        ),
-        (
-            "component_research",
-            "succeeded",
-            "Component Research completed.",
-            None,
-            31,
-        ),
-        (
-            "electrical_engineering",
-            "succeeded",
-            "Electrical Engineering completed.",
-            None,
-            46,
-        ),
-        (
-            "programming",
-            "not_implemented",
-            "Programming is a foundation placeholder.",
-            "Programming is not implemented yet. It will be delivered in milestone M6.",
-            2,
-        ),
-        (
-            "mechanical_design",
-            "not_implemented",
-            "Mechanical Design is a foundation placeholder.",
-            "Mechanical Design is not implemented yet. It will be delivered in milestone M7.",
-            2,
-        ),
-        (
-            "cost_estimation",
-            "not_implemented",
-            "Cost Estimation is a foundation placeholder.",
-            "Cost Estimation is not implemented yet. It will be delivered in milestone M8.",
-            2,
-        ),
-    ]
+def _agent_runs(shared: tuple[Any, ...]) -> list[dict[str, Any]]:
+    latencies = {
+        "robot_planner": 24,
+        "component_research": 31,
+        "electrical_engineering": 46,
+        "programming": 52,
+        "mechanical_design": 39,
+        "cost_estimation": 18,
+    }
+    payloads = {
+        "robot_planner": shared[0],
+        "component_research": shared[1],
+        "electrical_engineering": shared[2],
+        "programming": shared[3],
+        "mechanical_design": shared[4],
+        "cost_estimation": shared[5],
+    }
     runs: list[dict[str, Any]] = []
-    for agent, status, summary, error, latency in definitions:
+    for agent in (name.value for name in PIPELINE_ORDER):
+        payload = payloads.get(agent)
         runs.append(
             {
                 "id": str(RUN_IDS[agent]),
                 "project_id": str(PROJECT_ID),
                 "agent": agent,
-                "status": status,
+                "status": "succeeded",
                 "provider": "mock",
                 "model": "deterministic-v1",
-                "summary": summary,
-                "output_payload": None,
-                "error_message": error,
+                "summary": f"{agent.replace('_', ' ').title()} completed.",
+                "output_payload": payload.model_dump(mode="json") if payload else None,
+                "error_message": None,
                 "prompt_tokens": 0,
                 "completion_tokens": 0,
-                "latency_ms": latency,
+                "latency_ms": latencies[agent],
                 "started_at": GENERATED_AT,
-                "completed_at": UPDATED_AT if status == "succeeded" else GENERATED_AT,
+                "completed_at": UPDATED_AT,
                 "created_at": GENERATED_AT,
             }
         )
@@ -260,97 +229,43 @@ def _agent_runs() -> list[dict[str, Any]]:
 
 
 def main() -> None:
-    specification = _specification()
-    research = _research()
-    plan = build_electrical_plan(specification, research)
-    runs = _agent_runs()
+    preferences = _preferences()
+    specification, research, plan, programming, mechanical, cost = asyncio.run(
+        _run_pipeline(_specification(), preferences)
+    )
+    assert research is not None and plan is not None
+    assert programming is not None and mechanical is not None and cost is not None
 
+    runs = _agent_runs((specification, research, plan, programming, mechanical, cost))
     catalog = {
         "provider": "mock",
         "model": "deterministic-v1",
-        "agents": [
-            _agent_descriptor(
-                "robot_planner",
-                "Robot Planner",
-                "Turns a plain-language robot idea into a structured specification.",
-                "available",
-                [],
-                "PlannerInput",
-                "RobotSpecificationDraft",
-                "M3",
-                "Robotics / Systems Engineering",
-            ),
-            _agent_descriptor(
-                "component_research",
-                "Component Research",
-                "Selects a compatible bill of materials for the robot archetype.",
-                "available",
-                ["robot_planner"],
-                "ComponentResearchInput",
-                "ComponentResearchOutput",
-                "M4",
-                "Robotics / Hardware Engineering",
-            ),
-            _agent_descriptor(
-                "electrical_engineering",
-                "Electrical Engineering",
-                "Creates a full pinout, nets, power budgets, and wiring steps, then validates the wiring.",
-                "available",
-                ["robot_planner", "component_research"],
-                "ElectricalInput",
-                "ElectricalPlan",
-                "M5",
-                "Robotics / Electrical Engineering",
-            ),
-            _agent_descriptor(
-                "programming",
-                "Programming",
-                "Generates firmware for the selected hardware.",
-                "placeholder",
-                ["robot_planner", "component_research", "electrical_engineering"],
-                "ProgrammingInput",
-                "ProgrammingOutput",
-                "M6",
-                "Robotics / Software Engineering",
-            ),
-            _agent_descriptor(
-                "mechanical_design",
-                "Mechanical Design",
-                "Plans the chassis, mounts, and assembly order.",
-                "placeholder",
-                ["robot_planner", "component_research"],
-                "MechanicalInput",
-                "MechanicalOutput",
-                "M7",
-                "Robotics / Mechanical Engineering",
-            ),
-            _agent_descriptor(
-                "cost_estimation",
-                "Cost Estimation",
-                "Builds the line-item budget and alternatives.",
-                "placeholder",
-                ["robot_planner", "component_research"],
-                "CostInput",
-                "CostEstimate",
-                "M8",
-                "Robotics / Product Engineering",
-            ),
-        ],
+        "agents": _agent_descriptors(MockProvider("deterministic-v1")),
     }
+
+    documentation = build_documentation(
+        project_name=preferences.robot_name,
+        description=preferences.description,
+        preferences=preferences,
+        identification=None,
+        specification=specification,
+        research=research,
+        electrical=plan,
+        programming=programming,
+        mechanical=mechanical,
+        cost=cost,
+    )
 
     project = {
         "id": str(PROJECT_ID),
-        "name": "Patio Scout",
+        "name": preferences.robot_name,
         "slug": "patio-scout",
-        "description": (
-            "An ESP32 obstacle-avoiding rover with ultrasonic distance sensing, "
-            "a scanning servo, and a fused 2S LiPo power tree."
-        ),
-        "robot_type": "obstacle_avoider",
-        "status": ProjectStatus.PLANNING.value,
-        "difficulty": "intermediate",
+        "description": preferences.description,
+        "robot_type": preferences.robot_type.value,
+        "status": ProjectStatus.READY.value,
+        "difficulty": preferences.difficulty.value,
         "budget_min_usd": 80,
-        "budget_max_usd": 150,
+        "budget_max_usd": float(preferences.budget_max_usd or 150),
         "owner_id": None,
         "specification": {
             "id": "22222222-2222-4222-8222-222222222222",
@@ -361,7 +276,7 @@ def main() -> None:
             "target_platform": specification.target_platform.value,
             "drive_type": specification.drive_type.value,
             "power_source": specification.power_source,
-            "payload_capacity_kg": specification.payload_capacity_kg,
+            "payload_capacity_kg": float(specification.payload_capacity_kg or 0),
             "dimensions": specification.dimensions.model_dump(),
             "requirements": specification.requirements,
             "constraints": specification.constraints,
@@ -395,17 +310,44 @@ def main() -> None:
         "export_formats": export_formats,
     }
 
+    build = {
+        "project_id": str(PROJECT_ID),
+        "project_name": project["name"],
+        "status": "ready",
+        "generated_at": UPDATED_AT,
+        "preferences": preferences.model_dump(mode="json"),
+        "identification": {
+            "proposed_name": project["name"],
+            "robot_type": preferences.robot_type.value,
+            "confidence": preferences.identification_confidence,
+            "rationale": preferences.identification_rationale,
+            "suggested_platform": TargetPlatform.ESP32.value,
+            "suggested_difficulty": preferences.difficulty.value,
+            "key_requirements": specification.requirements,
+            "needs_confirmation": False,
+        },
+        "specification": specification.model_dump(mode="json"),
+        "research": research.model_dump(mode="json"),
+        "electrical": plan.model_dump(mode="json"),
+        "programming": programming.model_dump(mode="json"),
+        "mechanical": mechanical.model_dump(mode="json"),
+        "cost": cost.model_dump(mode="json"),
+        "documentation": documentation.model_dump(mode="json"),
+        "missing": [],
+        "warnings": [],
+    }
+
     orchestration = {
         "project_id": str(PROJECT_ID),
-        "status": "not_implemented",
+        "status": "succeeded",
         "runs": runs,
         "shared_context": {
             "specification": specification.model_dump(mode="json"),
             "component_research": research.model_dump(mode="json"),
             "electrical": plan.model_dump(mode="json"),
-            "programming": None,
-            "mechanical": None,
-            "cost": None,
+            "programming": programming.model_dump(mode="json"),
+            "mechanical": mechanical.model_dump(mode="json"),
+            "cost": cost.model_dump(mode="json"),
             "artifacts": {},
             "notes": [],
         },
@@ -417,6 +359,7 @@ def main() -> None:
     _write_json(WEB_ROOT / "src" / "lib" / "demo" / "agent-runs.json", runs)
     _write_json(WEB_ROOT / "src" / "lib" / "demo" / "agent-catalog.json", catalog)
     _write_json(WEB_ROOT / "src" / "lib" / "demo" / "electrical.json", artifact)
+    _write_json(WEB_ROOT / "src" / "lib" / "demo" / "build.json", build)
     _write_json(WEB_ROOT / "src" / "lib" / "demo" / "orchestration.json", orchestration)
 
     export_dir = WEB_ROOT / "public" / "demo" / "exports"
@@ -440,6 +383,10 @@ def main() -> None:
         "connections": len(plan.connections),
         "nets": len({connection.net for connection in plan.connections}),
         "issues": [issue.code for issue in plan.issues],
+        "offers": len(research.bill_of_materials[0].selection.offers),
+        "languages": [bundle.language.value for bundle in programming.bundles],
+        "print_quotes": len(mechanical.material_quotes),
+        "docs": [doc.path for doc in documentation.files],
         "exports": sorted(spec.filename for spec in EXPORT_SPECS.values()),
         "generated_at": UPDATED_AT,
     }

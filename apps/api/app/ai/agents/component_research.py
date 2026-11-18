@@ -23,7 +23,8 @@ from app.electrical.library import (
     COMPONENT_LIBRARY,
     build_reference_bom,
 )
-from app.models.enums import AgentName
+from app.models.enums import AgentName, StoreName
+from app.pricing import STORE_ORDER, build_store_offers
 
 
 def _candidate_specs(profile_key: str) -> dict[str, Any]:
@@ -39,6 +40,20 @@ def _candidate_specs(profile_key: str) -> dict[str, Any]:
         "pins": [pin.name for pin in profile.pins],
         "electrical_notes": profile.notes,
     }
+
+
+def _selected_shops(raw: object) -> list[StoreName]:
+    if not isinstance(raw, list):
+        return list(STORE_ORDER)
+    shops: list[StoreName] = []
+    for value in raw:
+        try:
+            store = StoreName(str(value))
+        except ValueError:
+            continue
+        if store not in shops:
+            shops.append(store)
+    return shops or list(STORE_ORDER)
 
 
 class ComponentResearchAgent(BaseAgent):
@@ -72,8 +87,12 @@ class ComponentResearchAgent(BaseAgent):
 
         items: list[BillOfMaterialsItem] = []
         total = Decimal("0")
+        total_jod = Decimal("0")
+        shops = _selected_shops(request.parameters.get("preferred_suppliers"))
         for part in parts:
             profile = part.profile
+            offers = build_store_offers(profile, shops)
+            cheapest = offers[0] if offers else None
             candidate = ComponentCandidate(
                 name=profile.name,
                 manufacturer=profile.manufacturer,
@@ -81,13 +100,18 @@ class ComponentResearchAgent(BaseAgent):
                 category=profile.category.value,
                 specs=_candidate_specs(profile.key),
                 price_usd=profile.price_usd,
-                supplier="Blueprints Baker curated library",
-                supplier_url=None,
-                availability="in_stock",
+                supplier="Blueprints Baker curated estimate catalog",
+                supplier_url=cheapest.product_url if cheapest else None,
+                availability=cheapest.availability if cheapest else "unknown",
                 compatibility_notes=[profile.notes] if profile.notes else [],
                 score=0.9,
+                offers=offers,
+                cheapest_store=cheapest.store if cheapest else None,
+                cheapest_price_jod=cheapest.price_jod if cheapest else None,
             )
             total += profile.price_usd * part.quantity
+            if cheapest is not None:
+                total_jod += cheapest.price_jod * part.quantity
             items.append(
                 BillOfMaterialsItem(
                     role=part.role,
@@ -107,7 +131,8 @@ class ComponentResearchAgent(BaseAgent):
             f"Controller: {controller_name}",
             "All selected parts are in the curated electrical library, so pin-level "
             "wiring can be generated.",
-            "Prices are planning estimates in USD, not live supplier quotes.",
+            "Store prices are deterministic planning estimates in JOD, sorted cheapest "
+            "first. Confirm live price and stock before ordering.",
         ]
         if specification.target_platform.value == "undecided":
             compatibility_notes.append(
@@ -120,6 +145,9 @@ class ComponentResearchAgent(BaseAgent):
             unresolved_requirements=unresolved,
             compatibility_notes=compatibility_notes,
             total_estimated_usd=total,
+            total_estimated_jod=total_jod,
+            selected_shops=shops,
+            currency="JOD",
             sources=["Blueprints Baker curated component library v1.0"],
         )
 

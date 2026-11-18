@@ -29,6 +29,74 @@
       "title": "CodeFile",
       "type": "object"
     },
+    "CodeLanguage": {
+      "description": "Programming languages the generated bundle can scaffold.",
+      "enum": [
+        "python",
+        "cpp",
+        "c",
+        "stm32_assembly",
+        "verilog",
+        "vhdl",
+        "other"
+      ],
+      "title": "CodeLanguage",
+      "type": "string"
+    },
+    "LanguageBundle": {
+      "additionalProperties": false,
+      "description": "All files generated for one selected programming language.",
+      "properties": {
+        "display_name": {
+          "title": "Display Name",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/CodeFile"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "framework": {
+          "default": "",
+          "title": "Framework",
+          "type": "string"
+        },
+        "language": {
+          "$ref": "#/$defs/CodeLanguage"
+        },
+        "libraries": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Libraries",
+          "type": "array"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "status": {
+          "default": "scaffold",
+          "enum": [
+            "complete",
+            "scaffold"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "language",
+        "display_name"
+      ],
+      "title": "LanguageBundle",
+      "type": "object"
+    },
     "TargetPlatform": {
       "enum": [
         "arduino",
@@ -44,6 +112,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
+    "bundles": {
+      "items": {
+        "$ref": "#/$defs/LanguageBundle"
+      },
+      "title": "Bundles",
+      "type": "array"
+    },
     "files": {
       "items": {
         "$ref": "#/$defs/CodeFile"

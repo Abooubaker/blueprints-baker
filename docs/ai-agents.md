@@ -4,14 +4,18 @@ Blueprints Baker decomposes robot design into six specialized agents. Each agent
 works against a typed contract. The orchestrator is deterministic: it resolves dependencies, runs
 agents in a fixed order, validates outputs before accepting them, and records every execution.
 
-**Current state:** three agents are implemented and deterministic — `robot_planner`,
-`component_research`, and `electrical_engineering` — and the wiring system exports
-CSV/SVG/Markdown/JSON plus a KiCad netlist. They do not call a model: the curated component
-library and rules engine produce the same result for the same input, which makes every finding
-reproducible and testable offline. `programming`, `mechanical_design`, and `cost_estimation`
-remain placeholders returning `status: "not_implemented"` (or `skipped` if a dependency failed).
-The orchestration, contracts, API, and persistence are fully implemented and tested, so each
-remaining agent can be filled in without changing the pipeline.
+**Current state:** all six agents are implemented and deterministic — `robot_planner`,
+`component_research`, `electrical_engineering`, `programming`, `mechanical_design`, and
+`cost_estimation`. They do not call a model: the curated component library, pricing catalog, and
+rules engine produce the same result for the same input, which makes every finding reproducible
+and testable offline. The electrical engine exports CSV/SVG/Markdown/JSON, a KiCad netlist, and a
+KiCad schematic. Programming emits multi-file scaffolds for the requested languages, mechanical
+emits a parametric STL plus the JOD print-material chart, cost rolls the BOM and print into a
+budget, and documentation renders the whole build as Markdown.
+
+The orchestration, contracts, API, and persistence are fully implemented and tested. Nothing is
+model-backed yet: `AI_PROVIDER=mock` remains the only provider. Replacing a deterministic agent
+with a model-backed implementation does not require changing the pipeline or the contracts.
 
 ## Why this shape
 
@@ -55,9 +59,10 @@ flowchart TD
 | `mechanical_design` | planner, components | `mechanical` | M7 | Mechanical Design |
 | `cost_estimation` | planner, components | `cost` | M8 | AI Engineering / Integrations |
 
-In this release the first three rows run deterministically (no model). The milestone column
-records the roadmap milestone that originally scoped each capability; M3–M5 still own the
-model-backed and supplier-integrated versions.
+In this release every row runs deterministically (no model). The milestone column records the
+roadmap milestone that originally scoped each capability; the model-backed and supplier-integrated
+versions still belong to those milestones. `documentation` is not an orchestrator agent: the build
+service renders it from the artifacts above.
 
 Pipeline order is fixed (`PIPELINE_ORDER`), even when a request selects a subset. Requested agents
 are expanded with transitive dependencies. For example, requesting `programming` runs the planner,
@@ -167,12 +172,14 @@ The service layer converts the project aggregate into `ProjectContext`, runs the
 persists one `AgentRun` per result. Parameters are stored in `input_payload`; outputs are stored only
 when they passed validation.
 
-## Implementing a placeholder agent
+## Implementing or replacing an agent
 
-Deterministic agents subclass `BaseAgent` and set `status = "available"`; placeholder agents
-keep `status = "placeholder"`. The planner and component research live in
+Deterministic agents subclass `BaseAgent` and set `status = "available"`; placeholder agents keep
+`status = "placeholder"`. The planner and component research live in
 `app/ai/agents/planner.py` and `component_research.py`; the electrical agent delegates to
-`app/electrical/engine.py` so validation stays independent of the HTTP and agent layers.
+`app/electrical/engine.py` so validation stays independent of the HTTP and agent layers. Programming,
+mechanical, cost, and documentation logic live beside them, with shared pricing in
+`app/pricing.py` and identification in `app/ai/intent.py`.
 
 1. **Read the agent module** in `apps/api/app/ai/agents/`. Its docstring lists responsibilities and
    the contract it owns.

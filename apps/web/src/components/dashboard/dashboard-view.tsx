@@ -4,10 +4,8 @@ import {
   Activity,
   ArrowUpRight,
   Bot,
-  CircuitBoard,
   DollarSign,
   FolderKanban,
-  Layers,
   Plus,
   Search,
   Sparkles,
@@ -23,7 +21,7 @@ import { Input } from "@/components/ui/form";
 import { EmptyState, Progress, Skeleton } from "@/components/ui/misc";
 import { AGENTS, PROJECT_STATUS_STYLES, ROBOT_TYPES } from "@/lib/constants";
 import type { ProjectSummary } from "@/lib/types";
-import { cn, formatMoney, formatRelative, titleCase } from "@/lib/utils";
+import { formatMoney, formatRelative, titleCase } from "@/lib/utils";
 import { useProjects } from "@/hooks/use-projects";
 
 function robotMeta(type: string) {
@@ -133,7 +131,7 @@ export function DashboardView() {
         <StatCard
           label="Agent pipeline"
           value="6"
-          hint="Contracts online · placeholders"
+          hint="Parts, wiring, code, 3D, cost + docs"
           icon={Bot}
         />
       </div>
@@ -220,39 +218,29 @@ export function DashboardView() {
           <Card className="panel-sheen">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm">Foundation status</CardTitle>
-                <Badge variant="signal">M1</Badge>
+                <CardTitle className="text-sm">What a build includes</CardTitle>
+                <Badge variant="signal">Ready</Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
               {[
-                { label: "Project API & database", done: true, icon: Layers },
-                { label: "Agent contracts & audit trail", done: true, icon: Bot },
-                { label: "Component catalog", done: false, icon: Layers },
-                { label: "Schematic & firmware modules", done: false, icon: CircuitBoard },
+                { label: "Parts priced at your stores", done: true },
+                { label: "Schematic, nets & pinout", done: true },
+                { label: "Multi-file code bundles", done: true },
+                { label: "STL, weight & print price", done: true },
+                { label: "Budget and documentation", done: true },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-2.5 text-xs">
-                  <span
-                    className={cn(
-                      "flex size-5 items-center justify-center rounded-full border",
-                      item.done
-                        ? "border-signal/25 bg-signal/10 text-signal"
-                        : "border-line text-faint",
-                    )}
-                  >
-                    {item.done ? (
-                      <span className="bg-signal size-1.5 rounded-full" />
-                    ) : (
-                      <span className="bg-line size-1.5 rounded-full" />
-                    )}
+                  <span className="border-signal/25 bg-signal/10 text-signal flex size-5 items-center justify-center rounded-full border">
+                    <span className="bg-signal size-1.5 rounded-full" />
                   </span>
-                  <span className={item.done ? "text-ink" : "text-faint"}>{item.label}</span>
+                  <span className="text-ink">{item.label}</span>
                 </div>
               ))}
               <div className="pt-1">
-                <Progress value={35} />
+                <Progress value={100} />
                 <p className="text-faint mt-2 text-[10px]">
-                  Foundation delivered. Feature milestones M2–M10 are on the board.
+                  One confirmed flow produces all artifacts from the same validated pin map.
                 </p>
               </div>
             </CardContent>
@@ -270,8 +258,8 @@ export function DashboardView() {
                 >
                   <agent.icon className="text-faint size-3.5" />
                   <span className="text-muted text-[12px]">{agent.label}</span>
-                  <span className="text-faint ml-auto font-mono text-[8px] tracking-wider uppercase">
-                    stub
+                  <span className="text-signal ml-auto font-mono text-[8px] tracking-wider uppercase">
+                    ready
                   </span>
                 </div>
               ))}

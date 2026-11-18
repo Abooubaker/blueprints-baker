@@ -1,6 +1,6 @@
 "use client";
 
-import { Boxes, Cpu, FlaskConical, Github, LayoutDashboard, Menu, Plus, X } from "lucide-react";
+import { BookOpen, Cpu, Github, LayoutDashboard, Menu, Plus, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -13,10 +13,17 @@ const NAV = [
   { href: "/projects/new", label: "New project", icon: Plus },
 ];
 
-const SOON = [
-  { label: "Component catalog", icon: Boxes, hint: "M4" },
-  { label: "Agent lab", icon: FlaskConical, hint: "M3" },
-  { label: "Firmware", icon: Cpu, hint: "M6" },
+const LEARN = [
+  {
+    label: "Documentation",
+    href: "https://github.com/Abooubaker/blueprints-baker/tree/main/docs",
+    icon: BookOpen,
+  },
+  {
+    label: "Source code",
+    href: "https://github.com/Abooubaker/blueprints-baker",
+    icon: Cpu,
+  },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -100,20 +107,20 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
         <div>
           <p className="text-faint mb-2 px-2.5 font-mono text-[10px] tracking-[0.16em] uppercase">
-            Modules
+            Learn
           </p>
           <ul className="space-y-0.5">
-            {SOON.map((item) => (
-              <li
-                key={item.label}
-                className="text-faint/70 flex cursor-not-allowed items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px]"
-                title={`Planned for ${item.hint}`}
-              >
-                <item.icon className="size-4" strokeWidth={1.7} />
-                {item.label}
-                <span className="text-faint ml-auto font-mono text-[9px] tracking-wider">
-                  {item.hint}
-                </span>
+            {LEARN.map((item) => (
+              <li key={item.label}>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-muted hover:text-ink flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] transition-colors hover:bg-white/[0.04]"
+                >
+                  <item.icon className="size-4" strokeWidth={1.7} />
+                  {item.label}
+                </a>
               </li>
             ))}
           </ul>

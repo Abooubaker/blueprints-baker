@@ -3,11 +3,19 @@
 import { usePathname } from "next/navigation";
 
 import { MobileNav } from "@/components/layout/sidebar";
+import { PROJECT_MODULES } from "@/lib/constants";
 
 function crumbs(pathname: string): string[] {
   if (pathname === "/dashboard") return ["Workspace", "Dashboard"];
   if (pathname === "/projects/new") return ["Workspace", "New project"];
-  if (pathname.startsWith("/projects/")) return ["Workspace", "Projects", "Overview"];
+  if (pathname.startsWith("/projects/")) {
+    const [, , moduleSlug] = pathname.split("/");
+    if (moduleSlug) {
+      const moduleInfo = PROJECT_MODULES.find((item) => item.slug === moduleSlug);
+      return ["Workspace", "Projects", moduleInfo?.label ?? "Module"];
+    }
+    return ["Workspace", "Projects", "Overview"];
+  }
   return ["Workspace"];
 }
 

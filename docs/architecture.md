@@ -157,16 +157,18 @@ The target production topology is intentionally boring:
 
 ```mermaid
 flowchart TB
-    cdn["CDN / edge"] --> web["Next.js (standalone output)"]
+    cdn["CDN / edge"] --> web["Next.js (Node server)"]
     web --> api["FastAPI (uvicorn workers)"]
     api --> pg[("Managed PostgreSQL")]
     api --> obs["Logs / metrics / traces"]
     api -.-> secrets["Secret manager"]
 ```
 
-- The web app builds with `output: "standalone"` for a small container image.
+- The web app builds with Next.js output for a Node server (`next start`), or a static export in
+  demo mode.
 - The API is stateless; sessions and audit records live in PostgreSQL.
-- Migrations run as a separate deploy step, never on application startup.
+- Migrations run once per deploy from the container entrypoint (`alembic upgrade head`), or as a
+  separate deploy step on platforms that support pre-deploy commands. Never run them per request.
 - Health (`/health`) is a liveness probe; readiness (`/health/ready`) verifies the database.
 - Horizontal scaling of the API is safe because agent execution is request-scoped and persisted
   synchronously. Long-running jobs will move to a queue in a later milestone if latency demands it.

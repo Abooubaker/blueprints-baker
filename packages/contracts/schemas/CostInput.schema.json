@@ -1,5 +1,51 @@
 {
   "$defs": {
+    "AssemblyStep": {
+      "additionalProperties": false,
+      "properties": {
+        "instructions": {
+          "title": "Instructions",
+          "type": "string"
+        },
+        "order": {
+          "minimum": 1,
+          "title": "Order",
+          "type": "integer"
+        },
+        "parts": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Parts",
+          "type": "array"
+        },
+        "safety_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Safety Notes",
+          "type": "array"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tools",
+          "type": "array"
+        }
+      },
+      "required": [
+        "order",
+        "title",
+        "instructions"
+      ],
+      "title": "AssemblyStep",
+      "type": "object"
+    },
     "BillOfMaterialsItem": {
       "additionalProperties": false,
       "description": "A required component slot, optionally resolved to a concrete candidate.",
@@ -115,6 +161,33 @@
           "title": "Category",
           "type": "string"
         },
+        "cheapest_price_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cheapest Price Jod"
+        },
+        "cheapest_store": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StoreName"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "compatibility_notes": {
           "items": {
             "type": "string"
@@ -135,6 +208,14 @@
         "name": {
           "title": "Name",
           "type": "string"
+        },
+        "offers": {
+          "description": "Store estimates sorted cheapest to most expensive.",
+          "items": {
+            "$ref": "#/$defs/StoreOffer"
+          },
+          "title": "Offers",
+          "type": "array"
         },
         "price_usd": {
           "anyOf": [
@@ -206,12 +287,40 @@
           "title": "Compatibility Notes",
           "type": "array"
         },
+        "currency": {
+          "default": "JOD",
+          "title": "Currency",
+          "type": "string"
+        },
+        "selected_shops": {
+          "items": {
+            "$ref": "#/$defs/StoreName"
+          },
+          "title": "Selected Shops",
+          "type": "array"
+        },
         "sources": {
           "items": {
             "type": "string"
           },
           "title": "Sources",
           "type": "array"
+        },
+        "total_estimated_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Estimated Jod"
         },
         "total_estimated_usd": {
           "anyOf": [
@@ -239,6 +348,352 @@
       },
       "title": "ComponentResearchOutput",
       "type": "object"
+    },
+    "Dimensions": {
+      "additionalProperties": false,
+      "properties": {
+        "height_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height Mm"
+        },
+        "length_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Length Mm"
+        },
+        "width_mm": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width Mm"
+        }
+      },
+      "title": "Dimensions",
+      "type": "object"
+    },
+    "MechanicalOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "assembly_steps": {
+          "items": {
+            "$ref": "#/$defs/AssemblyStep"
+          },
+          "title": "Assembly Steps",
+          "type": "array"
+        },
+        "chassis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MechanicalPart"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "dimensions_mm": {
+          "$ref": "#/$defs/Dimensions"
+        },
+        "drawings": {
+          "description": "References/paths, not CAD payloads.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Drawings",
+          "type": "array"
+        },
+        "infill_percent": {
+          "default": 35,
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Infill Percent",
+          "type": "integer"
+        },
+        "manufacturing_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Manufacturing Notes",
+          "type": "array"
+        },
+        "material_quotes": {
+          "items": {
+            "$ref": "#/$defs/PrintMaterialQuote"
+          },
+          "title": "Material Quotes",
+          "type": "array"
+        },
+        "parts": {
+          "items": {
+            "$ref": "#/$defs/MechanicalPart"
+          },
+          "title": "Parts",
+          "type": "array"
+        },
+        "pricing_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Pricing Notes",
+          "type": "array"
+        },
+        "stl_ascii": {
+          "default": "",
+          "title": "Stl Ascii",
+          "type": "string"
+        },
+        "stl_filename": {
+          "default": "",
+          "title": "Stl Filename",
+          "type": "string"
+        },
+        "volume_cm3": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "default": "0",
+          "title": "Volume Cm3"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "title": "MechanicalOutput",
+      "type": "object"
+    },
+    "MechanicalPart": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "default": "structure",
+          "title": "Category",
+          "type": "string"
+        },
+        "dimensions_mm": {
+          "$ref": "#/$defs/Dimensions"
+        },
+        "material": {
+          "default": "",
+          "title": "Material",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "quantity": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Quantity",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "MechanicalPart",
+      "type": "object"
+    },
+    "PrintMaterial": {
+      "description": "Materials carried by the 3D-print price chart.",
+      "enum": [
+        "PLA",
+        "PETG",
+        "ABS",
+        "Resin",
+        "TPU"
+      ],
+      "title": "PrintMaterial",
+      "type": "string"
+    },
+    "PrintMaterialQuote": {
+      "additionalProperties": false,
+      "description": "Cost to print the generated model in one material.",
+      "properties": {
+        "base_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Base Jod"
+        },
+        "is_cheapest": {
+          "default": false,
+          "title": "Is Cheapest",
+          "type": "boolean"
+        },
+        "material": {
+          "$ref": "#/$defs/PrintMaterial"
+        },
+        "minimum_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Minimum Jod"
+        },
+        "price_per_gram_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Price Per Gram Jod"
+        },
+        "total_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Total Jod"
+        },
+        "weight_g": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Weight G"
+        }
+      },
+      "required": [
+        "material",
+        "price_per_gram_jod",
+        "base_jod",
+        "minimum_jod",
+        "weight_g",
+        "total_jod"
+      ],
+      "title": "PrintMaterialQuote",
+      "type": "object"
+    },
+    "StoreName": {
+      "description": "Stores the guided flow can price a part against.",
+      "enum": [
+        "temu",
+        "mikroelectron",
+        "waslleh",
+        "amazon",
+        "aliexpress",
+        "ghanimjo"
+      ],
+      "title": "StoreName",
+      "type": "string"
+    },
+    "StoreOffer": {
+      "additionalProperties": false,
+      "description": "One store's estimate for a part, in Jordanian dinars.",
+      "properties": {
+        "availability": {
+          "default": "unknown",
+          "title": "Availability",
+          "type": "string"
+        },
+        "is_estimate": {
+          "default": true,
+          "title": "Is Estimate",
+          "type": "boolean"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "note": {
+          "default": "",
+          "title": "Note",
+          "type": "string"
+        },
+        "price_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Price Jod"
+        },
+        "product_url": {
+          "default": "",
+          "title": "Product Url",
+          "type": "string"
+        },
+        "store": {
+          "$ref": "#/$defs/StoreName"
+        }
+      },
+      "required": [
+        "store",
+        "label",
+        "price_jod"
+      ],
+      "title": "StoreOffer",
+      "type": "object"
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -249,6 +704,17 @@
     },
     "component_research": {
       "$ref": "#/$defs/ComponentResearchOutput"
+    },
+    "mechanical": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MechanicalOutput"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     },
     "quantity_multiplier": {
       "default": 1.0,

@@ -1,0 +1,142 @@
+{
+  "$defs": {
+    "CodeLanguage": {
+      "description": "Programming languages the generated bundle can scaffold.",
+      "enum": [
+        "python",
+        "cpp",
+        "c",
+        "stm32_assembly",
+        "verilog",
+        "vhdl",
+        "other"
+      ],
+      "title": "CodeLanguage",
+      "type": "string"
+    },
+    "Difficulty": {
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "title": "Difficulty",
+      "type": "string"
+    },
+    "RobotType": {
+      "enum": [
+        "line_follower",
+        "obstacle_avoider",
+        "rover",
+        "robot_arm",
+        "drone",
+        "balancing_bot",
+        "custom"
+      ],
+      "title": "RobotType",
+      "type": "string"
+    },
+    "StoreName": {
+      "description": "Stores the guided flow can price a part against.",
+      "enum": [
+        "temu",
+        "mikroelectron",
+        "waslleh",
+        "amazon",
+        "aliexpress",
+        "ghanimjo"
+      ],
+      "title": "StoreName",
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Persisted answers from the guided project flow.\n\nThe configuration lives in ``project_configurations.configuration`` as JSON so\nit can evolve without a migration. Every downstream agent reads it through\nrequest parameters.",
+  "properties": {
+    "budget_max_usd": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Budget Max Usd"
+    },
+    "confirmed": {
+      "default": false,
+      "title": "Confirmed",
+      "type": "boolean"
+    },
+    "controller_notes": {
+      "default": "",
+      "title": "Controller Notes",
+      "type": "string"
+    },
+    "controllers": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Controllers",
+      "type": "array"
+    },
+    "custom_pcb": {
+      "default": false,
+      "title": "Custom Pcb",
+      "type": "boolean"
+    },
+    "description": {
+      "default": "",
+      "title": "Description",
+      "type": "string"
+    },
+    "difficulty": {
+      "$ref": "#/$defs/Difficulty",
+      "default": "beginner"
+    },
+    "identification_confidence": {
+      "default": 0.0,
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Identification Confidence",
+      "type": "number"
+    },
+    "identification_rationale": {
+      "default": "",
+      "title": "Identification Rationale",
+      "type": "string"
+    },
+    "languages": {
+      "items": {
+        "$ref": "#/$defs/CodeLanguage"
+      },
+      "title": "Languages",
+      "type": "array"
+    },
+    "robot_name": {
+      "default": "",
+      "title": "Robot Name",
+      "type": "string"
+    },
+    "robot_type": {
+      "$ref": "#/$defs/RobotType",
+      "default": "custom"
+    },
+    "shops": {
+      "items": {
+        "$ref": "#/$defs/StoreName"
+      },
+      "title": "Shops",
+      "type": "array"
+    }
+  },
+  "title": "BuildPreferences",
+  "type": "object"
+}

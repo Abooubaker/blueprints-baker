@@ -139,7 +139,7 @@ export function BlueprintCard() {
         <Sparkles className="size-3" /> agent contracts v1
       </div>
       <div className="border-line bg-canvas/90 text-muted absolute -bottom-4 -left-3 hidden -rotate-2 items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[9px] shadow-xl backdrop-blur sm:flex">
-        M1 · foundation online
+        Build output · demo
       </div>
     </div>
   );

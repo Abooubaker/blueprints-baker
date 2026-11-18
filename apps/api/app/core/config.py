@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 from typing import Literal
+from urllib.parse import parse_qsl, urlencode
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -53,6 +54,41 @@ class Settings(BaseSettings):
             return [origin.strip() for origin in value.split(",") if origin.strip()]
         return value
 
+    @field_validator("database_url", mode="before")
+    @classmethod
+    def normalize_database_url(cls, value: object) -> object:
+        """Accept the URLs hosted providers emit and use the async driver.
+
+        Neon and Render hand out libpq-style URLs (``sslmode``, ``channel_binding``)
+        that asyncpg does not understand, so those parameters are translated or
+        dropped. The async driver is selected automatically.
+        """
+
+        if not isinstance(value, str):
+            return value
+        if value.startswith("postgres://"):
+            value = "postgresql+asyncpg://" + value.removeprefix("postgres://")
+        elif value.startswith("postgresql://"):
+            value = "postgresql+asyncpg://" + value.removeprefix("postgresql://")
+        elif not value.startswith("postgresql+asyncpg://"):
+            return value
+
+        scheme, separator, rest = value.partition("://")
+        authority, question, query = rest.partition("?")
+        if not question:
+            return value
+
+        allowed: list[tuple[str, str]] = []
+        for key, raw in parse_qsl(query, keep_blank_values=True):
+            if key == "sslmode":
+                allowed.append(("ssl", "require" if raw == "require" else raw))
+            elif key in {"channel_binding", "options"}:
+                continue
+            else:
+                allowed.append((key, raw))
+        normalized = urlencode(allowed)
+        return f"{scheme}{separator}{authority}" + (f"?{normalized}" if normalized else "")
+
     @field_validator("log_level")
     @classmethod
     def normalize_log_level(cls, value: str) -> str:
@@ -71,6 +107,10 @@ class Settings(BaseSettings):
         """Driver-specific connection arguments."""
         if self.database_url.startswith("sqlite"):
             return {"check_same_thread": False}
+        # Neon's pooled endpoint (PgBouncer) cannot use asyncpg's prepared-statement
+        # cache. Detect it from the conventional ``-pooler`` host label.
+        if "-pooler." in self.database_url:
+            return {"statement_cache_size": 0}
         return {}
 
 

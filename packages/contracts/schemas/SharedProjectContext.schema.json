@@ -214,6 +214,20 @@
       "title": "CodeFile",
       "type": "object"
     },
+    "CodeLanguage": {
+      "description": "Programming languages the generated bundle can scaffold.",
+      "enum": [
+        "python",
+        "cpp",
+        "c",
+        "stm32_assembly",
+        "verilog",
+        "vhdl",
+        "other"
+      ],
+      "title": "CodeLanguage",
+      "type": "string"
+    },
     "ComponentCandidate": {
       "additionalProperties": false,
       "properties": {
@@ -225,6 +239,33 @@
         "category": {
           "title": "Category",
           "type": "string"
+        },
+        "cheapest_price_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cheapest Price Jod"
+        },
+        "cheapest_store": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/StoreName"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         },
         "compatibility_notes": {
           "items": {
@@ -246,6 +287,14 @@
         "name": {
           "title": "Name",
           "type": "string"
+        },
+        "offers": {
+          "description": "Store estimates sorted cheapest to most expensive.",
+          "items": {
+            "$ref": "#/$defs/StoreOffer"
+          },
+          "title": "Offers",
+          "type": "array"
         },
         "price_usd": {
           "anyOf": [
@@ -317,12 +366,40 @@
           "title": "Compatibility Notes",
           "type": "array"
         },
+        "currency": {
+          "default": "JOD",
+          "title": "Currency",
+          "type": "string"
+        },
+        "selected_shops": {
+          "items": {
+            "$ref": "#/$defs/StoreName"
+          },
+          "title": "Selected Shops",
+          "type": "array"
+        },
         "sources": {
           "items": {
             "type": "string"
           },
           "title": "Sources",
           "type": "array"
+        },
+        "total_estimated_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Estimated Jod"
         },
         "total_estimated_usd": {
           "anyOf": [
@@ -398,12 +475,33 @@
           "default": null,
           "title": "Contingency Usd"
         },
+        "currency": {
+          "default": "JOD",
+          "title": "Currency",
+          "type": "string"
+        },
         "line_items": {
           "items": {
             "$ref": "#/$defs/CostLineItem"
           },
           "title": "Line Items",
           "type": "array"
+        },
+        "print_cost_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Print Cost Jod"
         },
         "shipping_usd": {
           "anyOf": [
@@ -421,6 +519,22 @@
           "default": null,
           "title": "Shipping Usd"
         },
+        "subtotal_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subtotal Jod"
+        },
         "subtotal_usd": {
           "anyOf": [
             {
@@ -436,6 +550,22 @@
           ],
           "default": null,
           "title": "Subtotal Usd"
+        },
+        "total_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Jod"
         },
         "total_usd": {
           "anyOf": [
@@ -474,6 +604,22 @@
           "title": "Label",
           "type": "string"
         },
+        "line_total_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line Total Jod"
+        },
         "line_total_usd": {
           "anyOf": [
             {
@@ -500,6 +646,22 @@
           "default": "",
           "title": "Supplier",
           "type": "string"
+        },
+        "unit_price_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit Price Jod"
         },
         "unit_price_usd": {
           "anyOf": [
@@ -577,6 +739,30 @@
         }
       },
       "title": "Dimensions",
+      "type": "object"
+    },
+    "DocumentationFile": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "title": "Content",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "title",
+        "content"
+      ],
+      "title": "DocumentationFile",
       "type": "object"
     },
     "DriveType": {
@@ -1034,6 +1220,60 @@
       "title": "ElectricalPlan",
       "type": "object"
     },
+    "LanguageBundle": {
+      "additionalProperties": false,
+      "description": "All files generated for one selected programming language.",
+      "properties": {
+        "display_name": {
+          "title": "Display Name",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/CodeFile"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "framework": {
+          "default": "",
+          "title": "Framework",
+          "type": "string"
+        },
+        "language": {
+          "$ref": "#/$defs/CodeLanguage"
+        },
+        "libraries": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Libraries",
+          "type": "array"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "status": {
+          "default": "scaffold",
+          "enum": [
+            "complete",
+            "scaffold"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "language",
+        "display_name"
+      ],
+      "title": "LanguageBundle",
+      "type": "object"
+    },
     "MechanicalOutput": {
       "additionalProperties": false,
       "properties": {
@@ -1055,6 +1295,9 @@
           ],
           "default": null
         },
+        "dimensions_mm": {
+          "$ref": "#/$defs/Dimensions"
+        },
         "drawings": {
           "description": "References/paths, not CAD payloads.",
           "items": {
@@ -1063,11 +1306,25 @@
           "title": "Drawings",
           "type": "array"
         },
+        "infill_percent": {
+          "default": 35,
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Infill Percent",
+          "type": "integer"
+        },
         "manufacturing_notes": {
           "items": {
             "type": "string"
           },
           "title": "Manufacturing Notes",
+          "type": "array"
+        },
+        "material_quotes": {
+          "items": {
+            "$ref": "#/$defs/PrintMaterialQuote"
+          },
+          "title": "Material Quotes",
           "type": "array"
         },
         "parts": {
@@ -1076,6 +1333,36 @@
           },
           "title": "Parts",
           "type": "array"
+        },
+        "pricing_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Pricing Notes",
+          "type": "array"
+        },
+        "stl_ascii": {
+          "default": "",
+          "title": "Stl Ascii",
+          "type": "string"
+        },
+        "stl_filename": {
+          "default": "",
+          "title": "Stl Filename",
+          "type": "string"
+        },
+        "volume_cm3": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "default": "0",
+          "title": "Volume Cm3"
         },
         "warnings": {
           "items": {
@@ -1313,9 +1600,112 @@
       "title": "PowerRail",
       "type": "object"
     },
+    "PrintMaterial": {
+      "description": "Materials carried by the 3D-print price chart.",
+      "enum": [
+        "PLA",
+        "PETG",
+        "ABS",
+        "Resin",
+        "TPU"
+      ],
+      "title": "PrintMaterial",
+      "type": "string"
+    },
+    "PrintMaterialQuote": {
+      "additionalProperties": false,
+      "description": "Cost to print the generated model in one material.",
+      "properties": {
+        "base_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Base Jod"
+        },
+        "is_cheapest": {
+          "default": false,
+          "title": "Is Cheapest",
+          "type": "boolean"
+        },
+        "material": {
+          "$ref": "#/$defs/PrintMaterial"
+        },
+        "minimum_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Minimum Jod"
+        },
+        "price_per_gram_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Price Per Gram Jod"
+        },
+        "total_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Total Jod"
+        },
+        "weight_g": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Weight G"
+        }
+      },
+      "required": [
+        "material",
+        "price_per_gram_jod",
+        "base_jod",
+        "minimum_jod",
+        "weight_g",
+        "total_jod"
+      ],
+      "title": "PrintMaterialQuote",
+      "type": "object"
+    },
     "ProgrammingOutput": {
       "additionalProperties": false,
       "properties": {
+        "bundles": {
+          "items": {
+            "$ref": "#/$defs/LanguageBundle"
+          },
+          "title": "Bundles",
+          "type": "array"
+        },
         "files": {
           "items": {
             "$ref": "#/$defs/CodeFile"
@@ -1376,6 +1766,32 @@
         "platform"
       ],
       "title": "ProgrammingOutput",
+      "type": "object"
+    },
+    "ProjectDocumentation": {
+      "additionalProperties": false,
+      "properties": {
+        "files": {
+          "items": {
+            "$ref": "#/$defs/DocumentationFile"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "summary": {
+          "default": "",
+          "title": "Summary",
+          "type": "string"
+        }
+      },
+      "title": "ProjectDocumentation",
       "type": "object"
     },
     "RobotSpecificationDraft": {
@@ -1494,6 +1910,71 @@
       "title": "RobotType",
       "type": "string"
     },
+    "StoreName": {
+      "description": "Stores the guided flow can price a part against.",
+      "enum": [
+        "temu",
+        "mikroelectron",
+        "waslleh",
+        "amazon",
+        "aliexpress",
+        "ghanimjo"
+      ],
+      "title": "StoreName",
+      "type": "string"
+    },
+    "StoreOffer": {
+      "additionalProperties": false,
+      "description": "One store's estimate for a part, in Jordanian dinars.",
+      "properties": {
+        "availability": {
+          "default": "unknown",
+          "title": "Availability",
+          "type": "string"
+        },
+        "is_estimate": {
+          "default": true,
+          "title": "Is Estimate",
+          "type": "boolean"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "note": {
+          "default": "",
+          "title": "Note",
+          "type": "string"
+        },
+        "price_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Price Jod"
+        },
+        "product_url": {
+          "default": "",
+          "title": "Product Url",
+          "type": "string"
+        },
+        "store": {
+          "$ref": "#/$defs/StoreName"
+        }
+      },
+      "required": [
+        "store",
+        "label",
+        "price_jod"
+      ],
+      "title": "StoreOffer",
+      "type": "object"
+    },
     "TargetPlatform": {
       "enum": [
         "arduino",
@@ -1530,6 +2011,17 @@
       "anyOf": [
         {
           "$ref": "#/$defs/CostEstimate"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "documentation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ProjectDocumentation"
         },
         {
           "type": "null"

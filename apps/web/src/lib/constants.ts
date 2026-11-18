@@ -18,7 +18,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-import type { AgentName, RobotType } from "@/lib/types";
+import type { AgentName, CodeLanguage, RobotType, StoreName } from "@/lib/types";
 
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:8000";
@@ -211,54 +211,103 @@ export interface ProjectModule {
 
 export const PROJECT_MODULES: ProjectModule[] = [
   {
-    slug: "specification",
-    label: "Specification",
-    description: "Approved requirements, platform, drive type, and constraints.",
-    milestone: "M1",
-    icon: FileText,
-    available: true,
-  },
-  {
     slug: "components",
-    label: "Components",
-    description: "Bill of materials, compatibility checks, suppliers, and pricing.",
+    label: "Parts & prices",
+    description: "Every part priced at your selected stores, cheapest first.",
     milestone: "M4",
     icon: Layers,
-    available: false,
+    available: true,
   },
   {
     slug: "wiring",
     label: "Schematic & pinout",
-    description: "Every pin and destination, power budget, validation, and KiCad/EasyEDA exports.",
+    description: "Every pin and destination, power budget, validation, and KiCad exports.",
     milestone: "M5",
     icon: CircuitBoard,
     available: true,
   },
   {
     slug: "programming",
-    label: "Programming",
-    description: "Generated firmware, libraries, and deployment instructions.",
+    label: "Code",
+    description: "Multi-file code bundles with switchable languages.",
     milestone: "M6",
     icon: Code2,
-    available: false,
+    available: true,
   },
   {
     slug: "mechanical",
-    label: "Mechanical",
-    description: "Chassis plan, mechanical parts, and assembly instructions.",
+    label: "3D & print price",
+    description: "Reference STL, weight, and the JOD material price chart.",
     milestone: "M7",
     icon: Wrench,
-    available: false,
+    available: true,
   },
   {
     slug: "cost",
-    label: "Cost",
-    description: "Line-item budget, alternatives, and total project estimate.",
+    label: "Budget",
+    description: "Line-item budget, print cost, and total project estimate.",
     milestone: "M8",
     icon: DollarSign,
-    available: false,
+    available: true,
+  },
+  {
+    slug: "docs",
+    label: "Documentation",
+    description: "Sourcing, wiring, firmware, mechanical, safety, and decisions.",
+    milestone: "M9",
+    icon: FileText,
+    available: true,
   },
 ];
+
+export interface StoreOption {
+  value: StoreName;
+  label: string;
+  blurb: string;
+}
+
+export const STORES: StoreOption[] = [
+  { value: "temu", label: "Temu", blurb: "Lowest estimates, long shipping" },
+  { value: "mikroelectron", label: "mikroelectron.com", blurb: "Local electronics parts" },
+  { value: "waslleh", label: "waslleh.com", blurb: "Local hobby supplies" },
+  { value: "amazon", label: "Amazon", blurb: "Fast, usually pricier" },
+  { value: "aliexpress", label: "AliExpress", blurb: "Cheap modules, variable stock" },
+  { value: "ghanimjo", label: "ghanimjo.com", blurb: "Local robotics supplier" },
+];
+
+export interface LanguageOption {
+  value: CodeLanguage;
+  label: string;
+  blurb: string;
+}
+
+export const CODE_LANGUAGES: LanguageOption[] = [
+  { value: "python", label: "Python", blurb: "MicroPython control loop" },
+  { value: "cpp", label: "C++", blurb: "Arduino / PlatformIO" },
+  { value: "c", label: "C", blurb: "STM32 HAL" },
+  { value: "stm32_assembly", label: "STM32 assembly", blurb: "Cortex-M startup + loop" },
+  { value: "verilog", label: "Verilog", blurb: "RTL scaffold with testbench" },
+  { value: "vhdl", label: "VHDL", blurb: "RTL scaffold with testbench" },
+  { value: "other", label: "Other", blurb: "Toolchain-neutral scaffold" },
+];
+
+export const CONTROLLER_FAMILIES = [
+  "ESP32",
+  "Arduino Uno",
+  "Arduino Nano",
+  "Raspberry Pi Pico",
+  "STM32",
+  "Teensy",
+  "Other",
+];
+
+export const PRINT_CHART = [
+  { material: "PLA", perGram: 0.07, base: 0.5, minimum: 1.0 },
+  { material: "PETG", perGram: 0.12, base: 0.5, minimum: 1.2 },
+  { material: "ABS", perGram: 0.12, base: 0.5, minimum: 1.0 },
+  { material: "Resin", perGram: 0.3, base: 0.5, minimum: 1.5 },
+  { material: "TPU", perGram: 0.2, base: 2.0, minimum: 1.2 },
+] as const;
 
 export const PROJECT_STATUS_STYLES: Record<
   string,

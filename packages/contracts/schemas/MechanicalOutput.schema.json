@@ -129,6 +129,102 @@
       ],
       "title": "MechanicalPart",
       "type": "object"
+    },
+    "PrintMaterial": {
+      "description": "Materials carried by the 3D-print price chart.",
+      "enum": [
+        "PLA",
+        "PETG",
+        "ABS",
+        "Resin",
+        "TPU"
+      ],
+      "title": "PrintMaterial",
+      "type": "string"
+    },
+    "PrintMaterialQuote": {
+      "additionalProperties": false,
+      "description": "Cost to print the generated model in one material.",
+      "properties": {
+        "base_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Base Jod"
+        },
+        "is_cheapest": {
+          "default": false,
+          "title": "Is Cheapest",
+          "type": "boolean"
+        },
+        "material": {
+          "$ref": "#/$defs/PrintMaterial"
+        },
+        "minimum_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Minimum Jod"
+        },
+        "price_per_gram_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Price Per Gram Jod"
+        },
+        "total_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Total Jod"
+        },
+        "weight_g": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Weight G"
+        }
+      },
+      "required": [
+        "material",
+        "price_per_gram_jod",
+        "base_jod",
+        "minimum_jod",
+        "weight_g",
+        "total_jod"
+      ],
+      "title": "PrintMaterialQuote",
+      "type": "object"
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -152,6 +248,9 @@
       ],
       "default": null
     },
+    "dimensions_mm": {
+      "$ref": "#/$defs/Dimensions"
+    },
     "drawings": {
       "description": "References/paths, not CAD payloads.",
       "items": {
@@ -160,11 +259,25 @@
       "title": "Drawings",
       "type": "array"
     },
+    "infill_percent": {
+      "default": 35,
+      "maximum": 100,
+      "minimum": 0,
+      "title": "Infill Percent",
+      "type": "integer"
+    },
     "manufacturing_notes": {
       "items": {
         "type": "string"
       },
       "title": "Manufacturing Notes",
+      "type": "array"
+    },
+    "material_quotes": {
+      "items": {
+        "$ref": "#/$defs/PrintMaterialQuote"
+      },
+      "title": "Material Quotes",
       "type": "array"
     },
     "parts": {
@@ -173,6 +286,36 @@
       },
       "title": "Parts",
       "type": "array"
+    },
+    "pricing_notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Pricing Notes",
+      "type": "array"
+    },
+    "stl_ascii": {
+      "default": "",
+      "title": "Stl Ascii",
+      "type": "string"
+    },
+    "stl_filename": {
+      "default": "",
+      "title": "Stl Filename",
+      "type": "string"
+    },
+    "volume_cm3": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "default": "0",
+      "title": "Volume Cm3"
     },
     "warnings": {
       "items": {

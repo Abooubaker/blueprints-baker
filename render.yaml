@@ -1,0 +1,51 @@
+# Render Blueprint for Blueprints Baker.
+#
+# Deploy with: Dashboard → New → Blueprint → select this repository.
+# DATABASE_URL is intentionally `sync: false`: paste a Neon pooled connection
+# string during setup so database credentials never live in git.
+#
+# Docs: docs/deployment.md
+
+services:
+  - type: web
+    name: blueprints-baker-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerContext: ./apps/api
+    dockerfilePath: ./apps/api/Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: DATABASE_URL
+        sync: false
+      # Add the deployed web origin after the frontend has a URL, e.g.
+      # https://blueprints-baker-web.onrender.com
+      - key: CORS_ORIGINS
+        sync: false
+
+  - type: web
+    name: blueprints-baker-web
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: apps/web
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # Set to the API origin once the API service exists, e.g.
+      # https://blueprints-baker-api.onrender.com — this is inlined at build time.
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
+      - key: NEXT_PUBLIC_DEMO_MODE
+        value: "false"
+      - key: NEXT_PUBLIC_BASE_PATH
+        value: ""

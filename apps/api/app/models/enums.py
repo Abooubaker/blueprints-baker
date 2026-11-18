@@ -75,6 +75,39 @@ class ComponentAvailability(StrEnum):
     UNKNOWN = "unknown"
 
 
+class StoreName(StrEnum):
+    """Stores the guided flow can price a part against."""
+
+    TEMU = "temu"
+    MIKROELECTRON = "mikroelectron"
+    WASLLEH = "waslleh"
+    AMAZON = "amazon"
+    ALIEXPRESS = "aliexpress"
+    GHANIMJO = "ghanimjo"
+
+
+class CodeLanguage(StrEnum):
+    """Programming languages the generated bundle can scaffold."""
+
+    PYTHON = "python"
+    CPP = "cpp"
+    C = "c"
+    STM32_ASSEMBLY = "stm32_assembly"
+    VERILOG = "verilog"
+    VHDL = "vhdl"
+    OTHER = "other"
+
+
+class PrintMaterial(StrEnum):
+    """Materials carried by the 3D-print price chart."""
+
+    PLA = "PLA"
+    PETG = "PETG"
+    ABS = "ABS"
+    RESIN = "Resin"
+    TPU = "TPU"
+
+
 class AgentName(StrEnum):
     PLANNER = "robot_planner"
     COMPONENT_RESEARCH = "component_research"

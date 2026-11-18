@@ -1,107 +1,47 @@
 "use client";
 
 import {
-  Armchair,
-  ArrowLeft,
-  ArrowRight,
   ArrowUpRight,
-  Bot,
   CheckCircle2,
   CircuitBoard,
   Clock3,
-  Compass,
+  Code2,
   FileText,
-  FolderGit2,
-  Gauge,
+  Layers,
   Loader2,
-  Plane,
   Play,
   RefreshCw,
-  Route,
-  Scan,
   Sparkles,
   TriangleAlert,
-  XCircle,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { EmptyState, Progress, Separator } from "@/components/ui/misc";
-import { AGENTS, DEMO_MODE, PROJECT_MODULES, PROJECT_STATUS_STYLES } from "@/lib/constants";
+import { EmptyState, Progress } from "@/components/ui/misc";
 import { api, ApiError } from "@/lib/api";
-import type {
-  AgentName,
-  AgentRun,
-  AgentRunStatus,
-  OrchestrationResult,
-  Project,
-} from "@/lib/types";
-import { cn, formatDate, formatMoney, formatRelative, titleCase } from "@/lib/utils";
-
-const RUN_STYLES: Record<
-  AgentRunStatus,
-  {
-    label: string;
-    variant: "default" | "signal" | "aqua" | "warn" | "danger" | "outline";
-    text: string;
-  }
-> = {
-  succeeded: { label: "Complete", variant: "signal", text: "text-signal" },
-  running: { label: "Running", variant: "aqua", text: "text-aqua" },
-  queued: { label: "Queued", variant: "default", text: "text-muted" },
-  not_implemented: { label: "Placeholder", variant: "warn", text: "text-warn" },
-  skipped: { label: "Blocked", variant: "outline", text: "text-faint" },
-  failed: { label: "Failed", variant: "danger", text: "text-danger" },
-  cancelled: { label: "Cancelled", variant: "outline", text: "text-faint" },
-};
-
-function RobotTypeGlyph({ type, className }: { type: string; className?: string }) {
-  switch (type) {
-    case "line_follower":
-      return <Route className={className} strokeWidth={1.6} />;
-    case "obstacle_avoider":
-      return <Scan className={className} strokeWidth={1.6} />;
-    case "rover":
-      return <Compass className={className} strokeWidth={1.6} />;
-    case "robot_arm":
-      return <Armchair className={className} strokeWidth={1.6} />;
-    case "balancing_bot":
-      return <Gauge className={className} strokeWidth={1.6} />;
-    case "drone":
-      return <Plane className={className} strokeWidth={1.6} />;
-    default:
-      return <Bot className={className} strokeWidth={1.6} />;
-  }
-}
-
-function RunIcon({ status }: { status: AgentRunStatus }) {
-  if (status === "succeeded") return <CheckCircle2 className="text-signal size-3.5" />;
-  if (status === "failed") return <XCircle className="text-danger size-3.5" />;
-  if (status === "running") return <Loader2 className="text-aqua size-3.5 animate-spin" />;
-  if (status === "not_implemented") return <Sparkles className="text-warn size-3.5" />;
-  return <Clock3 className="text-faint size-3.5" />;
-}
+import { DEMO_MODE, PROJECT_MODULES, PROJECT_STATUS_STYLES } from "@/lib/constants";
+import type { BuildArtifact, Project } from "@/lib/types";
+import { formatJod, formatRelative, titleCase } from "@/lib/utils";
 
 export function ProjectWorkspace({ projectId }: { projectId: string }) {
   const [project, setProject] = useState<Project | null>(null);
-  const [runs, setRuns] = useState<AgentRun[]>([]);
+  const [build, setBuild] = useState<BuildArtifact | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [running, setRunning] = useState<AgentName[] | "all" | null>(null);
-  const [runResult, setRunResult] = useState<OrchestrationResult | null>(null);
-  const [runError, setRunError] = useState<string | null>(null);
+  const [building, setBuilding] = useState(false);
+  const [buildError, setBuildError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([api.getProject(projectId), api.listAgentRuns(projectId, { limit: 50 })])
-      .then(([loadedProject, runPage]) => {
+    Promise.all([api.getProject(projectId), api.getBuild(projectId).catch(() => null)])
+      .then(([loadedProject, loadedBuild]) => {
         if (cancelled) return;
         setProject(loadedProject);
-        setRuns(runPage.items);
+        setBuild(loadedBuild);
         setError(null);
       })
       .catch((caught: unknown) => {
@@ -116,37 +56,24 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
     };
   }, [projectId, refreshKey]);
 
-  function reloadProject() {
+  function reload() {
     setLoading(true);
     setRefreshKey((key) => key + 1);
   }
 
-  const latestByAgent = useMemo(() => {
-    const map = new Map<AgentName, AgentRun>();
-    for (const run of runs) {
-      if (!map.has(run.agent)) map.set(run.agent, run);
-    }
-    return map;
-  }, [runs]);
-
-  async function runAgents(selection: AgentName[] | "all") {
+  async function generate() {
     if (!project) return;
-    setRunning(selection);
-    setRunError(null);
-    setRunResult(null);
+    setBuilding(true);
+    setBuildError(null);
     try {
-      const result = await api.runAgents(project.id, {
-        agents: selection === "all" ? undefined : selection,
-      });
-      setRunResult(result);
-      const page = await api.listAgentRuns(project.id, { limit: 50 });
-      setRuns(page.items);
+      const result = await api.generateBuild(project.id);
+      setBuild(result);
     } catch (caught) {
-      setRunError(
-        caught instanceof ApiError ? caught.message : "The agent run could not be started.",
+      setBuildError(
+        caught instanceof ApiError ? caught.message : "The build pipeline could not finish.",
       );
     } finally {
-      setRunning(null);
+      setBuilding(false);
     }
   }
 
@@ -154,11 +81,13 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
     return (
       <div className="space-y-6">
         <div className="bg-raised h-4 w-32 animate-pulse rounded" />
-        <div className="rounded-panel bg-raised h-24 animate-pulse" />
-        <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
-          <div className="rounded-panel bg-raised h-96 animate-pulse" />
-          <div className="rounded-panel bg-raised h-96 animate-pulse" />
+        <div className="rounded-panel bg-raised h-28 animate-pulse" />
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {[0, 1, 2, 3].map((key) => (
+            <div key={key} className="rounded-panel bg-raised h-24 animate-pulse" />
+          ))}
         </div>
+        <div className="rounded-panel bg-raised h-72 animate-pulse" />
       </div>
     );
   }
@@ -170,25 +99,23 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
         title="Project unavailable"
         description={error ?? "This project does not exist."}
         action={
-          <div className="flex gap-2">
-            <Button variant="secondary" size="sm" onClick={reloadProject}>
-              <RefreshCw className="size-3.5" /> Retry
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => history.back()}>
-              Go back
-            </Button>
-          </div>
+          <Button variant="secondary" size="sm" onClick={reload}>
+            <RefreshCw className="size-3.5" /> Retry
+          </Button>
         }
       />
     );
   }
 
   const status = PROJECT_STATUS_STYLES[project.status] ?? PROJECT_STATUS_STYLES.draft!;
-  const spec = project.specification;
-  const completedStages = AGENTS.filter(
-    (agent) => latestByAgent.get(agent.name)?.status === "succeeded",
+  const research = build?.research ?? null;
+  const mechanical = build?.mechanical ?? null;
+  const programming = build?.programming ?? null;
+  const cost = build?.cost ?? null;
+  const cheapestPrint = mechanical?.material_quotes.find((quote) => quote.is_cheapest);
+  const completedSteps = [research, build?.electrical, programming, mechanical, cost].filter(
+    Boolean,
   ).length;
-  const pipelineProgress = (completedStages / AGENTS.length) * 100;
 
   return (
     <div>
@@ -196,62 +123,127 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
         href="/dashboard"
         className="text-faint hover:text-ink mb-5 inline-flex items-center gap-1.5 text-xs transition-colors"
       >
-        <ArrowLeft className="size-3.5" /> All projects
+        ← All projects
       </Link>
 
       <div className="mb-7 flex flex-col justify-between gap-5 lg:flex-row lg:items-start">
-        <div className="flex min-w-0 items-start gap-4">
-          <div className="border-line bg-elevated text-signal flex size-12 shrink-0 items-center justify-center rounded-xl border">
-            <RobotTypeGlyph type={project.robot_type} className="size-5" />
-          </div>
-          <div className="min-w-0">
-            <div className="mb-2 flex flex-wrap items-center gap-2">
-              <Badge variant={status.variant}>{status.label}</Badge>
-              <Badge variant="outline">{titleCase(project.robot_type)}</Badge>
+        <div className="min-w-0">
+          <div className="mb-2 flex flex-wrap items-center gap-2">
+            <Badge variant={status.variant}>{status.label}</Badge>
+            <Badge variant="outline">{titleCase(project.robot_type)}</Badge>
+            {build?.identification ? (
               <span className="text-faint font-mono text-[10px]">
-                updated {formatRelative(project.updated_at)}
+                identified at {Math.round(build.identification.confidence * 100)}%
               </span>
-            </div>
-            <h1 className="text-ink truncate text-[26px] leading-tight font-medium tracking-[-0.02em] sm:text-[30px]">
-              {project.name}
-            </h1>
-            <p className="text-muted mt-1.5 max-w-2xl text-sm leading-relaxed">
-              {project.description || "No description yet."}
-            </p>
+            ) : null}
+            <span className="text-faint font-mono text-[10px]">
+              updated {formatRelative(project.updated_at)}
+            </span>
           </div>
+          <h1 className="text-ink truncate text-[28px] leading-tight font-medium tracking-[-0.02em] sm:text-[32px]">
+            {project.name}
+          </h1>
+          <p className="text-muted mt-1.5 max-w-2xl text-sm leading-relaxed">
+            {project.description || build?.specification?.summary || "No description yet."}
+          </p>
         </div>
 
         <div className="flex shrink-0 flex-wrap items-center gap-2">
-          <ButtonLink href={`/projects/${project.id}/wiring`} size="md">
-            <CircuitBoard className="size-4" /> Open schematic
-          </ButtonLink>
-          {DEMO_MODE ? <Badge variant="outline">Precomputed · read-only</Badge> : null}
+          {DEMO_MODE ? (
+            <Badge variant="outline">Read-only demo · real engine output</Badge>
+          ) : (
+            <Button
+              size="md"
+              onClick={() => void generate()}
+              disabled={building}
+              variant={build ? "secondary" : "primary"}
+            >
+              {building ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" /> Building…
+                </>
+              ) : build ? (
+                <>
+                  <RefreshCw className="size-4" /> Regenerate build
+                </>
+              ) : (
+                <>
+                  <Play className="size-4" /> Generate build
+                </>
+              )}
+            </Button>
+          )}
         </div>
       </div>
 
-      <div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      {buildError ? (
+        <div className="rounded-panel border-danger/20 bg-danger/[0.05] text-danger mb-5 flex items-start gap-2.5 border px-4 py-3 text-xs">
+          <TriangleAlert className="mt-0.5 size-4 shrink-0" />
+          {buildError}
+        </div>
+      ) : null}
+
+      {!build || build.status === "empty" ? (
+        <Card className="mb-6">
+          <CardContent className="flex flex-col items-start gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <div className="border-signal/25 bg-signal/10 text-signal flex size-10 shrink-0 items-center justify-center rounded-lg border">
+                <Sparkles className="size-4.5" />
+              </div>
+              <div>
+                <p className="text-ink text-sm font-medium">
+                  This build has not been generated yet.
+                </p>
+                <p className="text-muted mt-1 max-w-xl text-xs leading-relaxed">
+                  Generate it to get parts priced at your stores, a schematic, code bundles, a 3D
+                  print price, a budget, and documentation.
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {DEMO_MODE ? (
+                <Badge variant="outline">Read-only demo</Badge>
+              ) : (
+                <Button size="sm" onClick={() => void generate()} disabled={building}>
+                  {building ? (
+                    <Loader2 className="size-3.5 animate-spin" />
+                  ) : (
+                    <Play className="size-3.5" />
+                  )}
+                  Generate
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      ) : null}
+
+      <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {[
           {
-            label: "Budget cap",
-            value: project.budget_max_usd ? formatMoney(project.budget_max_usd) : "Not set",
-            hint: project.budget_min_usd
-              ? `Floor ${formatMoney(project.budget_min_usd)}`
-              : "Add a range when planning",
+            label: "Total estimate",
+            value: formatJod(cost?.total_jod),
+            hint: "parts + cheapest print",
           },
           {
-            label: "Specification",
-            value: spec ? `v${spec.version}` : "—",
-            hint: spec?.status ? titleCase(spec.status) : "No spec",
+            label: "Parts compared",
+            value: String(research?.bill_of_materials.length ?? 0),
+            hint: research?.selected_shops?.length
+              ? `across ${research.selected_shops.length} stores`
+              : "no stores selected",
           },
           {
-            label: "Agent runs",
-            value: String(runs.length),
-            hint: runs.length === 0 ? "Pipeline not started" : "Audited executions",
+            label: "Cheapest print",
+            value: cheapestPrint ? formatJod(cheapestPrint.total_jod) : "—",
+            hint: cheapestPrint
+              ? `${cheapestPrint.material} · ${cheapestPrint.weight_g} g`
+              : "not generated",
           },
           {
-            label: "Pipeline",
-            value: `${completedStages}/${AGENTS.length}`,
-            hint: "Agents completed successfully",
+            label: "Code bundles",
+            value: String(programming?.bundles.length ?? 0),
+            hint:
+              programming?.bundles.map((item) => item.display_name).join(", ") || "not generated",
           },
         ].map((item) => (
           <Card key={item.label} className="p-4">
@@ -259,144 +251,80 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
               {item.label}
             </p>
             <p className="text-ink mt-2.5 text-xl font-medium tracking-tight">{item.value}</p>
-            <p className="text-faint mt-1 text-[10px]">{item.hint}</p>
+            <p className="text-faint mt-1 truncate text-[10px]">{item.hint}</p>
           </Card>
         ))}
       </div>
 
-      {runResult ? (
-        <div
-          className={cn(
-            "rounded-panel mb-5 flex items-start gap-3 border px-4 py-3",
-            runResult.status === "succeeded"
-              ? "border-signal/20 bg-signal/[0.05]"
-              : runResult.status === "failed"
-                ? "border-danger/20 bg-danger/[0.05]"
-                : "border-warn/20 bg-warn/[0.05]",
-          )}
-        >
-          <Sparkles className="text-warn mt-0.5 size-4 shrink-0" />
-          <div className="min-w-0 flex-1 text-xs">
-            <p className="text-ink font-medium">
-              Outline complete — {runResult.runs.length} execution
-              {runResult.runs.length === 1 ? "" : "s"} recorded.
-            </p>
-            <p className="text-muted mt-1 leading-relaxed">
-              {runResult.status === "not_implemented"
-                ? "The planner, component research, and electrical agents completed and stored validated artifacts. Programming, mechanical, and cost agents are still placeholders; open Schematic & pinout to inspect every connection."
-                : "Agent results are stored in the project audit trail below."}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => setRunResult(null)}
-            className="text-faint hover:text-ink"
-            aria-label="Dismiss result"
-          >
-            <XCircle className="size-4" />
-          </button>
-        </div>
-      ) : null}
-
-      {runError ? (
-        <div className="rounded-panel border-danger/20 bg-danger/[0.05] text-danger mb-5 flex items-start gap-2.5 border px-4 py-3 text-xs">
-          <TriangleAlert className="mt-0.5 size-4 shrink-0" />
-          {runError}
-        </div>
-      ) : null}
-
-      <div className="grid items-start gap-6 xl:grid-cols-[1fr_330px]">
+      <div className="grid items-start gap-6 xl:grid-cols-[1fr_320px]">
         <div className="space-y-6">
           <section>
             <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-ink text-sm font-medium">Build modules</h2>
+              <h2 className="text-ink text-sm font-medium">Your build</h2>
               <span className="text-faint font-mono text-[9px] tracking-wider uppercase">
-                same specification · five disciplines
+                {completedSteps}/5 artifacts ready
               </span>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              {PROJECT_MODULES.map((module) => {
-                const href =
-                  module.slug === "specification"
-                    ? "#specification"
-                    : `/projects/${project.id}/${module.slug}`;
-                return (
-                  <Link
-                    key={module.slug}
-                    href={href}
-                    className={cn(
-                      "group rounded-panel flex flex-col border p-4 transition-colors",
-                      module.available
-                        ? "border-signal/20 bg-signal/[0.03] hover:border-signal/35"
-                        : "border-line-soft bg-surface hover:border-line",
-                    )}
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div
-                        className={cn(
-                          "flex size-8 items-center justify-center rounded-md border",
-                          module.available
-                            ? "border-signal/25 bg-signal/10 text-signal"
-                            : "border-line bg-elevated text-faint",
-                        )}
-                      >
-                        <module.icon className="size-4" strokeWidth={1.7} />
-                      </div>
-                      <Badge variant={module.available ? "signal" : "outline"}>
-                        {module.available ? "Ready" : module.milestone}
-                      </Badge>
+              {PROJECT_MODULES.map((module) => (
+                <Link
+                  key={module.slug}
+                  href={`/projects/${project.id}/${module.slug}`}
+                  className="group rounded-panel border-line-soft bg-surface hover:border-signal/30 flex flex-col border p-4 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="border-signal/25 bg-signal/10 text-signal flex size-8 items-center justify-center rounded-md border">
+                      <module.icon className="size-4" strokeWidth={1.7} />
                     </div>
-                    <h3 className="text-ink mt-3 flex items-center gap-1.5 text-[13px] font-medium">
-                      {module.label}
-                      <ArrowUpRight className="text-faint size-3 opacity-0 transition-opacity group-hover:opacity-100" />
-                    </h3>
-                    <p className="text-faint mt-1 text-[11px] leading-relaxed">
-                      {module.description}
-                    </p>
-                  </Link>
-                );
-              })}
+                    <ArrowUpRight className="text-faint size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
+                  </div>
+                  <h3 className="text-ink mt-3 text-[13px] font-medium">{module.label}</h3>
+                  <p className="text-faint mt-1 text-[11px] leading-relaxed">
+                    {module.description}
+                  </p>
+                </Link>
+              ))}
             </div>
           </section>
 
-          <Card id="specification" className="scroll-mt-24">
-            <CardHeader className="flex-row items-start justify-between space-y-0">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="text-signal/80 size-4" /> Specification
-                </CardTitle>
-                <p className="text-muted mt-1 text-xs">
-                  Structured intent created with the project. Editing lands in M2.
-                </p>
-              </div>
-              <Badge variant={spec?.status === "approved" ? "signal" : "outline"}>
-                {spec?.status ?? "draft"} · v{spec?.version ?? 1}
+          <Card>
+            <CardHeader className="flex-row items-center justify-between space-y-0 pb-3">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <FileText className="text-signal/80 size-4" /> Specification
+              </CardTitle>
+              <Badge variant={project.specification?.status === "approved" ? "signal" : "outline"}>
+                {project.specification?.status ?? "draft"} · v{project.specification?.version ?? 1}
               </Badge>
             </CardHeader>
-            <CardContent className="space-y-5">
-              <div className="border-line-soft bg-canvas/30 rounded-lg border p-4">
-                <p className="text-faint font-mono text-[9px] tracking-[0.16em] uppercase">
-                  Summary
-                </p>
-                <p className="text-muted mt-2 text-[13px] leading-relaxed">
-                  {spec?.summary || project.description || "No specification summary yet."}
-                </p>
-              </div>
-
-              <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <CardContent className="space-y-4">
+              <p className="text-muted text-[13px] leading-relaxed">
+                {build?.specification?.summary ||
+                  project.specification?.summary ||
+                  project.description ||
+                  "No specification summary yet."}
+              </p>
+              <dl className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                 {[
                   [
                     "Platform",
-                    spec?.target_platform ? titleCase(spec.target_platform) : "Undecided",
+                    titleCase(
+                      build?.specification?.target_platform ??
+                        project.specification?.target_platform ??
+                        "undecided",
+                    ),
                   ],
-                  ["Drive type", spec?.drive_type ? titleCase(spec.drive_type) : "Not set"],
-                  ["Environment", spec?.environment ? titleCase(spec.environment) : "Indoor"],
-                  ["Power source", spec?.power_source || "Planner decides"],
                   [
-                    "Payload",
-                    spec?.payload_capacity_kg ? `${spec.payload_capacity_kg} kg` : "Not set",
+                    "Drive",
+                    titleCase(
+                      build?.specification?.drive_type ??
+                        project.specification?.drive_type ??
+                        "none",
+                    ),
                   ],
                   ["Difficulty", titleCase(project.difficulty)],
+                  ["Stores", String(research?.selected_shops?.length ?? 0)],
+                  ["Languages", String(programming?.bundles.length ?? 0)],
+                  ["Custom PCB", build?.preferences.custom_pcb ? "Yes" : "No"],
                 ].map(([label, value]) => (
                   <div
                     key={label}
@@ -409,119 +337,21 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
                   </div>
                 ))}
               </dl>
-
-              <div className="grid gap-4 sm:grid-cols-2">
+              {build?.specification?.requirements.length ? (
                 <div>
                   <p className="text-faint mb-2 font-mono text-[9px] tracking-[0.16em] uppercase">
                     Requirements
                   </p>
-                  {spec?.requirements?.length ? (
-                    <ul className="space-y-1.5">
-                      {spec.requirements.map((requirement) => (
-                        <li key={requirement} className="text-muted flex items-start gap-2 text-xs">
-                          <span className="bg-signal/70 mt-1.5 size-1 shrink-0 rounded-full" />
-                          {requirement}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-faint text-xs">No explicit requirements recorded.</p>
-                  )}
+                  <ul className="space-y-1.5">
+                    {build.specification.requirements.map((requirement) => (
+                      <li key={requirement} className="text-muted flex items-start gap-2 text-xs">
+                        <CheckCircle2 className="text-signal/70 mt-0.5 size-3 shrink-0" />
+                        {requirement}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <div>
-                  <p className="text-faint mb-2 font-mono text-[9px] tracking-[0.16em] uppercase">
-                    Constraints
-                  </p>
-                  {spec?.constraints?.length ? (
-                    <ul className="space-y-1.5">
-                      {spec.constraints.map((constraint) => (
-                        <li key={constraint} className="text-muted flex items-start gap-2 text-xs">
-                          <span className="bg-aqua/70 mt-1.5 size-1 shrink-0 rounded-full" />
-                          {constraint}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-faint text-xs">No constraints recorded.</p>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex-row items-start justify-between space-y-0">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Bot className="text-signal/80 size-4" /> Agent pipeline
-                </CardTitle>
-                <p className="text-muted mt-1 text-xs">
-                  Typed contracts, deterministic dependency order, audited runs.
-                </p>
-              </div>
-              {DEMO_MODE ? (
-                <Badge variant="outline">read-only</Badge>
-              ) : (
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={() => void runAgents("all")}
-                  disabled={running !== null}
-                >
-                  {running !== null ? (
-                    <Loader2 className="size-3.5 animate-spin" />
-                  ) : runs.length ? (
-                    <RefreshCw className="size-3.5" />
-                  ) : (
-                    <Play className="size-3.5" />
-                  )}
-                  {runs.length ? "Run again" : "Run pipeline"}
-                </Button>
-              )}
-            </CardHeader>
-            <CardContent>
-              <div className="mb-5">
-                <div className="text-faint mb-2 flex items-center justify-between text-[10px]">
-                  <span>Pipeline completion</span>
-                  <span className="font-mono">
-                    {completedStages}/{AGENTS.length}
-                  </span>
-                </div>
-                <Progress value={pipelineProgress} />
-              </div>
-              <div className="space-y-1.5">
-                {AGENTS.map((agent, index) => {
-                  const run = latestByAgent.get(agent.name);
-                  const runStyle = run ? RUN_STYLES[run.status] : null;
-                  return (
-                    <div
-                      key={agent.name}
-                      className="border-line-soft bg-canvas/30 flex items-center gap-3 rounded-lg border px-3 py-2.5"
-                    >
-                      <span className="text-faint w-4 font-mono text-[9px]">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <agent.icon className="text-faint size-3.5 shrink-0" />
-                      <div className="min-w-0 flex-1">
-                        <p className="text-ink truncate text-xs">{agent.label}</p>
-                        <p className="text-faint truncate text-[10px]">{agent.short}</p>
-                      </div>
-                      {run ? (
-                        <div className="flex shrink-0 items-center gap-1.5">
-                          <RunIcon status={run.status} />
-                          <span className={cn("font-mono text-[9px] uppercase", runStyle?.text)}>
-                            {runStyle?.label}
-                          </span>
-                        </div>
-                      ) : (
-                        <Badge variant="outline" className="shrink-0">
-                          not run
-                        </Badge>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+              ) : null}
             </CardContent>
           </Card>
         </div>
@@ -529,89 +359,90 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
         <aside className="space-y-4">
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm">Project details</CardTitle>
+              <CardTitle className="text-sm">Pipeline</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-xs">
-              {[
-                ["Created", formatDate(project.created_at)],
-                ["Updated", formatDate(project.updated_at)],
-                ["Slug", project.slug],
-                ["Project ID", `${project.id.slice(0, 8)}…`],
-              ].map(([label, value]) => (
-                <div key={label} className="flex items-center justify-between gap-3">
-                  <span className="text-faint">{label}</span>
-                  <span className="text-muted truncate font-mono text-[10px]">{value}</span>
-                </div>
-              ))}
-              <Separator />
-              <div className="flex items-center justify-between">
-                <span className="text-faint">Budget</span>
-                <span className="text-muted">
-                  {project.budget_min_usd ? `${formatMoney(project.budget_min_usd)} – ` : ""}
-                  {formatMoney(project.budget_max_usd)}
+            <CardContent>
+              <div className="mb-3 flex items-center justify-between text-[10px]">
+                <span className="text-faint">Build freshness</span>
+                <span className="text-muted font-mono">
+                  {build ? formatRelative(build.generated_at) : "not built"}
                 </span>
               </div>
+              <Progress value={(completedSteps / 5) * 100} />
+              <div className="mt-4 space-y-1.5">
+                {[
+                  ["Parts & prices", Boolean(research)],
+                  ["Schematic", Boolean(build?.electrical)],
+                  ["Code", Boolean(programming)],
+                  ["3D & print price", Boolean(mechanical)],
+                  ["Documentation", Boolean(build?.documentation.files.length)],
+                ].map(([label, done]) => (
+                  <div
+                    key={String(label)}
+                    className="flex items-center justify-between gap-2 text-xs"
+                  >
+                    <span className="text-muted">{label}</span>
+                    {done ? (
+                      <CheckCircle2 className="text-signal size-3.5" />
+                    ) : (
+                      <Clock3 className="text-faint size-3.5" />
+                    )}
+                  </div>
+                ))}
+              </div>
+              {build?.missing.length ? (
+                <p className="text-warn mt-3 text-[10px] leading-relaxed">
+                  Missing: {build.missing.join(", ")}
+                </p>
+              ) : null}
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader className="flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-sm">Execution log</CardTitle>
-              <Badge variant="outline">{runs.length}</Badge>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm">Stores</CardTitle>
             </CardHeader>
             <CardContent>
-              {runs.length === 0 ? (
-                <div className="border-line rounded-lg border border-dashed px-3 py-5 text-center">
-                  <Bot className="text-faint mx-auto size-4" />
-                  <p className="text-faint mt-2 text-[11px]">
-                    No agent runs yet. Execute the pipeline to inspect the contract.
-                  </p>
+              {research?.selected_shops?.length ? (
+                <div className="flex flex-wrap gap-1.5">
+                  {research.selected_shops.map((store) => (
+                    <Badge key={store} variant="outline">
+                      {store}
+                    </Badge>
+                  ))}
                 </div>
               ) : (
-                <div className="space-y-3">
-                  {runs.slice(0, 8).map((run) => {
-                    const runStyle = RUN_STYLES[run.status];
-                    return (
-                      <div key={run.id} className="flex items-start gap-2">
-                        <RunIcon status={run.status} />
-                        <div className="min-w-0 flex-1">
-                          <p className="text-muted truncate text-[11px]">
-                            {AGENTS.find((agent) => agent.name === run.agent)?.label ?? run.agent}
-                          </p>
-                          <p className="text-faint mt-0.5 flex items-center gap-1.5 text-[9px]">
-                            <span className={runStyle.text}>{runStyle.label}</span>
-                            <span>·</span>
-                            <span>{formatRelative(run.created_at)}</span>
-                            <span>·</span>
-                            <span className="font-mono">{run.latency_ms}ms</span>
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                <p className="text-faint text-xs">No stores selected.</p>
               )}
+              <p className="text-faint mt-3 text-[10px] leading-relaxed">
+                Every part is sorted cheapest → most expensive per selected store. Prices are
+                estimates, not live quotes.
+              </p>
             </CardContent>
           </Card>
 
           <div className="rounded-panel border-line-soft bg-surface border p-4">
             <div className="text-aqua flex items-center gap-2 text-[11px]">
-              <FolderGit2 className="size-3.5" /> Foundation scope
+              <CircuitBoard className="size-3.5" /> Shared build artifact
             </div>
             <p className="text-faint mt-2 text-[11px] leading-relaxed">
-              Project CRUD, specification persistence, and orchestration audit are implemented.
-              Product capabilities are delivered through milestones M2–M10.
+              Prices, schematic, code, 3D pricing, budget, and documents are all derived from the
+              same confirmed answers and validated pin map.
             </p>
-            <a
-              href="https://github.com/Abooubaker/blueprints-baker"
-              target="_blank"
-              rel="noreferrer"
-              className="text-muted hover:text-signal mt-3 flex items-center gap-1 text-[11px]"
-            >
-              Follow the roadmap <ArrowRight className="size-3" />
-            </a>
           </div>
         </aside>
+      </div>
+
+      <div className="mt-6 flex flex-wrap gap-2">
+        <ButtonLink href={`/projects/${project.id}/components`} variant="secondary" size="sm">
+          <Layers className="size-3.5" /> Parts & prices
+        </ButtonLink>
+        <ButtonLink href={`/projects/${project.id}/wiring`} variant="secondary" size="sm">
+          <CircuitBoard className="size-3.5" /> Schematic
+        </ButtonLink>
+        <ButtonLink href={`/projects/${project.id}/programming`} variant="secondary" size="sm">
+          <Code2 className="size-3.5" /> Code
+        </ButtonLink>
       </div>
     </div>
   );

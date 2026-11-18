@@ -8,6 +8,7 @@
 
 import agentCatalogJson from "@/lib/demo/agent-catalog.json";
 import agentRunsJson from "@/lib/demo/agent-runs.json";
+import buildJson from "@/lib/demo/build.json";
 import electricalJson from "@/lib/demo/electrical.json";
 import orchestrationJson from "@/lib/demo/orchestration.json";
 import projectJson from "@/lib/demo/project.json";
@@ -15,6 +16,7 @@ import { assetPath, DEMO_PROJECT_ID } from "@/lib/constants";
 import type {
   AgentCatalog,
   AgentRun,
+  BuildArtifact,
   ElectricalArtifact,
   ExportFormat,
   OrchestrationResult,
@@ -26,6 +28,7 @@ export const demoProject = projectJson as unknown as Project;
 export const demoAgentRuns = agentRunsJson as unknown as AgentRun[];
 export const demoAgentCatalog = agentCatalogJson as unknown as AgentCatalog;
 export const demoElectrical = electricalJson as unknown as ElectricalArtifact;
+export const demoBuild = buildJson as unknown as BuildArtifact;
 export const demoOrchestration = orchestrationJson as unknown as OrchestrationResult;
 
 export const demoProjectSummaries: ProjectSummary[] = [

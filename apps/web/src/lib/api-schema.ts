@@ -38,6 +38,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/intent/identify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Identify the robot from a plain-language description */
+        post: operations["identify_api_v1_intent_identify_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects": {
         parameters: {
             query?: never;
@@ -96,6 +113,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{project_id}/build": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read the latest full build artifact */
+        get: operations["get_build_api_v1_projects__project_id__build_get"];
+        put?: never;
+        /**
+         * Run the full build pipeline
+         * @description Runs planner, component research, electrical, programming, mechanical, and cost agents, then returns one artifact with sourced prices, schematic, code bundles, 3D/weight/price, and documentation.
+         */
+        post: operations["generate_build_api_v1_projects__project_id__build_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{project_id}/electrical": {
         parameters: {
             query?: never;
@@ -127,6 +165,41 @@ export interface paths {
         /** Download an export */
         get: operations["export_electrical_api_v1_projects__project_id__electrical_export__export_format__get"];
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/mechanical/stl": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download the generated chassis STL */
+        get: operations["download_stl_api_v1_projects__project_id__mechanical_stl_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read the saved guided-flow answers */
+        get: operations["get_preferences_api_v1_projects__project_id__preferences_get"];
+        /** Save the confirmed guided-flow answers */
+        put: operations["save_preferences_api_v1_projects__project_id__preferences_put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -364,6 +437,153 @@ export interface components {
             /** Tradeoffs */
             tradeoffs?: string[];
         };
+        /** BuildArtifactRead */
+        BuildArtifactRead: {
+            cost?: components["schemas"]["CostEstimate"] | null;
+            documentation?: components["schemas"]["ProjectDocumentation"];
+            electrical?: components["schemas"]["ElectricalPlan"] | null;
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+            identification?: components["schemas"]["RobotIdentification"] | null;
+            mechanical?: components["schemas"]["MechanicalOutput"] | null;
+            /** Missing */
+            missing?: string[];
+            preferences: components["schemas"]["BuildPreferences-Output"];
+            programming?: components["schemas"]["ProgrammingOutput"] | null;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /** Project Name */
+            project_name: string;
+            research?: components["schemas"]["ComponentResearchOutput"] | null;
+            specification?: components["schemas"]["RobotSpecificationDraft"] | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ready" | "partial" | "empty";
+            /** Warnings */
+            warnings?: string[];
+        };
+        /**
+         * BuildPreferences
+         * @description Persisted answers from the guided project flow.
+         *
+         *     The configuration lives in ``project_configurations.configuration`` as JSON so
+         *     it can evolve without a migration. Every downstream agent reads it through
+         *     request parameters.
+         */
+        "BuildPreferences-Input": {
+            /** Budget Max Usd */
+            budget_max_usd?: number | string | null;
+            /**
+             * Confirmed
+             * @default false
+             */
+            confirmed: boolean;
+            /**
+             * Controller Notes
+             * @default
+             */
+            controller_notes: string;
+            /** Controllers */
+            controllers?: string[];
+            /**
+             * Custom Pcb
+             * @default false
+             */
+            custom_pcb: boolean;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** @default beginner */
+            difficulty: components["schemas"]["Difficulty"];
+            /**
+             * Identification Confidence
+             * @default 0
+             */
+            identification_confidence: number;
+            /**
+             * Identification Rationale
+             * @default
+             */
+            identification_rationale: string;
+            /** Languages */
+            languages?: components["schemas"]["CodeLanguage"][];
+            /**
+             * Robot Name
+             * @default
+             */
+            robot_name: string;
+            /** @default custom */
+            robot_type: components["schemas"]["RobotType"];
+            /** Shops */
+            shops?: components["schemas"]["StoreName"][];
+        };
+        /**
+         * BuildPreferences
+         * @description Persisted answers from the guided project flow.
+         *
+         *     The configuration lives in ``project_configurations.configuration`` as JSON so
+         *     it can evolve without a migration. Every downstream agent reads it through
+         *     request parameters.
+         */
+        "BuildPreferences-Output": {
+            /** Budget Max Usd */
+            budget_max_usd?: string | null;
+            /**
+             * Confirmed
+             * @default false
+             */
+            confirmed: boolean;
+            /**
+             * Controller Notes
+             * @default
+             */
+            controller_notes: string;
+            /** Controllers */
+            controllers?: string[];
+            /**
+             * Custom Pcb
+             * @default false
+             */
+            custom_pcb: boolean;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** @default beginner */
+            difficulty: components["schemas"]["Difficulty"];
+            /**
+             * Identification Confidence
+             * @default 0
+             */
+            identification_confidence: number;
+            /**
+             * Identification Rationale
+             * @default
+             */
+            identification_rationale: string;
+            /** Languages */
+            languages?: components["schemas"]["CodeLanguage"][];
+            /**
+             * Robot Name
+             * @default
+             */
+            robot_name: string;
+            /** @default custom */
+            robot_type: components["schemas"]["RobotType"];
+            /** Shops */
+            shops?: components["schemas"]["StoreName"][];
+        };
         /** CodeFile */
         CodeFile: {
             /** Content */
@@ -379,6 +599,12 @@ export interface components {
             path: string;
         };
         /**
+         * CodeLanguage
+         * @description Programming languages the generated bundle can scaffold.
+         * @enum {string}
+         */
+        CodeLanguage: "python" | "cpp" | "c" | "stm32_assembly" | "verilog" | "vhdl" | "other";
+        /**
          * ComponentAvailability
          * @enum {string}
          */
@@ -392,6 +618,9 @@ export interface components {
             availability: string;
             /** Category */
             category: string;
+            /** Cheapest Price Jod */
+            cheapest_price_jod?: string | null;
+            cheapest_store?: components["schemas"]["StoreName"] | null;
             /** Compatibility Notes */
             compatibility_notes?: string[];
             /**
@@ -406,6 +635,11 @@ export interface components {
             model_number: string;
             /** Name */
             name: string;
+            /**
+             * Offers
+             * @description Store estimates sorted cheapest to most expensive.
+             */
+            offers?: components["schemas"]["StoreOffer"][];
             /** Price Usd */
             price_usd?: string | null;
             /**
@@ -478,8 +712,17 @@ export interface components {
             bill_of_materials?: components["schemas"]["BillOfMaterialsItem"][];
             /** Compatibility Notes */
             compatibility_notes?: string[];
+            /**
+             * Currency
+             * @default JOD
+             */
+            currency: string;
+            /** Selected Shops */
+            selected_shops?: components["schemas"]["StoreName"][];
             /** Sources */
             sources?: string[];
+            /** Total Estimated Jod */
+            total_estimated_jod?: string | null;
             /** Total Estimated Usd */
             total_estimated_usd?: string | null;
             /** Unresolved Requirements */
@@ -500,12 +743,23 @@ export interface components {
             budget_status: "under" | "within" | "over" | "unknown";
             /** Contingency Usd */
             contingency_usd?: string | null;
+            /**
+             * Currency
+             * @default JOD
+             */
+            currency: string;
             /** Line Items */
             line_items?: components["schemas"]["CostLineItem"][];
+            /** Print Cost Jod */
+            print_cost_jod?: string | null;
             /** Shipping Usd */
             shipping_usd?: string | null;
+            /** Subtotal Jod */
+            subtotal_jod?: string | null;
             /** Subtotal Usd */
             subtotal_usd?: string | null;
+            /** Total Jod */
+            total_jod?: string | null;
             /** Total Usd */
             total_usd?: string | null;
         };
@@ -523,6 +777,8 @@ export interface components {
             is_estimate: boolean;
             /** Label */
             label: string;
+            /** Line Total Jod */
+            line_total_jod?: string | null;
             /** Line Total Usd */
             line_total_usd?: string | null;
             /**
@@ -535,6 +791,8 @@ export interface components {
              * @default
              */
             supplier: string;
+            /** Unit Price Jod */
+            unit_price_jod?: string | null;
             /** Unit Price Usd */
             unit_price_usd?: string | null;
         };
@@ -551,6 +809,15 @@ export interface components {
             length_mm?: number | null;
             /** Width Mm */
             width_mm?: number | null;
+        };
+        /** DocumentationFile */
+        DocumentationFile: {
+            /** Content */
+            content: string;
+            /** Path */
+            path: string;
+            /** Title */
+            title: string;
         };
         /**
          * DriveType
@@ -831,20 +1098,77 @@ export interface components {
             /** Version */
             version: string;
         };
+        /** IdentifyRequest */
+        IdentifyRequest: {
+            /** Description */
+            description: string;
+            robot_type?: components["schemas"]["RobotType"] | null;
+        };
+        /**
+         * LanguageBundle
+         * @description All files generated for one selected programming language.
+         */
+        LanguageBundle: {
+            /** Display Name */
+            display_name: string;
+            /** Files */
+            files?: components["schemas"]["CodeFile"][];
+            /**
+             * Framework
+             * @default
+             */
+            framework: string;
+            language: components["schemas"]["CodeLanguage"];
+            /** Libraries */
+            libraries?: string[];
+            /** Notes */
+            notes?: string[];
+            /**
+             * Status
+             * @default scaffold
+             * @enum {string}
+             */
+            status: "complete" | "scaffold";
+        };
         /** MechanicalOutput */
         MechanicalOutput: {
             /** Assembly Steps */
             assembly_steps?: components["schemas"]["AssemblyStep"][];
             chassis?: components["schemas"]["MechanicalPart"] | null;
+            dimensions_mm?: components["schemas"]["Dimensions"];
             /**
              * Drawings
              * @description References/paths, not CAD payloads.
              */
             drawings?: string[];
+            /**
+             * Infill Percent
+             * @default 35
+             */
+            infill_percent: number;
             /** Manufacturing Notes */
             manufacturing_notes?: string[];
+            /** Material Quotes */
+            material_quotes?: components["schemas"]["PrintMaterialQuote"][];
             /** Parts */
             parts?: components["schemas"]["MechanicalPart"][];
+            /** Pricing Notes */
+            pricing_notes?: string[];
+            /**
+             * Stl Ascii
+             * @default
+             */
+            stl_ascii: string;
+            /**
+             * Stl Filename
+             * @default
+             */
+            stl_filename: string;
+            /**
+             * Volume Cm3
+             * @default 0
+             */
+            volume_cm3: string;
             /** Warnings */
             warnings?: string[];
         };
@@ -983,8 +1307,38 @@ export interface components {
             /** Voltage V */
             voltage_v?: number | null;
         };
+        /**
+         * PrintMaterial
+         * @description Materials carried by the 3D-print price chart.
+         * @enum {string}
+         */
+        PrintMaterial: "PLA" | "PETG" | "ABS" | "Resin" | "TPU";
+        /**
+         * PrintMaterialQuote
+         * @description Cost to print the generated model in one material.
+         */
+        PrintMaterialQuote: {
+            /** Base Jod */
+            base_jod: string;
+            /**
+             * Is Cheapest
+             * @default false
+             */
+            is_cheapest: boolean;
+            material: components["schemas"]["PrintMaterial"];
+            /** Minimum Jod */
+            minimum_jod: string;
+            /** Price Per Gram Jod */
+            price_per_gram_jod: string;
+            /** Total Jod */
+            total_jod: string;
+            /** Weight G */
+            weight_g: string;
+        };
         /** ProgrammingOutput */
         ProgrammingOutput: {
+            /** Bundles */
+            bundles?: components["schemas"]["LanguageBundle"][];
             /** Files */
             files?: components["schemas"]["CodeFile"][];
             /**
@@ -1034,6 +1388,18 @@ export interface components {
             robot_type: components["schemas"]["RobotType"];
             /** @default undecided */
             target_platform: components["schemas"]["TargetPlatform"];
+        };
+        /** ProjectDocumentation */
+        ProjectDocumentation: {
+            /** Files */
+            files?: components["schemas"]["DocumentationFile"][];
+            /** Notes */
+            notes?: string[];
+            /**
+             * Summary
+             * @default
+             */
+            summary: string;
         };
         /** ProjectRead */
         ProjectRead: {
@@ -1140,6 +1506,33 @@ export interface components {
             version: string;
         };
         /**
+         * RobotIdentification
+         * @description Result of the guided-flow research step before a project exists.
+         */
+        RobotIdentification: {
+            /** Confidence */
+            confidence: number;
+            /** Key Requirements */
+            key_requirements?: string[];
+            /**
+             * Needs Confirmation
+             * @default true
+             */
+            needs_confirmation: boolean;
+            /** Proposed Name */
+            proposed_name: string;
+            /**
+             * Rationale
+             * @default
+             */
+            rationale: string;
+            robot_type: components["schemas"]["RobotType"];
+            /** @default beginner */
+            suggested_difficulty: components["schemas"]["Difficulty"];
+            /** @default arduino */
+            suggested_platform: components["schemas"]["TargetPlatform"];
+        };
+        /**
          * RobotSpecificationDraft
          * @description Structured, buildable interpretation of the user's request.
          */
@@ -1209,6 +1602,7 @@ export interface components {
             };
             component_research?: components["schemas"]["ComponentResearchOutput"] | null;
             cost?: components["schemas"]["CostEstimate"] | null;
+            documentation?: components["schemas"]["ProjectDocumentation"] | null;
             electrical?: components["schemas"]["ElectricalPlan"] | null;
             mechanical?: components["schemas"]["MechanicalOutput"] | null;
             /** Notes */
@@ -1320,6 +1714,43 @@ export interface components {
             use_case: string;
         };
         /**
+         * StoreName
+         * @description Stores the guided flow can price a part against.
+         * @enum {string}
+         */
+        StoreName: "temu" | "mikroelectron" | "waslleh" | "amazon" | "aliexpress" | "ghanimjo";
+        /**
+         * StoreOffer
+         * @description One store's estimate for a part, in Jordanian dinars.
+         */
+        StoreOffer: {
+            /**
+             * Availability
+             * @default unknown
+             */
+            availability: string;
+            /**
+             * Is Estimate
+             * @default true
+             */
+            is_estimate: boolean;
+            /** Label */
+            label: string;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+            /** Price Jod */
+            price_jod: string;
+            /**
+             * Product Url
+             * @default
+             */
+            product_url: string;
+            store: components["schemas"]["StoreName"];
+        };
+        /**
          * TargetPlatform
          * @enum {string}
          */
@@ -1387,6 +1818,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Page_ComponentRead_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    identify_api_v1_intent_identify_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IdentifyRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RobotIdentification"];
                 };
             };
             /** @description Validation Error */
@@ -1632,6 +2096,68 @@ export interface operations {
             };
         };
     };
+    get_build_api_v1_projects__project_id__build_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuildArtifactRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    generate_build_api_v1_projects__project_id__build_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuildArtifactRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_electrical_api_v1_projects__project_id__electrical_get: {
         parameters: {
             query?: never;
@@ -1717,6 +2243,104 @@ export interface operations {
                     "text/csv": unknown;
                     "text/markdown": unknown;
                     "text/plain": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_stl_api_v1_projects__project_id__mechanical_stl_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "model/stl": unknown;
+                    "text/plain": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_preferences_api_v1_projects__project_id__preferences_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuildPreferences-Output"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_preferences_api_v1_projects__project_id__preferences_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BuildPreferences-Input"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuildPreferences-Output"];
                 };
             };
             /** @description Validation Error */

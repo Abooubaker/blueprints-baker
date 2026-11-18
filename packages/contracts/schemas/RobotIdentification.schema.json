@@ -1,0 +1,89 @@
+{
+  "$defs": {
+    "Difficulty": {
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "title": "Difficulty",
+      "type": "string"
+    },
+    "RobotType": {
+      "enum": [
+        "line_follower",
+        "obstacle_avoider",
+        "rover",
+        "robot_arm",
+        "drone",
+        "balancing_bot",
+        "custom"
+      ],
+      "title": "RobotType",
+      "type": "string"
+    },
+    "TargetPlatform": {
+      "enum": [
+        "arduino",
+        "esp32",
+        "raspberry_pi",
+        "other",
+        "undecided"
+      ],
+      "title": "TargetPlatform",
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Result of the guided-flow research step before a project exists.",
+  "properties": {
+    "confidence": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "key_requirements": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Key Requirements",
+      "type": "array"
+    },
+    "needs_confirmation": {
+      "default": true,
+      "title": "Needs Confirmation",
+      "type": "boolean"
+    },
+    "proposed_name": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Proposed Name",
+      "type": "string"
+    },
+    "rationale": {
+      "default": "",
+      "title": "Rationale",
+      "type": "string"
+    },
+    "robot_type": {
+      "$ref": "#/$defs/RobotType"
+    },
+    "suggested_difficulty": {
+      "$ref": "#/$defs/Difficulty",
+      "default": "beginner"
+    },
+    "suggested_platform": {
+      "$ref": "#/$defs/TargetPlatform",
+      "default": "arduino"
+    }
+  },
+  "required": [
+    "proposed_name",
+    "robot_type",
+    "confidence"
+  ],
+  "title": "RobotIdentification",
+  "type": "object"
+}

@@ -101,6 +101,22 @@
           "title": "Label",
           "type": "string"
         },
+        "line_total_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line Total Jod"
+        },
         "line_total_usd": {
           "anyOf": [
             {
@@ -127,6 +143,22 @@
           "default": "",
           "title": "Supplier",
           "type": "string"
+        },
+        "unit_price_jod": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit Price Jod"
         },
         "unit_price_usd": {
           "anyOf": [
@@ -199,12 +231,33 @@
       "default": null,
       "title": "Contingency Usd"
     },
+    "currency": {
+      "default": "JOD",
+      "title": "Currency",
+      "type": "string"
+    },
     "line_items": {
       "items": {
         "$ref": "#/$defs/CostLineItem"
       },
       "title": "Line Items",
       "type": "array"
+    },
+    "print_cost_jod": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Print Cost Jod"
     },
     "shipping_usd": {
       "anyOf": [
@@ -222,6 +275,22 @@
       "default": null,
       "title": "Shipping Usd"
     },
+    "subtotal_jod": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Subtotal Jod"
+    },
     "subtotal_usd": {
       "anyOf": [
         {
@@ -237,6 +306,22 @@
       ],
       "default": null,
       "title": "Subtotal Usd"
+    },
+    "total_jod": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Total Jod"
     },
     "total_usd": {
       "anyOf": [

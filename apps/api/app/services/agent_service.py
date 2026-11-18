@@ -15,6 +15,7 @@ from app.models.agent_run import AgentRun
 from app.models.enums import AgentName, AgentResultStatus, AgentRunStatus
 from app.models.project import RobotProject
 from app.schemas.agent import AgentRunRequest, OrchestrationRead
+from app.services import preferences_service
 from app.services.project_service import get_project
 
 _RUN_STATUS_MAP: dict[AgentResultStatus, AgentRunStatus] = {
@@ -96,10 +97,15 @@ async def run_agents(
 ) -> OrchestrationRead:
     project = await get_project(session, project_id)
     context = build_project_context(project)
+    preferences = await preferences_service.get_preferences(session, project_id)
+    parameters: dict[str, object] = {
+        **preferences_service.preferences_parameters(preferences),
+        **payload.parameters,
+    }
 
     try:
         orchestration = await orchestrator.run(
-            context, agents=payload.agents, parameters=payload.parameters
+            context, agents=payload.agents, parameters=parameters
         )
     except OrchestrationError as exc:
         raise ValidationError(str(exc)) from exc
@@ -110,7 +116,7 @@ async def run_agents(
             result,
             provider=provider.name,
             model=provider.default_model,
-            parameters=payload.parameters,
+            parameters=parameters,
         )
         for result in orchestration.results
     ]

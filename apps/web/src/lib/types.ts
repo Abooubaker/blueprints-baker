@@ -239,6 +239,22 @@ export interface ElectricalPlan {
   library_version: string;
 }
 
+export type StoreName = "temu" | "mikroelectron" | "waslleh" | "amazon" | "aliexpress" | "ghanimjo";
+
+export type CodeLanguage = "python" | "cpp" | "c" | "stm32_assembly" | "verilog" | "vhdl" | "other";
+
+export type PrintMaterial = "PLA" | "PETG" | "ABS" | "Resin" | "TPU";
+
+export interface StoreOffer {
+  store: StoreName;
+  label: string;
+  price_jod: number | string;
+  product_url: string;
+  availability: string;
+  is_estimate: boolean;
+  note: string;
+}
+
 export interface ComponentCandidate {
   name: string;
   manufacturer: string;
@@ -251,6 +267,9 @@ export interface ComponentCandidate {
   availability: string;
   compatibility_notes: string[];
   score: number;
+  offers?: StoreOffer[];
+  cheapest_store?: StoreName | null;
+  cheapest_price_jod?: number | string | null;
 }
 
 export interface BomItem {
@@ -267,7 +286,193 @@ export interface ComponentResearchOutput {
   unresolved_requirements: string[];
   compatibility_notes: string[];
   total_estimated_usd: number | string | null;
+  total_estimated_jod?: number | string | null;
+  selected_shops?: StoreName[];
+  currency?: string;
   sources: string[];
+}
+
+export interface RobotIdentification {
+  proposed_name: string;
+  robot_type: RobotType;
+  confidence: number;
+  rationale: string;
+  suggested_platform: TargetPlatform;
+  suggested_difficulty: Difficulty;
+  key_requirements: string[];
+  needs_confirmation: boolean;
+}
+
+export interface BuildPreferences {
+  description: string;
+  robot_name: string;
+  robot_type: RobotType;
+  difficulty: Difficulty;
+  shops: StoreName[];
+  languages: CodeLanguage[];
+  controllers: string[];
+  controller_notes: string;
+  custom_pcb: boolean;
+  confirmed: boolean;
+  budget_max_usd: number | string | null;
+  identification_rationale: string;
+  identification_confidence: number;
+}
+
+export interface CodeFile {
+  path: string;
+  language: string;
+  content: string;
+  explanation: string;
+}
+
+export interface LanguageBundle {
+  language: CodeLanguage;
+  display_name: string;
+  framework: string;
+  status: "complete" | "scaffold";
+  files: CodeFile[];
+  libraries: string[];
+  notes: string[];
+}
+
+export interface ProgrammingOutput {
+  platform: TargetPlatform;
+  language: string;
+  framework: string;
+  files: CodeFile[];
+  bundles: LanguageBundle[];
+  libraries: string[];
+  pin_assignments: Record<string, string>;
+  setup_steps: string[];
+  upload_steps: string[];
+  validation_notes: string[];
+}
+
+export interface PrintMaterialQuote {
+  material: PrintMaterial;
+  price_per_gram_jod: number | string;
+  base_jod: number | string;
+  minimum_jod: number | string;
+  weight_g: number | string;
+  total_jod: number | string;
+  is_cheapest: boolean;
+}
+
+export interface MechanicalPart {
+  name: string;
+  category: string;
+  quantity: number;
+  material: string;
+  dimensions_mm?: Record<string, number | null>;
+  notes: string;
+}
+
+export interface AssemblyStep {
+  order: number;
+  title: string;
+  instructions: string;
+  tools: string[];
+  parts: string[];
+  safety_notes: string[];
+}
+
+export interface MechanicalOutput {
+  chassis: MechanicalPart | null;
+  parts: MechanicalPart[];
+  assembly_steps: AssemblyStep[];
+  drawings: string[];
+  manufacturing_notes: string[];
+  warnings: string[];
+  dimensions_mm: { length_mm: number | null; width_mm: number | null; height_mm: number | null };
+  volume_cm3: number | string;
+  infill_percent: number;
+  stl_ascii: string;
+  stl_filename: string;
+  material_quotes: PrintMaterialQuote[];
+  pricing_notes: string[];
+}
+
+export interface CostLineItem {
+  label: string;
+  category: string;
+  quantity: number;
+  unit_price_usd: number | string | null;
+  line_total_usd: number | string | null;
+  unit_price_jod?: number | string | null;
+  line_total_jod?: number | string | null;
+  supplier: string;
+  is_estimate: boolean;
+}
+
+export interface BudgetAlternative {
+  description: string;
+  savings_usd: number | string | null;
+  tradeoffs: string[];
+}
+
+export interface CostEstimate {
+  line_items: CostLineItem[];
+  subtotal_usd: number | string | null;
+  subtotal_jod: number | string | null;
+  shipping_usd: number | string | null;
+  contingency_usd: number | string | null;
+  print_cost_jod: number | string | null;
+  total_usd: number | string | null;
+  total_jod: number | string | null;
+  currency: string;
+  budget: { min_usd: number | string | null; max_usd: number | string | null; currency: string };
+  budget_status: "under" | "within" | "over" | "unknown";
+  alternatives: BudgetAlternative[];
+  assumptions: string[];
+}
+
+export interface DocumentationFile {
+  path: string;
+  title: string;
+  content: string;
+}
+
+export interface ProjectDocumentation {
+  files: DocumentationFile[];
+  summary: string;
+  notes: string[];
+}
+
+export interface BuildArtifact {
+  project_id: string;
+  project_name: string;
+  status: "ready" | "partial" | "empty";
+  generated_at: string;
+  preferences: BuildPreferences;
+  identification: RobotIdentification | null;
+  specification: RobotSpecificationDraft | null;
+  research: ComponentResearchOutput | null;
+  electrical: ElectricalPlan | null;
+  programming: ProgrammingOutput | null;
+  mechanical: MechanicalOutput | null;
+  cost: CostEstimate | null;
+  documentation: ProjectDocumentation;
+  missing: string[];
+  warnings: string[];
+}
+
+export interface RobotSpecificationDraft {
+  summary: string;
+  use_case: string;
+  robot_type: RobotType;
+  difficulty: Difficulty;
+  target_platform: TargetPlatform;
+  drive_type: DriveType;
+  environment: string;
+  power_source: string;
+  dimensions: { length_mm: number | null; width_mm: number | null; height_mm: number | null };
+  payload_capacity_kg: number | string | null;
+  requirements: string[];
+  constraints: string[];
+  success_criteria: string[];
+  open_questions: string[];
+  confidence: number;
 }
 
 export type ExportFormat =

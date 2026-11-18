@@ -71,7 +71,7 @@ contracts: ## Regenerate OpenAPI, agent schemas, and frontend API types
 	cd $(API_DIR) && uv run python ../../scripts/export_contracts.py
 	cd $(WEB_DIR) && npm run codegen
 
-demo-data: ## Regenerate the static GitHub Pages fixtures from the electrical engine
+demo-data: ## Regenerate the static GitHub Pages fixtures with the real build pipeline
 	cd $(API_DIR) && uv run python ../../scripts/generate_demo_data.py
 
 demo-build: demo-data ## Build the static demo export served on GitHub Pages

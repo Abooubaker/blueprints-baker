@@ -35,6 +35,16 @@ export function formatMoney(value: number | null | undefined): string {
   }).format(value);
 }
 
+export function formatJod(value: number | string | null | undefined, digits = 2): string {
+  if (value === null || value === undefined) return "—";
+  const numeric = typeof value === "string" ? Number(value) : value;
+  if (Number.isNaN(numeric)) return "—";
+  return `${new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(numeric)} JOD`;
+}
+
 export function titleCase(value: string): string {
   return value
     .split("_")

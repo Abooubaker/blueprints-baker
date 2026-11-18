@@ -81,7 +81,7 @@ Run from the repository root:
 | `make typecheck` | mypy strict + `tsc --noEmit` |
 | `make build` | Production Next.js build |
 | `make contracts` | Export OpenAPI/schemas and regenerate API types |
-| `make demo-data` | Regenerate the static Pages fixtures from the electrical engine |
+| `make demo-data` | Regenerate the static Pages fixtures with the real build pipeline |
 | `make demo-build` | Build the static Pages export and scan it for credentials |
 | `make check` | Every quality gate (`api-check` + `web-check`) |
 | `make clean` | Remove local caches and build output |
@@ -89,7 +89,7 @@ Run from the repository root:
 Backend commands (from `apps/api`):
 
 ```bash
-uv run pytest                      # 26 tests, SQLite, no network
+uv run pytest                      # 34 tests, SQLite, no network
 uv run pytest -k agent             # focused selection
 uv run pytest --cov=app            # coverage
 uv run ruff check .
@@ -129,6 +129,10 @@ npm run codegen                    # regenerate src/lib/api-schema.ts
 | `AI_MODEL` | `placeholder` | Default model identifier |
 | `AI_API_KEY` | empty | Never commit a real key |
 | `AI_REQUEST_TIMEOUT_SECONDS` | `60` | Provider timeout |
+
+Hosted providers can paste their URL directly: `postgres://`, `sslmode`, and `channel_binding` are
+normalized at startup, and a Neon `-pooler` host disables asyncpg's prepared-statement cache. See
+[deployment.md](deployment.md) for Render + Neon settings.
 
 ### Web (`apps/web/.env.local`)
 
@@ -205,7 +209,7 @@ Adding component tests is tracked in M10.
 
 ## CI
 
-`.github/workflows/ci.yml` runs five jobs on pushes to `main` and every pull request:
+`.github/workflows/ci.yml` runs six jobs on pushes to `main` and every pull request:
 
 1. **Backend** — uv sync, Ruff, format check, mypy strict, pytest with coverage.
 2. **Migrations** — real PostgreSQL 16 service: upgrade head, `alembic check`, downgrade base,

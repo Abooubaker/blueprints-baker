@@ -4,10 +4,10 @@
   "slug": "patio-scout",
   "description": "An ESP32 obstacle-avoiding rover with ultrasonic distance sensing, a scanning servo, and a fused 2S LiPo power tree.",
   "robot_type": "obstacle_avoider",
-  "status": "planning",
+  "status": "ready",
   "difficulty": "intermediate",
   "budget_min_usd": 80,
-  "budget_max_usd": 150,
+  "budget_max_usd": 150.0,
   "owner_id": null,
   "specification": {
     "id": "22222222-2222-4222-8222-222222222222",

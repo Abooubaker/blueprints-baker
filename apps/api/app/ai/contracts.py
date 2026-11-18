@@ -23,9 +23,12 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.models.enums import (
     AgentName,
     AgentResultStatus,
+    CodeLanguage,
     Difficulty,
     DriveType,
+    PrintMaterial,
     RobotType,
+    StoreName,
     TargetPlatform,
 )
 
@@ -53,6 +56,44 @@ class Dimensions(ContractModel):
     height_mm: float | None = Field(default=None, gt=0)
 
 
+class RobotIdentification(ContractModel):
+    """Result of the guided-flow research step before a project exists."""
+
+    proposed_name: str = Field(min_length=1, max_length=120)
+    robot_type: RobotType
+    confidence: float = Field(ge=0, le=1)
+    rationale: str = ""
+    suggested_platform: TargetPlatform = TargetPlatform.ARDUINO
+    suggested_difficulty: Difficulty = Difficulty.BEGINNER
+    key_requirements: list[str] = Field(default_factory=list)
+    needs_confirmation: bool = True
+
+
+class BuildPreferences(ContractModel):
+    """Persisted answers from the guided project flow.
+
+    The configuration lives in ``project_configurations.configuration`` as JSON so
+    it can evolve without a migration. Every downstream agent reads it through
+    request parameters.
+    """
+
+    description: str = ""
+    robot_name: str = ""
+    robot_type: RobotType = RobotType.CUSTOM
+    difficulty: Difficulty = Difficulty.BEGINNER
+    shops: list[StoreName] = Field(default_factory=list)
+    languages: list[CodeLanguage] = Field(
+        default_factory=lambda: [CodeLanguage.PYTHON, CodeLanguage.CPP]
+    )
+    controllers: list[str] = Field(default_factory=list)
+    controller_notes: str = ""
+    custom_pcb: bool = False
+    confirmed: bool = False
+    budget_max_usd: Decimal | None = Field(default=None, ge=0)
+    identification_rationale: str = ""
+    identification_confidence: float = Field(default=0.0, ge=0, le=1)
+
+
 class RobotSpecificationDraft(ContractModel):
     """Structured, buildable interpretation of the user's request."""
 
@@ -78,6 +119,18 @@ class RobotSpecificationDraft(ContractModel):
 # ---------------------------------------------------------------------------
 
 
+class StoreOffer(ContractModel):
+    """One store's estimate for a part, in Jordanian dinars."""
+
+    store: StoreName
+    label: str
+    price_jod: Decimal = Field(ge=0)
+    product_url: str = ""
+    availability: str = "unknown"
+    is_estimate: bool = True
+    note: str = ""
+
+
 class ComponentCandidate(ContractModel):
     name: str
     manufacturer: str = ""
@@ -90,6 +143,12 @@ class ComponentCandidate(ContractModel):
     availability: str = "unknown"
     compatibility_notes: list[str] = Field(default_factory=list)
     score: float = Field(default=0.0, ge=0, le=1)
+    offers: list[StoreOffer] = Field(
+        default_factory=list,
+        description="Store estimates sorted cheapest to most expensive.",
+    )
+    cheapest_store: StoreName | None = None
+    cheapest_price_jod: Decimal | None = Field(default=None, ge=0)
 
 
 class BillOfMaterialsItem(ContractModel):
@@ -109,6 +168,9 @@ class ComponentResearchOutput(ContractModel):
     unresolved_requirements: list[str] = Field(default_factory=list)
     compatibility_notes: list[str] = Field(default_factory=list)
     total_estimated_usd: Decimal | None = Field(default=None, ge=0)
+    total_estimated_jod: Decimal | None = Field(default=None, ge=0)
+    selected_shops: list[StoreName] = Field(default_factory=list)
+    currency: str = "JOD"
     sources: list[str] = Field(default_factory=list)
 
 
@@ -245,11 +307,24 @@ class CodeFile(ContractModel):
     explanation: str = ""
 
 
+class LanguageBundle(ContractModel):
+    """All files generated for one selected programming language."""
+
+    language: CodeLanguage
+    display_name: str
+    framework: str = ""
+    status: Literal["complete", "scaffold"] = "scaffold"
+    files: list[CodeFile] = Field(default_factory=list)
+    libraries: list[str] = Field(default_factory=list)
+    notes: list[str] = Field(default_factory=list)
+
+
 class ProgrammingOutput(ContractModel):
     platform: TargetPlatform
     language: str = ""
     framework: str = ""
     files: list[CodeFile] = Field(default_factory=list)
+    bundles: list[LanguageBundle] = Field(default_factory=list)
     libraries: list[str] = Field(default_factory=list)
     pin_assignments: dict[str, str] = Field(default_factory=dict)
     setup_steps: list[str] = Field(default_factory=list)
@@ -280,6 +355,18 @@ class AssemblyStep(ContractModel):
     safety_notes: list[str] = Field(default_factory=list)
 
 
+class PrintMaterialQuote(ContractModel):
+    """Cost to print the generated model in one material."""
+
+    material: PrintMaterial
+    price_per_gram_jod: Decimal = Field(ge=0)
+    base_jod: Decimal = Field(ge=0)
+    minimum_jod: Decimal = Field(ge=0)
+    weight_g: Decimal = Field(ge=0)
+    total_jod: Decimal = Field(ge=0)
+    is_cheapest: bool = False
+
+
 class MechanicalOutput(ContractModel):
     chassis: MechanicalPart | None = None
     parts: list[MechanicalPart] = Field(default_factory=list)
@@ -289,6 +376,13 @@ class MechanicalOutput(ContractModel):
     )
     manufacturing_notes: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
+    dimensions_mm: Dimensions = Field(default_factory=Dimensions)
+    volume_cm3: Decimal = Field(default=Decimal("0"), ge=0)
+    infill_percent: int = Field(default=35, ge=0, le=100)
+    stl_ascii: str = ""
+    stl_filename: str = ""
+    material_quotes: list[PrintMaterialQuote] = Field(default_factory=list)
+    pricing_notes: list[str] = Field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -302,6 +396,8 @@ class CostLineItem(ContractModel):
     quantity: int = Field(default=1, ge=1)
     unit_price_usd: Decimal | None = Field(default=None, ge=0)
     line_total_usd: Decimal | None = Field(default=None, ge=0)
+    unit_price_jod: Decimal | None = Field(default=None, ge=0)
+    line_total_jod: Decimal | None = Field(default=None, ge=0)
     supplier: str = ""
     is_estimate: bool = True
 
@@ -315,9 +411,13 @@ class BudgetAlternative(ContractModel):
 class CostEstimate(ContractModel):
     line_items: list[CostLineItem] = Field(default_factory=list)
     subtotal_usd: Decimal | None = Field(default=None, ge=0)
+    subtotal_jod: Decimal | None = Field(default=None, ge=0)
     shipping_usd: Decimal | None = Field(default=None, ge=0)
     contingency_usd: Decimal | None = Field(default=None, ge=0)
+    print_cost_jod: Decimal | None = Field(default=None, ge=0)
     total_usd: Decimal | None = Field(default=None, ge=0)
+    total_jod: Decimal | None = Field(default=None, ge=0)
+    currency: str = "JOD"
     budget: Budget = Field(default_factory=Budget)
     budget_status: Literal["under", "within", "over", "unknown"] = "unknown"
     alternatives: list[BudgetAlternative] = Field(default_factory=list)
@@ -342,6 +442,7 @@ class SharedProjectContext(ContractModel):
     programming: ProgrammingOutput | None = None
     mechanical: MechanicalOutput | None = None
     cost: CostEstimate | None = None
+    documentation: ProjectDocumentation | None = None
     artifacts: dict[str, Any] = Field(default_factory=dict)
     notes: list[str] = Field(default_factory=list)
 
@@ -392,18 +493,35 @@ class ProgrammingInput(ContractModel):
     specification: RobotSpecificationDraft
     component_research: ComponentResearchOutput
     electrical: ElectricalPlan
+    languages: list[CodeLanguage] = Field(
+        default_factory=lambda: [CodeLanguage.PYTHON, CodeLanguage.CPP]
+    )
 
 
 class MechanicalInput(ContractModel):
     specification: RobotSpecificationDraft
     component_research: ComponentResearchOutput
+    custom_pcb: bool = False
 
 
 class CostInput(ContractModel):
     component_research: ComponentResearchOutput
+    mechanical: MechanicalOutput | None = None
     budget: Budget = Field(default_factory=Budget)
     region: str = "global"
     quantity_multiplier: float = Field(default=1.0, gt=0, le=100)
+
+
+class DocumentationFile(ContractModel):
+    path: str
+    title: str
+    content: str
+
+
+class ProjectDocumentation(ContractModel):
+    files: list[DocumentationFile] = Field(default_factory=list)
+    summary: str = ""
+    notes: list[str] = Field(default_factory=list)
 
 
 class TokenUsage(ContractModel):

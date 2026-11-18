@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: "%s · Blueprints Baker",
   },
   description:
-    "Describe the robot you want to build. Blueprints Baker turns it into a structured plan: components, wiring, code, mechanical assembly, and cost.",
+    "Describe the robot you want to build. Blueprints Baker identifies it, prices the parts at your stores, and generates the schematic, code, 3D print price, and documentation.",
   applicationName: "Blueprints Baker",
   keywords: ["robotics", "AI", "engineering", "Arduino", "ESP32", "Raspberry Pi"],
   authors: [{ name: "Blueprints Baker" }],

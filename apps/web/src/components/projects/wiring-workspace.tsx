@@ -910,7 +910,7 @@ export function WiringWorkspace({ projectId }: { projectId: string }) {
       <div className="mb-6 flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
         <div>
           <div className="mb-2 flex flex-wrap items-center gap-2">
-            <Badge variant="aqua">M5 · Wiring</Badge>
+            <Badge variant="aqua">Wiring</Badge>
             {DEMO_MODE ? <Badge variant="outline">Static demo</Badge> : null}
             {plan ? <Badge variant="outline">library v{plan.library_version}</Badge> : null}
             {artifact ? (

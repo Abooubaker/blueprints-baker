@@ -8,6 +8,24 @@
     "motor_overvoltage",
     "logic_level_mismatch"
   ],
+  "offers": 6,
+  "languages": [
+    "python",
+    "cpp",
+    "c",
+    "verilog"
+  ],
+  "print_quotes": 5,
+  "docs": [
+    "README.md",
+    "docs/sourcing.md",
+    "docs/wiring.md",
+    "docs/firmware.md",
+    "docs/mechanical.md",
+    "docs/safety.md",
+    "docs/decisions.md",
+    "docs/budget.md"
+  ],
   "exports": [
     "bill-of-materials.csv",
     "blueprints-baker.kicad_sch",
