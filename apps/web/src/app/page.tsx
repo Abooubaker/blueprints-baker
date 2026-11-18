@@ -79,8 +79,8 @@ export default function LandingPage() {
               </h1>
 
               <p className="text-muted mt-6 max-w-lg text-[15px] leading-relaxed">
-                Describe what you want to build. Blueprints Baker identifies the robot, prices the
-                parts at your stores, and generates the schematic, code, 3D print price, and docs.
+                Describe what you want to build. Albayraq identifies the robot, prices the parts at
+                your stores, and generates the schematic, code, 3D print price, and docs.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -219,7 +219,7 @@ export default function LandingPage() {
             >
               Docs
             </a>
-            <span>© 2026 Blueprints Baker</span>
+            <span>© 2026 Albayraq</span>
           </div>
         </div>
       </footer>

@@ -1,1 +1,1 @@
-"""Blueprints Baker API package."""
+"""Albayraq API package."""

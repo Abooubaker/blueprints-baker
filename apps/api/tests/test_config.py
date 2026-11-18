@@ -23,11 +23,11 @@ def test_neon_libpq_url_is_normalized() -> None:
 def test_render_postgres_url_is_normalized() -> None:
     settings = Settings(
         environment="test",
-        database_url="postgres://blueprints:secret@db.example.com/blueprints",
+        database_url="postgres://albayraq:secret@db.example.com/albayraq",
     )
 
     assert settings.database_url == (
-        "postgresql+asyncpg://blueprints:secret@db.example.com/blueprints"
+        "postgresql+asyncpg://albayraq:secret@db.example.com/albayraq"
     )
     assert settings.sqlalchemy_connect_args == {}
 

@@ -1,4 +1,4 @@
-# Blueprints Baker developer commands. Run `make` or `make help` for the list.
+# Albayraq developer commands. Run `make` or `make help` for the list.
 SHELL := /usr/bin/env bash
 .DEFAULT_GOAL := help
 
@@ -11,7 +11,7 @@ COMPOSE := docker compose
 	demo-data demo-build api-check web-check clean
 
 help: ## Show available commands
-	@awk 'BEGIN {FS = ":.*## "; printf "\nBlueprints Baker commands:\n\n"} /^[a-zA-Z_-]+:.*## / {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2} END {printf "\n"}' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*## "; printf "\nAlbayraq commands:\n\n"} /^[a-zA-Z_-]+:.*## / {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2} END {printf "\n"}' $(MAKEFILE_LIST)
 
 install: install-api install-web ## Install backend and frontend dependencies
 

@@ -1,4 +1,4 @@
-# Blueprints Baker foundation report
+# Albayraq foundation report
 
 - **Date:** 2026-11-16
 - **Repository:** https://github.com/Abooubaker/blueprints-baker (public)

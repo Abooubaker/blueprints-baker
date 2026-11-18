@@ -136,7 +136,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             target="_blank"
             rel="noreferrer"
             className="hover:text-ink transition-colors"
-            aria-label="Blueprints Baker on GitHub"
+            aria-label="Albayraq on GitHub"
           >
             <Github className="size-3.5" />
           </a>

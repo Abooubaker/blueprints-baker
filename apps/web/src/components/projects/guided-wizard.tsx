@@ -249,7 +249,7 @@ export function GuidedWizard() {
           </CardTitle>
           <p className="text-muted mt-1 text-xs leading-relaxed">
             {step === 0
-              ? "Describe it in plain language. Blueprints Baker will name it and identify the robot type, then ask you to confirm."
+              ? "Describe it in plain language. Albayraq will name it and identify the robot type, then ask you to confirm."
               : step === 1
                 ? "Nothing is ordered yet. Confirm or correct the name and type before pricing."
                 : step === 2

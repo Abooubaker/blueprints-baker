@@ -100,7 +100,7 @@ import time
 
 
 class Robot:
-    """Starter control loop generated from the Blueprints Baker pin map."""
+    """Starter control loop generated from the Albayraq pin map."""
 
     def __init__(self) -> None:
         self.running = False
@@ -210,7 +210,7 @@ void loop() {{
   delay(20);
 }}
 """
-    platformio = f"""[env:blueprints_baker]
+    platformio = f"""[env:albayraq]
 platform = atmelavr
 board = uno
 framework = arduino
@@ -467,7 +467,7 @@ This RTL is a scaffold; it does not implement a complete robotics controller.
 def _other_files(pins: dict[str, str], robot_name: str) -> list[CodeFile]:
     content = f"""# {robot_name} — language scaffold
 
-Tell Blueprints Baker which language and toolchain you want to use, then port
+Tell Albayraq which language and toolchain you want to use, then port
 the generated pin map into your project.
 
 ## Pin map

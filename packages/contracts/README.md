@@ -1,4 +1,4 @@
-# Blueprints Baker contracts
+# Albayraq contracts
 
 Machine-readable contracts shared by the API, web app, agents, and external tools.
 

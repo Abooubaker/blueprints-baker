@@ -2,7 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-11-16
-- **Deciders:** Blueprints Baker maintainers
+- **Deciders:** Albayraq maintainers
 
 ## Context
 

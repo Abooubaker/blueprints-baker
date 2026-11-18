@@ -55,7 +55,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     });
   } catch {
     throw new ApiError(
-      "Cannot reach the Blueprints Baker API. Is it running on " + API_BASE_URL + "?",
+      "Cannot reach the Albayraq API. Is it running on " + API_BASE_URL + "?",
       "network_error",
     );
   }

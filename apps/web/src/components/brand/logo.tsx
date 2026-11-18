@@ -13,15 +13,16 @@ export function LogoMark({ className }: { className?: string }) {
         strokeOpacity="0.7"
       />
       <path
-        d="M10.4 22.6v-6.8c-2.1-.7-3-2.7-2.2-4.5.8-1.8 3-2.3 4.5-1.2.4-2.1 2.3-3.2 4-2.6 1.7-.9 3.9-.2 4.5 1.6 2-.2 3.5 1.3 3.5 3.3 0 1.5-1 2.8-2.4 3.3v6.9Z"
-        fill="none"
-        stroke="#eaf6ff"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="M9 25V15.5C9 10.8 12 8.2 15.8 8.2c3.4 0 5.9 1.6 7.1 4l3.9.9c.7.2.8 1 .2 1.3l-2.6 1.1c-1 3.5-4 5.9-8.2 5.9L9 25Z"
+        fill="#eaf6ff"
       />
-      <path d="M10.4 20.4h11.9" stroke="#eaf6ff" strokeWidth="1.5" strokeLinecap="round" />
-      <circle cx="23.2" cy="9.2" r="1.4" fill="#6fd6ff" />
+      <path
+        d="M26.4 14.4c-1.6-.2-3.1-.3-4.4-.2"
+        stroke="#0b2f4f"
+        strokeWidth="1.1"
+        strokeLinecap="round"
+      />
+      <circle cx="17.4" cy="13.4" r="1.2" fill="#6fd6ff" />
     </svg>
   );
 }
@@ -31,7 +32,7 @@ export function Logo({ className, markClassName }: { className?: string; markCla
     <Link
       href="/"
       className={cn("group flex items-center gap-2.5", className)}
-      aria-label="Blueprints Baker home"
+      aria-label="Albayraq home"
     >
       <LogoMark
         className={cn(
@@ -40,9 +41,7 @@ export function Logo({ className, markClassName }: { className?: string; markCla
         )}
       />
       <span className="flex items-baseline gap-2">
-        <span className="text-ink text-[16px] font-semibold tracking-[-0.02em]">
-          Blueprints <span className="text-aqua">Baker</span>
-        </span>
+        <span className="text-ink text-[16px] font-semibold tracking-[-0.02em]">Albayraq</span>
         <span className="border-line text-faint hidden rounded border px-1.5 py-0.5 font-mono text-[9px] tracking-[0.14em] uppercase sm:inline">
           beta
         </span>

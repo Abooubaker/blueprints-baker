@@ -1,25 +1,25 @@
 # Local development database. The API and web app are run with uv/npm for fast
 # reload; this file intentionally does not containerize them (see docs/development.md).
-name: blueprints-baker
+name: albayraq
 
 services:
   db:
     image: postgres:16-alpine
-    container_name: blueprints-baker-db
+    container_name: albayraq-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-blueprints}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-blueprints}
-      POSTGRES_DB: ${POSTGRES_DB:-blueprints}
+      POSTGRES_USER: ${POSTGRES_USER:-albayraq}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-albayraq}
+      POSTGRES_DB: ${POSTGRES_DB:-albayraq}
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - blueprints-baker-pgdata:/var/lib/postgresql/data
+      - albayraq-pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-blueprints} -d ${POSTGRES_DB:-blueprints}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-albayraq} -d ${POSTGRES_DB:-albayraq}"]
       interval: 5s
       timeout: 5s
       retries: 10
 
 volumes:
-  blueprints-baker-pgdata:
+  albayraq-pgdata:

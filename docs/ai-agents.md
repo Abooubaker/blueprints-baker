@@ -1,6 +1,6 @@
 # AI agents
 
-Blueprints Baker decomposes robot design into six specialized agents. Each agent owns one artifact and
+Albayraq decomposes robot design into six specialized agents. Each agent owns one artifact and
 works against a typed contract. The orchestrator is deterministic: it resolves dependencies, runs
 agents in a fixed order, validates outputs before accepting them, and records every execution.
 

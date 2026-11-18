@@ -37,7 +37,7 @@ export function Topbar() {
         ))}
       </div>
       <span className="text-faint ml-auto hidden font-mono text-[9px] tracking-[0.18em] uppercase sm:block">
-        Blueprints Baker · Drafting table
+        Albayraq · Drafting table
       </span>
     </header>
   );

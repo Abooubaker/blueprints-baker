@@ -100,7 +100,7 @@ class ComponentResearchAgent(BaseAgent):
                 category=profile.category.value,
                 specs=_candidate_specs(profile.key),
                 price_usd=profile.price_usd,
-                supplier="Blueprints Baker curated estimate catalog",
+                supplier="Albayraq curated estimate catalog",
                 supplier_url=cheapest.product_url if cheapest else None,
                 availability=cheapest.availability if cheapest else "unknown",
                 compatibility_notes=[profile.notes] if profile.notes else [],
@@ -148,7 +148,7 @@ class ComponentResearchAgent(BaseAgent):
             total_estimated_jod=total_jod,
             selected_shops=shops,
             currency="JOD",
-            sources=["Blueprints Baker curated component library v1.0"],
+            sources=["Albayraq curated component library v1.0"],
         )
 
 

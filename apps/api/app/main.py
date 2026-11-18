@@ -23,7 +23,7 @@ from app.core.db import dispose_engine
 from app.core.errors import AppError, error_payload
 from app.core.logging import configure_logging
 
-logger = logging.getLogger("blueprints-baker.api")
+logger = logging.getLogger("albayraq.api")
 
 
 @asynccontextmanager
@@ -126,7 +126,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         title=settings.app_name,
         version=settings.app_version,
         description=(
-            "Blueprints Baker is an AI-assisted robotics engineering platform. This API "
+            "Albayraq is an AI-assisted robotics engineering platform. This API "
             "exposes project, component catalog, and agent orchestration contracts."
         ),
         docs_url=None if settings.is_production else "/docs",

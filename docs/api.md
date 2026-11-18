@@ -99,7 +99,7 @@ curl http://localhost:8000/health/ready
 ```json
 {
   "status": "ok",
-  "service": "Blueprints Baker API",
+  "service": "Albayraq API",
   "version": "0.1.0",
   "environment": "development",
   "timestamp": "2026-11-16T22:00:00Z",
@@ -380,8 +380,8 @@ Exports are attachments with a fixed filename:
 | `wiring-csv` | `wiring.csv` |
 | `pinout-csv` | `pinout.csv` |
 | `bom-csv` | `bill-of-materials.csv` |
-| `kicad-netlist` | `blueprints-baker.net` |
-| `kicad-schematic` | `blueprints-baker.kicad_sch` |
+| `kicad-netlist` | `albayraq.net` |
+| `kicad-schematic` | `albayraq.kicad_sch` |
 | `svg` | `wiring.svg` |
 | `markdown` | `build-guide.md` |
 

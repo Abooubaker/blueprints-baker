@@ -1,6 +1,6 @@
 # Deployment
 
-Blueprints Baker runs as three pieces:
+Albayraq runs as three pieces:
 
 | Piece | Host | Why |
 | --- | --- | --- |
@@ -56,11 +56,11 @@ Environment variables:
 | --- | --- |
 | `ENVIRONMENT` | `production` |
 | `DATABASE_URL` | Neon pooled connection string (secret) |
-| `CORS_ORIGINS` | The deployed web origin, e.g. `https://blueprints-baker-web.onrender.com` |
+| `CORS_ORIGINS` | The deployed web origin, e.g. `https://albayraq-web.onrender.com` |
 | `LOG_LEVEL` | `INFO` |
 
 `CORS_ORIGINS` accepts a comma-separated list. Add local origins too if you develop against the
-hosted API: `https://blueprints-baker-web.onrender.com,http://localhost:3000`.
+hosted API: `https://albayraq-web.onrender.com,http://localhost:3000`.
 
 The container entrypoint runs `alembic upgrade head` once per deploy, then starts uvicorn on
 `$PORT`. That keeps the free single-service plan usable without exposing a shell. If you move to a
@@ -125,13 +125,13 @@ an entry in `CORS_ORIGINS` (scheme included, no trailing slash).
 The API image can be built and run locally against the Compose database:
 
 ```bash
-docker build -t blueprints-baker-api apps/api
+docker build -t albayraq-api apps/api
 
 docker run --rm -p 8000:8000 \
   -e ENVIRONMENT=development \
-  -e DATABASE_URL=postgresql+asyncpg://blueprints:blueprints@host.docker.internal:5432/blueprints \
+  -e DATABASE_URL=postgresql+asyncpg://albayraq:albayraq@host.docker.internal:5432/albayraq \
   -e CORS_ORIGINS=http://localhost:3000 \
-  blueprints-baker-api
+  albayraq-api
 ```
 
 On Linux, `host.docker.internal` requires

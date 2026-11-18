@@ -1,6 +1,6 @@
-# Blueprints Baker API
+# Albayraq API
 
-FastAPI service for Blueprints Baker. See the repository root [`README.md`](../../README.md) and
+FastAPI service for Albayraq. See the repository root [`README.md`](../../README.md) and
 [`docs/`](../../docs) for architecture, setup, and API documentation.
 
 ```bash
@@ -21,12 +21,12 @@ uv run pytest
 ## Production image
 
 ```bash
-docker build -t blueprints-baker-api apps/api
+docker build -t albayraq-api apps/api
 docker run --rm -p 8000:8000 \
   -e ENVIRONMENT=production \
   -e DATABASE_URL='postgresql://…' \
   -e CORS_ORIGINS='https://your-web.example' \
-  blueprints-baker-api
+  albayraq-api
 ```
 
 The entrypoint applies Alembic migrations once, then serves on `$PORT`. Hosted URLs from Neon and

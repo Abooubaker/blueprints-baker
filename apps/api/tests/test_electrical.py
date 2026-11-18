@@ -117,13 +117,13 @@ async def test_svg_netlist_and_markdown_exports_are_well_formed(client: AsyncCli
 
     schematic = await client.get(f"{base}/kicad-schematic")
     assert schematic.status_code == 200
-    assert 'filename="blueprints-baker.kicad_sch"' in schematic.headers["content-disposition"]
+    assert 'filename="albayraq.kicad_sch"' in schematic.headers["content-disposition"]
     schematic_text = schematic.text
     assert schematic_text.startswith("(kicad_sch")
     assert schematic_text.count("(") == schematic_text.count(")")
     assert "(lib_symbols" in schematic_text
     for node in artifact["plan"]["nodes"]:
-        assert f"blueprints-baker:{node['ref']}" in schematic_text
+        assert f"albayraq:{node['ref']}" in schematic_text
         for pin in node["pins"]:
             pin_name = pin["name"]
             assert f'(name "{pin_name}"' in schematic_text

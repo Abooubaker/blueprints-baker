@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Seed the Blueprints Baker GitHub backlog.
+"""Seed the Albayraq GitHub backlog.
 
 Creates labels, milestones M1-M10, and the issue plan, then writes docs/backlog.md.
 The script is idempotent by issue title and safe to re-run.

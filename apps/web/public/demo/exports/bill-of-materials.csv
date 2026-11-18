@@ -1,8 +1,8 @@
 role,category,quantity,component,manufacturer,model_number,unit_price_usd,line_total_usd,supplier,rationale
-controller,controller,1,ESP32 DevKit V1,Espressif,ESP32-DEVKITC-32D,9.50,9.50,Blueprints Baker curated estimate catalog,Runs the control loop and exposes the GPIO/PWM/I2C pins used below.
-motor_driver,motor_driver,1,TB6612FNG dual motor driver,Toshiba,TB6612FNG,6.20,6.20,Blueprints Baker curated estimate catalog,Provides the current gain and flyback protection a motor needs.
-drive_motor,motor,2,N20 gear motor (6 V),Generic,N20-6V-100RPM,5.40,10.80,Blueprints Baker curated estimate catalog,Selected for the wheeled drivetrain in this robot archetype.
-distance_sensor,sensor,1,HC-SR04 ultrasonic rangefinder,Generic,HC-SR04,2.30,2.30,Blueprints Baker curated estimate catalog,Adds a forward obstacle/distance measurement.
-servo,actuator,1,SG90 micro servo,TowerPro,SG90,3.40,3.40,Blueprints Baker curated estimate catalog,Provides one positional degree of freedom.
-battery,power,1,"2S LiPo battery (7.4 V, 2200 mAh)",Generic,2S-2200,18.00,18.00,Blueprints Baker curated estimate catalog,Supplies the pack voltage; the engine validates it against every load.
-regulator,power,1,5 V 3 A buck converter,Generic,MP1584EN-5V,4.20,4.20,Blueprints Baker curated estimate catalog,Creates a stable 5 V rail for logic and servos.
+controller,controller,1,ESP32 DevKit V1,Espressif,ESP32-DEVKITC-32D,9.50,9.50,Albayraq curated estimate catalog,Runs the control loop and exposes the GPIO/PWM/I2C pins used below.
+motor_driver,motor_driver,1,TB6612FNG dual motor driver,Toshiba,TB6612FNG,6.20,6.20,Albayraq curated estimate catalog,Provides the current gain and flyback protection a motor needs.
+drive_motor,motor,2,N20 gear motor (6 V),Generic,N20-6V-100RPM,5.40,10.80,Albayraq curated estimate catalog,Selected for the wheeled drivetrain in this robot archetype.
+distance_sensor,sensor,1,HC-SR04 ultrasonic rangefinder,Generic,HC-SR04,2.30,2.30,Albayraq curated estimate catalog,Adds a forward obstacle/distance measurement.
+servo,actuator,1,SG90 micro servo,TowerPro,SG90,3.40,3.40,Albayraq curated estimate catalog,Provides one positional degree of freedom.
+battery,power,1,"2S LiPo battery (7.4 V, 2200 mAh)",Generic,2S-2200,18.00,18.00,Albayraq curated estimate catalog,Supplies the pack voltage; the engine validates it against every load.
+regulator,power,1,5 V 3 A buck converter,Generic,MP1584EN-5V,4.20,4.20,Albayraq curated estimate catalog,Creates a stable 5 V rail for logic and servos.

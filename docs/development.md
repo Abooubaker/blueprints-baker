@@ -121,7 +121,7 @@ npm run codegen                    # regenerate src/lib/api-schema.ts
 | `LOG_LEVEL` | `INFO` | `CRITICAL`/`ERROR`/`WARNING`/`INFO`/`DEBUG` |
 | `API_V1_PREFIX` | `/api/v1` | Router prefix |
 | `CORS_ORIGINS` | localhost:3000 origins | Comma-separated allow-list |
-| `DATABASE_URL` | local blueprints-baker DSN | Must use `postgresql+asyncpg://` at runtime |
+| `DATABASE_URL` | local albayraq DSN | Must use `postgresql+asyncpg://` at runtime |
 | `DATABASE_ECHO` | `false` | Log SQL (noisy) |
 | `DATABASE_POOL_SIZE` | `5` | Ignored for SQLite |
 | `DATABASE_MAX_OVERFLOW` | `10` | Ignored for SQLite |
@@ -268,12 +268,12 @@ Rules of thumb:
 
 ### `database_unavailable` / readiness 503
 
-- Check PostgreSQL: `pg_isready -h localhost -p 5432 -U blueprints-baker`.
+- Check PostgreSQL: `pg_isready -h localhost -p 5432 -U albayraq`.
 - Confirm `DATABASE_URL` uses `postgresql+asyncpg://`, not `postgresql://`.
 - If using Compose, wait for the health check: `docker compose ps`.
 - Run `uv run alembic upgrade head` if the schema is missing.
 
-### `Cannot reach the Blueprints Baker API`
+### `Cannot reach the Albayraq API`
 
 - Confirm the API is on port 8000 and `NEXT_PUBLIC_API_URL` matches.
 - CORS failures appear in the browser console; add the web origin to `CORS_ORIGINS`.

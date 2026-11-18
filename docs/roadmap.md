@@ -1,6 +1,6 @@
 # Roadmap
 
-Ten milestones take Blueprints Baker from a verified foundation to a production-ready build assistant. Each
+Ten milestones take Albayraq from a verified foundation to a production-ready build assistant. Each
 milestone produces a usable slice; no milestone depends on a later one. Issue-level work is tracked
 on the [GitHub Project board](https://github.com/users/Abooubaker/projects/1) and mirrored in
 [backlog.md](backlog.md).
@@ -212,7 +212,7 @@ planning, and footprint assignment for layout.
 
 ## M10 — Production readiness
 
-**Goal:** operate Blueprints Baker safely and measure it.
+**Goal:** operate Albayraq safely and measure it.
 
 **Scope**
 

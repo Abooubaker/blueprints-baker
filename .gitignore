@@ -209,7 +209,7 @@ tempCodeRunnerFile.py
 .ruff_cache/
 
 # ---------------------------------------------------------------------------
-# Blueprints Baker — JavaScript / Next.js
+# Albayraq — JavaScript / Next.js
 # ---------------------------------------------------------------------------
 node_modules/
 .next/

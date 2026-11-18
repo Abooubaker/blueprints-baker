@@ -1,6 +1,6 @@
 # Architecture
 
-Blueprints Baker is a modular monolith: one deployable API and one web application in a single repository,
+Albayraq is a modular monolith: one deployable API and one web application in a single repository,
 with explicit internal boundaries. The foundation optimizes for a small team that needs to move
 quickly without turning coupled engineering artifacts into a distributed-system problem.
 

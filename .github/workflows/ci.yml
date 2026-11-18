@@ -45,19 +45,19 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: blueprints
-          POSTGRES_PASSWORD: blueprints
-          POSTGRES_DB: blueprints
+          POSTGRES_USER: albayraq
+          POSTGRES_PASSWORD: albayraq
+          POSTGRES_DB: albayraq
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U blueprints -d blueprints"
+          --health-cmd "pg_isready -U albayraq -d albayraq"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
     env:
       ENVIRONMENT: test
-      DATABASE_URL: postgresql+asyncpg://blueprints:blueprints@localhost:5432/blueprints
+      DATABASE_URL: postgresql+asyncpg://albayraq:albayraq@localhost:5432/albayraq
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -124,7 +124,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build production image
-        run: docker build --tag blueprints-baker-api:ci apps/api
+        run: docker build --tag albayraq-api:ci apps/api
 
   demo:
     name: Static demo build (GitHub Pages)

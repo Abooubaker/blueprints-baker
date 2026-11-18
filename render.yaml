@@ -1,4 +1,4 @@
-# Render Blueprint for Blueprints Baker.
+# Render Blueprint for Albayraq.
 #
 # Deploy with: Dashboard → New → Blueprint → select this repository.
 # DATABASE_URL is intentionally `sync: false`: paste a Neon pooled connection
@@ -8,7 +8,7 @@
 
 services:
   - type: web
-    name: blueprints-baker-api
+    name: albayraq-api
     runtime: docker
     plan: free
     region: ohio
@@ -24,12 +24,12 @@ services:
       - key: DATABASE_URL
         sync: false
       # Add the deployed web origin after the frontend has a URL, e.g.
-      # https://blueprints-baker-web.onrender.com
+      # https://albayraq-web.onrender.com
       - key: CORS_ORIGINS
         sync: false
 
   - type: web
-    name: blueprints-baker-web
+    name: albayraq-web
     runtime: node
     plan: free
     region: ohio
@@ -42,7 +42,7 @@ services:
       - key: NODE_VERSION
         value: "22"
       # Set to the API origin once the API service exists, e.g.
-      # https://blueprints-baker-api.onrender.com — this is inlined at build time.
+      # https://albayraq-api.onrender.com — this is inlined at build time.
       - key: NEXT_PUBLIC_API_URL
         sync: false
       - key: NEXT_PUBLIC_DEMO_MODE

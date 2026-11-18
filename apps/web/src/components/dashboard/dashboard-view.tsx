@@ -204,7 +204,7 @@ export function DashboardView() {
             <EmptyState
               icon={<Sparkles className="size-4" />}
               title="Describe your first robot"
-              description="Blueprints Baker starts with a sentence, not a parts list. Create a project and tell us what you want to build."
+              description="Albayraq starts with a sentence, not a parts list. Create a project and tell us what you want to build."
               action={
                 <ButtonLink href="/projects/new" size="sm">
                   <Plus className="size-3.5" /> New robot project

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Configure the Blueprints Baker GitHub Project board.
+"""Configure the Albayraq GitHub Project board.
 
 Requires the `project` auth scope:
 

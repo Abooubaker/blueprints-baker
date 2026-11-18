@@ -1,4 +1,4 @@
-# Contributing to Blueprints Baker
+# Contributing to Albayraq
 
 Thanks for helping build a better way to design robots. This document covers the workflow, quality
 bar, and conventions used in this repository.

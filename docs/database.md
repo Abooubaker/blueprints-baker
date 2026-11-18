@@ -1,6 +1,6 @@
 # Database
 
-Blueprints Baker uses PostgreSQL 16 as its runtime database, SQLAlchemy 2.0's async ORM, and Alembic for
+Albayraq uses PostgreSQL 16 as its runtime database, SQLAlchemy 2.0's async ORM, and Alembic for
 schema migrations. SQLite (`aiosqlite`) is supported **only** for the automated test suite; it is not
 a deployment target.
 

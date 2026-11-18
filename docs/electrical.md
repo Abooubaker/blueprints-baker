@@ -1,6 +1,6 @@
 # Electrical & wiring system
 
-Blueprints Baker turns an approved bill of materials into a deterministic wiring plan: every
+Albayraq turns an approved bill of materials into a deterministic wiring plan: every
 component gets a reference designator, every physical pin is allocated, nets are named,
 the power tree is budgeted, and safety rules are checked before the plan is returned.
 
@@ -89,15 +89,15 @@ The artifact stores the `agent_run_id` so the plan can be traced to the audit re
 | `wiring-csv` | `wiring.csv` | Spreadsheet review of every net |
 | `pinout-csv` | `pinout.csv` | Every physical pin with its net, signal, and exact destination(s) |
 | `bom-csv` | `bill-of-materials.csv` | Purchasing list with quantities and prices |
-| `kicad-netlist` | `blueprints-baker.net` | KiCad S-expression netlist |
-| `kicad-schematic` | `blueprints-baker.kicad_sch` | Self-contained KiCad schematic, one labelled wire per pin |
+| `kicad-netlist` | `albayraq.net` | KiCad S-expression netlist |
+| `kicad-schematic` | `albayraq.kicad_sch` | Self-contained KiCad schematic, one labelled wire per pin |
 | `svg` | `wiring.svg` | Blueprint-style pin-level schematic with destinations |
 | `markdown` | `build-guide.md` | Full pinout, safety checks, ordered wiring steps |
 
 **EasyEDA:** the `.net` file is a KiCad S-expression netlist and the `.kicad_sch` file is a
 KiCad 8 schematic with embedded library symbols. EasyEDA Pro can import both KiCad formats;
-KiCad opens them natively. The export is deliberately honest about what it is — Blueprints
-Baker does not emit an undocumented EasyEDA-native JSON format, and imported symbols must be
+KiCad opens them natively. The export is deliberately honest about what it is — Albayraq
+does not emit an undocumented EasyEDA-native JSON format, and imported symbols must be
 reviewed before layout. Every physical pin in the schematic has a short wire and a global
 label, so unconnected pins explicitly appear as `NC_<ref>_<pin>` instead of disappearing.
 The generators are covered by structural tests (balanced S-expressions, a symbol and wire per

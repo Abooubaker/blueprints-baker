@@ -4,16 +4,16 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Blueprints Baker — AI robotics engineering copilot",
-    template: "%s · Blueprints Baker",
+    default: "Albayraq — AI robotics engineering copilot",
+    template: "%s · Albayraq",
   },
   description:
-    "Describe the robot you want to build. Blueprints Baker identifies it, prices the parts at your stores, and generates the schematic, code, 3D print price, and documentation.",
-  applicationName: "Blueprints Baker",
+    "Describe the robot you want to build. Albayraq identifies it, prices the parts at your stores, and generates the schematic, code, 3D print price, and documentation.",
+  applicationName: "Albayraq",
   keywords: ["robotics", "AI", "engineering", "Arduino", "ESP32", "Raspberry Pi"],
-  authors: [{ name: "Blueprints Baker" }],
+  authors: [{ name: "Albayraq" }],
   openGraph: {
-    title: "Blueprints Baker — AI robotics engineering copilot",
+    title: "Albayraq — AI robotics engineering copilot",
     description:
       "An AI-assisted workspace for designing, wiring, coding, and budgeting your first robot.",
     type: "website",

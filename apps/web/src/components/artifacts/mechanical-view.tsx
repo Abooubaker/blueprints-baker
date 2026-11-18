@@ -33,7 +33,7 @@ function downloadStl(name: string, content: string) {
 }
 
 function demoStorageKey(projectId: string): string {
-  return `blueprints-baker:print:${projectId}`;
+  return `albayraq:print:${projectId}`;
 }
 
 function readDemoSettings(projectId: string): PrintSettings | null {

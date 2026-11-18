@@ -27,9 +27,9 @@
     "docs/budget.md"
   ],
   "exports": [
+    "albayraq.kicad_sch",
+    "albayraq.net",
     "bill-of-materials.csv",
-    "blueprints-baker.kicad_sch",
-    "blueprints-baker.net",
     "build-guide.md",
     "electrical-plan.json",
     "pinout.csv",

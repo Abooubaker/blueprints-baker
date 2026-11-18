@@ -81,7 +81,7 @@ async def export_electrical(
         media_type=exported.spec.media_type,
         headers={
             "Content-Disposition": f'attachment; filename="{exported.spec.filename}"',
-            "X-Blueprints-Baker-Export": exported.spec.format,
+            "X-Albayraq-Export": exported.spec.format,
         },
     )
 

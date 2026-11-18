@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
-# Blueprints Baker API — production image.
-# Build from apps/api: docker build -t blueprints-baker-api .
+# Albayraq API — production image.
+# Build from apps/api: docker build -t albayraq-api .
 
 FROM python:3.12-slim AS runtime
 
@@ -27,9 +27,9 @@ COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
 # The API is stateless; uploads and artifacts live in Postgres or response bodies.
-RUN useradd --create-home --uid 10001 blueprints \
-    && chown -R blueprints:blueprints /app
-USER blueprints
+RUN useradd --create-home --uid 10001 albayraq \
+    && chown -R albayraq:albayraq /app
+USER albayraq
 
 EXPOSE 8000
 

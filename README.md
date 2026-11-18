@@ -1,7 +1,7 @@
-# Blueprints Baker
+# Albayraq
 
 **An AI-assisted robotics engineering platform.** Describe the robot you want to build, and
-Blueprints Baker turns the idea into a structured specification, a compatible bill of materials, wiring,
+Albayraq turns the idea into a structured specification, a compatible bill of materials, wiring,
 firmware, a mechanical plan, and a realistic budget.
 
 > **Project status: end-to-end build (v0.1.0).** A guided flow turns a description into a named,
@@ -31,13 +31,13 @@ troubleshooting. Migrations run once per container deploy; production disables t
 
 ---
 
-## Why Blueprints Baker
+## Why Albayraq
 
 Building a robot from scratch means juggling five coupled decisions: what to build, which parts fit
 together, how to wire them, how to program them, and whether the result fits the budget. Mistakes
 are expensive and usually discovered after the parts arrive.
 
-Blueprints Baker keeps those decisions in one typed project workspace. Each specialized AI agent owns one
+Albayraq keeps those decisions in one typed project workspace. Each specialized AI agent owns one
 artifact and consumes the artifacts produced before it. That makes the output inspectable, lets a
 human correct any step, and keeps the system provider-independent — no vendor SDK leaks into the
 domain layer.
