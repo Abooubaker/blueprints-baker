@@ -68,6 +68,7 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
     try {
       const result = await api.generateBuild(project.id);
       setBuild(result);
+      setProject(await api.getProject(project.id));
     } catch (caught) {
       setBuildError(
         caught instanceof ApiError ? caught.message : "The build pipeline could not finish.",
