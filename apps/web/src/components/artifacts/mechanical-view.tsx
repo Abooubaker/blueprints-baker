@@ -273,7 +273,7 @@ export function MechanicalView({ projectId }: { projectId: string }) {
                         className={
                           active
                             ? "border-signal/40 bg-signal/10 text-ink rounded-lg border px-3 py-1.5 text-xs font-medium"
-                            : "border-line bg-canvas/40 text-muted rounded-lg border px-3 py-1.5 text-xs transition-colors hover:border-[#2d6894]"
+                            : "border-line bg-canvas/40 text-muted rounded-lg border px-3 py-1.5 text-xs transition-colors hover:border-[#8A6B45]"
                         }
                       >
                         {entry.material}
@@ -355,20 +355,20 @@ export function MechanicalView({ projectId }: { projectId: string }) {
               <CardContent>
                 <div className="bg-blueprint border-line-soft relative flex h-52 items-center justify-center overflow-hidden rounded-lg border">
                   <svg viewBox="0 0 240 150" className="h-full w-full max-w-[280px]">
-                    <g stroke="#7dd3fc" strokeOpacity="0.8" fill="none" strokeWidth="1.2">
+                    <g stroke="#C6A477" strokeOpacity="0.8" fill="none" strokeWidth="1.2">
                       <path d="M40 105 L150 105 L190 80 L80 80 Z" />
                       <path d="M40 105 L40 65 L80 40 L80 80" />
                       <path d="M80 80 L190 80 L190 40 L80 40 Z" />
                       <path d="M40 65 L150 65 L190 40" strokeDasharray="3 3" />
                       <path d="M150 105 L150 65" strokeDasharray="3 3" />
                     </g>
-                    <text x="95" y="128" fill="#94a29c" fontSize="7" fontFamily="monospace">
+                    <text x="95" y="128" fill="#A98B70" fontSize="7" fontFamily="monospace">
                       {mechanical.dimensions_mm.length_mm} mm
                     </text>
-                    <text x="196" y="70" fill="#94a29c" fontSize="7" fontFamily="monospace">
+                    <text x="196" y="70" fill="#A98B70" fontSize="7" fontFamily="monospace">
                       {mechanical.dimensions_mm.width_mm} mm
                     </text>
-                    <text x="8" y="90" fill="#94a29c" fontSize="7" fontFamily="monospace">
+                    <text x="8" y="90" fill="#A98B70" fontSize="7" fontFamily="monospace">
                       {mechanical.dimensions_mm.height_mm} mm
                     </text>
                   </svg>

@@ -62,12 +62,12 @@ const KIND_STYLES: Record<ConnectionKind, { label: string; chip: string; stroke:
   ground: {
     label: "Ground",
     chip: "border-line bg-elevated text-muted",
-    stroke: "#7fa8c8",
+    stroke: "#A98B70",
   },
   signal: {
     label: "Signal",
     chip: "border-aqua/25 bg-aqua/10 text-aqua",
-    stroke: "#6fd6ff",
+    stroke: "#C6A477",
   },
   motor: {
     label: "Motor",
@@ -77,7 +77,7 @@ const KIND_STYLES: Record<ConnectionKind, { label: string; chip: string; stroke:
   bus: {
     label: "Bus",
     chip: "border-signal/25 bg-signal/10 text-signal",
-    stroke: "#eaf6ff",
+    stroke: "#F3E7D5",
   },
 };
 
@@ -95,12 +95,12 @@ const NODE_ORDER: ElectricalNode["kind"][] = [
 const NODE_STYLE: Record<ElectricalNode["kind"], { stroke: string; fill: string }> = {
   power: { stroke: "rgba(255,155,155,0.65)", fill: "rgba(255,155,155,0.07)" },
   regulator: { stroke: "rgba(255,204,122,0.65)", fill: "rgba(255,204,122,0.06)" },
-  controller: { stroke: "rgba(234,246,255,0.8)", fill: "rgba(234,246,255,0.06)" },
-  driver: { stroke: "rgba(111,214,255,0.7)", fill: "rgba(111,214,255,0.06)" },
+  controller: { stroke: "rgba(243,231,213,0.8)", fill: "rgba(243,231,213,0.06)" },
+  driver: { stroke: "rgba(198,164,119,0.7)", fill: "rgba(198,164,119,0.06)" },
   motor: { stroke: "rgba(255,204,122,0.5)", fill: "rgba(255,204,122,0.05)" },
   actuator: { stroke: "rgba(255,204,122,0.4)", fill: "rgba(255,204,122,0.04)" },
-  sensor: { stroke: "rgba(111,214,255,0.5)", fill: "rgba(111,214,255,0.05)" },
-  other: { stroke: "rgba(127,168,200,0.8)", fill: "rgba(11,47,79,0.9)" },
+  sensor: { stroke: "rgba(198,164,119,0.5)", fill: "rgba(198,164,119,0.05)" },
+  other: { stroke: "rgba(169,139,112,0.8)", fill: "rgba(58,11,29,0.9)" },
 };
 
 const SEVERITY: Record<
@@ -220,7 +220,7 @@ function Diagram({
       >
         <defs>
           <pattern id="wiring-grid" width="24" height="24" patternUnits="userSpaceOnUse">
-            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#ffffff" strokeOpacity="0.06" />
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#F3E7D5" strokeOpacity="0.06" />
           </pattern>
         </defs>
         <rect width={width} height={height} fill="url(#wiring-grid)" />
@@ -287,7 +287,7 @@ function Diagram({
                 y1={DIAGRAM_HEADER}
                 x2={DIAGRAM_NODE_WIDTH}
                 y2={DIAGRAM_HEADER}
-                stroke="#eaf6ff"
+                stroke="#F3E7D5"
                 strokeOpacity={0.26}
               />
               <text
@@ -295,11 +295,11 @@ function Diagram({
                 y={19}
                 fontFamily="JetBrains Mono, monospace"
                 fontSize={11}
-                fill="#eaf6ff"
+                fill="#F3E7D5"
               >
                 {node.ref}
               </text>
-              <text x={44} y={19} fontFamily="Inter, sans-serif" fontSize={10} fill="#f2f8ff">
+              <text x={44} y={19} fontFamily="Inter, sans-serif" fontSize={10} fill="#F3E7D5">
                 {node.label.length > 26 ? `${node.label.slice(0, 25)}…` : node.label}
               </text>
               <text
@@ -307,7 +307,7 @@ function Diagram({
                 y={33}
                 fontFamily="JetBrains Mono, monospace"
                 fontSize={7}
-                fill="#7fa8c8"
+                fill="#A98B70"
               >
                 {node.kind.toUpperCase()} · {node.pins.length} PINS
               </text>
@@ -317,7 +317,7 @@ function Diagram({
                 textAnchor="end"
                 fontFamily="JetBrains Mono, monospace"
                 fontSize={7}
-                fill="#7fa8c8"
+                fill="#A98B70"
               >
                 PIN → DESTINATION
               </text>
@@ -332,7 +332,7 @@ function Diagram({
                       y={rowY + 11}
                       fontFamily="JetBrains Mono, monospace"
                       fontSize={8.5}
-                      fill={connected ? "#f2f8ff" : "#7fa8c8"}
+                      fill={connected ? "#F3E7D5" : "#A98B70"}
                     >
                       {pin.name.length > 15 ? `${pin.name.slice(0, 14)}…` : pin.name}
                     </text>
@@ -342,7 +342,7 @@ function Diagram({
                       textAnchor="end"
                       fontFamily="JetBrains Mono, monospace"
                       fontSize={8}
-                      fill={connected ? "#6fd6ff" : "#7fa8c8"}
+                      fill={connected ? "#C6A477" : "#A98B70"}
                     >
                       {destination.length > 26 ? `${destination.slice(0, 25)}…` : destination}
                     </text>
@@ -350,7 +350,7 @@ function Diagram({
                       cx={DIAGRAM_NODE_WIDTH}
                       cy={rowY + 7}
                       r={1.6}
-                      fill={connected ? "#6fd6ff" : "#2d6894"}
+                      fill={connected ? "#C6A477" : "#8A6B45"}
                     />
                   </g>
                 );

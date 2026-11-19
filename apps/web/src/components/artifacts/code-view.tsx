@@ -94,7 +94,7 @@ export function CodeView({ projectId }: { projectId: string }) {
                   "flex items-center gap-2 rounded-lg border px-3 py-2 text-xs transition-colors",
                   item.language === bundle.language
                     ? "border-signal/35 bg-signal/[0.08] text-ink"
-                    : "border-line bg-canvas/40 text-muted hover:border-[#2d6894]",
+                    : "border-line bg-canvas/40 text-muted hover:border-[#8A6B45]",
                 )}
               >
                 <span className="text-signal font-mono text-[9px]">
@@ -105,8 +105,8 @@ export function CodeView({ projectId }: { projectId: string }) {
             ))}
           </div>
 
-          <div className="rounded-panel border-line overflow-hidden border bg-[#0b1116]">
-            <div className="border-line-soft flex items-center justify-between border-b bg-[#0e151b] px-4 py-2">
+          <div className="rounded-panel border-line overflow-hidden border bg-[#1A040D]">
+            <div className="border-line-soft flex items-center justify-between border-b bg-[#1F050F] px-4 py-2">
               <div className="flex items-center gap-2">
                 <span className="size-2.5 rounded-full bg-[#ff5f57]" />
                 <span className="size-2.5 rounded-full bg-[#febc2e]" />
@@ -140,7 +140,7 @@ export function CodeView({ projectId }: { projectId: string }) {
             </div>
 
             <div className="grid min-h-[420px] md:grid-cols-[220px_1fr]">
-              <aside className="border-line-soft border-b bg-[#0c1318] md:border-r md:border-b-0">
+              <aside className="border-line-soft border-b bg-[#1F050F] md:border-r md:border-b-0">
                 <p className="text-faint flex items-center gap-1.5 px-3 py-2 font-mono text-[9px] tracking-[0.14em] uppercase">
                   <FolderTree className="size-3" /> Explorer
                 </p>
@@ -172,7 +172,7 @@ export function CodeView({ projectId }: { projectId: string }) {
               </aside>
 
               <div className="min-w-0">
-                <div className="border-line-soft flex items-center gap-2 border-b bg-[#0e151b] px-3 py-1.5">
+                <div className="border-line-soft flex items-center gap-2 border-b bg-[#1F050F] px-3 py-1.5">
                   <span className="text-muted border-line-soft rounded-t border-b-2 border-b-[#7dd3fc] px-2 py-1 font-mono text-[10px]">
                     {file.path.split("/").at(-1)}
                   </span>

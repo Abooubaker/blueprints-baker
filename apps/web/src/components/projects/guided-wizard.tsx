@@ -79,7 +79,7 @@ function OptionTile({
         "flex items-start gap-3 rounded-lg border px-3.5 py-3 text-left transition-colors",
         selected
           ? "border-signal/40 bg-signal/[0.07]"
-          : "border-line bg-canvas/40 hover:border-[#2d6894]",
+          : "border-line bg-canvas/40 hover:border-[#8A6B45]",
       )}
     >
       <span

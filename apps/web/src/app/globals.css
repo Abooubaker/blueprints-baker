@@ -2,20 +2,20 @@
 
 @theme {
   /* Blueprint palette: white ink, cyan accents, deep drafting-paper blue. */
-  --color-canvas: #07233d;
-  --color-surface: #0b2f4f;
-  --color-elevated: #103a5e;
-  --color-raised: #15466e;
-  --color-line: #2d6894;
-  --color-line-soft: #1b4d75;
-  --color-ink: #f2f8ff;
-  --color-muted: #b9d4ea;
-  --color-faint: #7fa8c8;
-  --color-signal: #eaf6ff;
-  --color-signal-dim: #c9e3f5;
-  --color-signal-ink: #07233d;
-  --color-aqua: #6fd6ff;
-  --color-warn: #ffcc7a;
+  --color-canvas: #2B0716;
+  --color-surface: #3A0B1D;
+  --color-elevated: #4A1025;
+  --color-raised: #5A1A33;
+  --color-line: #8A6B45;
+  --color-line-soft: #5A2A3E;
+  --color-ink: #F3E7D5;
+  --color-muted: #D8B99B;
+  --color-faint: #A98B70;
+  --color-signal: #F3E7D5;
+  --color-signal-dim: #D8B99B;
+  --color-signal-ink: #2B0716;
+  --color-aqua: #C6A477;
+  --color-warn: #E8B96A;
   --color-danger: #ff9b9b;
 
   --font-sans: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -69,7 +69,7 @@
     background: var(--color-canvas);
   }
   ::-webkit-scrollbar-thumb {
-    background: #2d6894;
+    background: #8A6B45;
     border: 2px solid var(--color-canvas);
     border-radius: 999px;
   }
@@ -98,12 +98,12 @@
 
   .panel-sheen {
     background:
-      radial-gradient(120% 120% at 0% 0%, rgb(111 214 255 / 0.1) 0%, transparent 45%),
+      radial-gradient(120% 120% at 0% 0%, rgb(198 164 119 / 0.1) 0%, transparent 45%),
       var(--color-surface);
   }
 
   .text-gradient {
-    background: linear-gradient(100deg, #ffffff 20%, #cfe9fb 55%, #6fd6ff 100%);
+    background: linear-gradient(100deg, #F3E7D5 20%, #D8B99B 55%, #C6A477 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -111,8 +111,8 @@
 
   .glow-signal {
     box-shadow:
-      0 0 0 1px rgb(234 246 255 / 0.3),
-      0 12px 48px -12px rgb(111 214 255 / 0.4);
+      0 0 0 1px rgb(243 231 213 / 0.3),
+      0 12px 48px -12px rgb(198 164 119 / 0.4);
   }
 
   .fade-up {
