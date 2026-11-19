@@ -12,8 +12,8 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-signal text-signal-ink shadow-[0_0_24px_-6px_rgba(234,246,255,0.45)] hover:bg-white active:bg-signal-dim",
-        secondary: "border border-line bg-elevated text-ink hover:border-[#2d6894] hover:bg-raised",
+          "bg-signal text-signal-ink shadow-[0_0_24px_-6px_rgba(243,231,213,0.45)] hover:bg-white active:bg-signal-dim",
+        secondary: "border border-line bg-elevated text-ink hover:border-[#8A6B45] hover:bg-raised",
         outline:
           "border border-line bg-transparent text-ink hover:border-signal/40 hover:bg-signal/5",
         ghost: "text-muted hover:bg-white/5 hover:text-ink",
