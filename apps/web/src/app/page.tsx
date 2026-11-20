@@ -270,6 +270,7 @@ export default function LandingPage() {
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {c.results.map((item, index) => {
                 const Icon = RESULT_ICONS[index];
+                if (!Icon) return null;
                 return (
                   <div
                     key={RESULT_KEYS[index]}
