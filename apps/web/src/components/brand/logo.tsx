@@ -40,6 +40,7 @@ export function Logo({ className, markClassName }: { className?: string; markCla
       />
       <span className="flex items-baseline gap-2">
         <span className="text-ink text-[16px] font-semibold tracking-[-0.02em]">Albayraq</span>
+        <span lang="ar" className="text-aqua text-[17px] font-semibold">البيرق</span>
         <span className="border-line text-faint hidden rounded border px-1.5 py-0.5 font-mono text-[9px] tracking-[0.14em] uppercase sm:inline">
           beta
         </span>
