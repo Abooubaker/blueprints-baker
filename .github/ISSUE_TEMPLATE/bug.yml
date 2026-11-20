@@ -9,7 +9,7 @@ body:
         Do not report security vulnerabilities here. Contact the maintainer privately instead.
   - type: textarea
     id: summary
-    attributes:
+    attributes
       label: Summary
       description: One or two sentences describing the bug.
     validations:
