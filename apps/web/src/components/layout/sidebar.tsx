@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Logo } from "@/components/brand/logo";
+import { API_BASE_URL, DEMO_MODE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -35,9 +36,10 @@ function ApiStatus() {
   const [state, setState] = useState<"checking" | "online" | "offline">("checking");
 
   useEffect(() => {
+    // The static Pages demo has no live API; its status probe would always fail.
+    if (DEMO_MODE) return;
     let cancelled = false;
-    const base = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "http://localhost:8000";
-    fetch(`${base}/health`, { cache: "no-store" })
+    fetch(`${API_BASE_URL}/health`, { cache: "no-store" })
       .then((response) => {
         if (!cancelled) setState(response.ok ? "online" : "offline");
       })
@@ -48,6 +50,15 @@ function ApiStatus() {
       cancelled = true;
     };
   }, []);
+
+  if (DEMO_MODE) {
+    return (
+      <div className="text-faint flex items-center gap-2 font-mono text-[10px] tracking-[0.12em] uppercase">
+        <span className="bg-warn size-1.5 rounded-full" />
+        Static demo
+      </div>
+    );
+  }
 
   return (
     <div className="text-faint flex items-center gap-2 font-mono text-[10px] tracking-[0.12em] uppercase">

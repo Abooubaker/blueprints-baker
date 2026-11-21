@@ -2,23 +2,24 @@
 
 @theme {
   /* Blueprint palette: white ink, cyan accents, deep drafting-paper blue. */
-  --color-canvas: #2B0716;
-  --color-surface: #3A0B1D;
-  --color-elevated: #4A1025;
-  --color-raised: #5A1A33;
-  --color-line: #8A6B45;
-  --color-line-soft: #5A2A3E;
-  --color-ink: #F3E7D5;
-  --color-muted: #D8B99B;
-  --color-faint: #A98B70;
-  --color-signal: #F3E7D5;
-  --color-signal-dim: #D8B99B;
-  --color-signal-ink: #2B0716;
-  --color-aqua: #C6A477;
-  --color-warn: #E8B96A;
+  --color-canvas: #2b0716;
+  --color-surface: #3a0b1d;
+  --color-elevated: #4a1025;
+  --color-raised: #5a1a33;
+  --color-line: #8a6b45;
+  --color-line-soft: #5a2a3e;
+  --color-ink: #f3e7d5;
+  --color-muted: #d8b99b;
+  --color-faint: #a98b70;
+  --color-signal: #f3e7d5;
+  --color-signal-dim: #d8b99b;
+  --color-signal-ink: #2b0716;
+  --color-aqua: #c6a477;
+  --color-warn: #e8b96a;
   --color-danger: #ff9b9b;
 
-  --font-sans: "Inter", "Cairo", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans:
+    "Inter", "Cairo", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Code", "Roboto Mono", Menlo, monospace;
 
   --radius-panel: 1rem;
@@ -59,7 +60,7 @@
     background: var(--color-canvas);
   }
   ::-webkit-scrollbar-thumb {
-    background: #8A6B45;
+    background: #8a6b45;
     border: 2px solid var(--color-canvas);
     border-radius: 999px;
   }
@@ -86,7 +87,7 @@
   }
 
   .text-gradient {
-    background: linear-gradient(100deg, #F3E7D5 20%, #D8B99B 55%, #C6A477 100%);
+    background: linear-gradient(100deg, #f3e7d5 20%, #d8b99b 55%, #c6a477 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
