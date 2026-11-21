@@ -1,48 +1,59 @@
+<div align="center">
+
+<img src="apps/web/public/brand/albayraq-mark.png" alt="Albayraq" width="92" />
+
 # Albayraq
 
-**An AI-assisted robotics engineering platform.** Describe the robot you want to build, and
-Albayraq turns the idea into a structured specification, a compatible bill of materials, wiring,
-firmware, a mechanical plan, and a realistic budget.
+**An AI-assisted robotics engineering platform.**
 
-> **Project status: end-to-end build (v0.1.0).** A guided flow turns a description into a named,
-> confirmed robot, then generates sourced part prices, a validated pin-level schematic, multi-file
-> code scaffolds, a parametric STL with JOD print pricing, a budget, and a documentation set.
-> The engine is deterministic and offline; authentication and live supplier feeds are still
-> planned. See the [roadmap](docs/roadmap.md) and
-> [GitHub Project board](https://github.com/users/Abooubaker/projects/1).
->
-> **Hosted API:** deploy the FastAPI service with [Render + Neon](docs/deployment.md). The web app
-> talks to it through `NEXT_PUBLIC_API_URL`; no credentials ship in the browser bundle.
+Describe the robot you want to build. Albayraq turns the idea into a structured
+specification, a sourced bill of materials, a pin-accurate schematic, multi-language
+firmware scaffolds, a printable mechanical plan, a JOD budget, and a full document set.
 
-> **Live demo:** <https://abooubaker.github.io/blueprints-baker/> — a read-only Pages build generated
-> by the same deterministic engine. See [docs/demo-site.md](docs/demo-site.md).
+[![CI](https://github.com/Abooubaker/blueprints-baker/actions/workflows/ci.yml/badge.svg)](https://github.com/Abooubaker/blueprints-baker/actions/workflows/ci.yml)
+[![Demo site](https://github.com/Abooubaker/blueprints-baker/actions/workflows/pages.yml/badge.svg)](https://github.com/Abooubaker/blueprints-baker/actions/workflows/pages.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](apps/api)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](apps/web)
+[![Version](https://img.shields.io/badge/version-0.1.0-green.svg)](docs/roadmap.md)
 
-### Hosted product
-
-The read-only demo cannot create projects. For the full product, deploy the API and web app:
-
-1. Create a Neon PostgreSQL project and copy the pooled connection string.
-2. Deploy the API to Render from `render.yaml` (Docker) with `DATABASE_URL` and `CORS_ORIGINS`.
-3. Deploy the web app to Render (Node) with `NEXT_PUBLIC_API_URL` pointing at the API.
-
-[`docs/deployment.md`](docs/deployment.md) has the exact settings, order of operations, and
-troubleshooting. Migrations run once per container deploy; production disables the interactive
-`/docs` routes.
+</div>
 
 ---
 
-## Why Albayraq
+## 🔗 Quick links
 
-Building a robot from scratch means juggling five coupled decisions: what to build, which parts fit
-together, how to wire them, how to program them, and whether the result fits the budget. Mistakes
-are expensive and usually discovered after the parts arrive.
+| | | |
+| :-- | :-- | :-- |
+| 🚀 **[Live app](https://albayraq-web.onrender.com/)** | 🩺 **[API health](https://albayraq-api.onrender.com/health)** | 🧪 **[Static demo](https://abooubaker.github.io/blueprints-baker/)** |
+| 📖 [Documentation](docs/architecture.md) | 🚀 [Deployment guide](docs/deployment.md) | 🗺️ [Roadmap](docs/roadmap.md) |
 
-Albayraq keeps those decisions in one typed project workspace. Each specialized AI agent owns one
+> **Live app vs. demo:** the [Render deployment](https://albayraq-web.onrender.com/) uses the real
+> API and database and can create projects. The [GitHub Pages demo](https://abooubaker.github.io/blueprints-baker/)
+> is a read-only, prebuilt fixture with no backend. If the demo shows **“Static demo”** in the
+> sidebar, that is expected — open the live app for the full product.
+
+---
+
+## ✨ Why Albayraq
+
+Building a robot from scratch means juggling five coupled decisions: what to build, which parts
+fit together, how to wire them, how to program them, and whether the result fits the budget.
+Mistakes are expensive and usually discovered after the parts arrive.
+
+Albayraq keeps those decisions in one typed project workspace. Each specialized agent owns one
 artifact and consumes the artifacts produced before it. That makes the output inspectable, lets a
 human correct any step, and keeps the system provider-independent — no vendor SDK leaks into the
 domain layer.
 
-## What works today
+- **Guided, not guesswork** — a six-step flow turns a plain-language description into a confirmed, named robot.
+- **Every decision sourced** — cheapest-first JOD estimates from six curated stores, clearly labelled as estimates.
+- **Inspectable artifacts** — schematic, pinout, code, STL, budget, and docs you can open, diff, and export.
+- **Reproducible** — the engine is deterministic: the same inputs always produce the same build.
+
+---
+
+## ✅ What works today
 
 | Area | Status |
 | --- | --- |
@@ -64,12 +75,13 @@ domain layer.
 | Static GitHub Pages demo generated by the same engine | ✅ Implemented |
 | Authentication, live supplier feeds, model-backed agents, collaboration | 📋 Planned |
 
-The engine is deterministic, not model-backed: the same specification and preferences produce the
-same build, and every finding is reproducible offline. Code bundles are runnable scaffolds with
-explicit TODO blocks, not finished firmware; store prices are curated JOD estimates, not live
-quotes.
+> **Honest scope:** store prices are curated JOD planning estimates, not live quotes. Code bundles
+> are runnable scaffolds with explicit `TODO` blocks, not finished firmware. The engine is
+> deterministic — no LLM is called — so results are reproducible offline.
 
-## Stack
+---
+
+## 🧱 Stack
 
 | Layer | Choice | Why |
 | --- | --- | --- |
@@ -79,7 +91,9 @@ quotes.
 | AI | Provider-independent `LLMProvider` boundary, typed agent contracts | Swap OpenAI/Anthropic/local models without touching domain code; validate model output before it enters the graph. |
 | Tooling | uv, npm, Ruff, mypy (strict), pytest, ESLint, Prettier, GitHub Actions | Fast, reproducible installs on both sides of the monorepo and meaningful CI gates. |
 
-## Repository layout
+---
+
+## 📁 Repository layout
 
 ```text
 blueprints-baker/
@@ -95,7 +109,9 @@ blueprints-baker/
 └── .github/workflows/       CI quality/tests, static demo build, and GitHub Pages deploy
 ```
 
-## Quick start
+---
+
+## ⚡ Quick start
 
 ### Prerequisites
 
@@ -148,7 +164,31 @@ make web-check
 See [docs/development.md](docs/development.md) for the full setup, test strategy, contract workflow,
 and troubleshooting guide.
 
-## Documentation
+---
+
+## 🌐 Hosted product
+
+A read-only demo cannot create projects. For the full product, deploy the API and web app:
+
+1. Create a Neon PostgreSQL project and copy the pooled connection string.
+2. Deploy the API to Render from `render.yaml` (Docker) with `DATABASE_URL` and `CORS_ORIGINS`.
+3. Deploy the web app to Render (Node) with `NEXT_PUBLIC_API_URL` pointing at the API.
+
+[`docs/deployment.md`](docs/deployment.md) has the exact settings, order of operations, and
+troubleshooting. Migrations run once per container deploy; production disables the interactive
+`/docs` routes.
+
+- **Web:** <https://albayraq-web.onrender.com/>
+- **API:** <https://albayraq-api.onrender.com/>
+- **API health:** <https://albayraq-api.onrender.com/health>
+
+> **Free-tier note:** Render services sleep when idle, so the first request after a quiet period
+> can take ~30–60 seconds. If Neon is suspended, the API deploy will fail until the database is
+> resumed and `DATABASE_URL` is refreshed.
+
+---
+
+## 📚 Documentation
 
 | Document | Contents |
 | --- | --- |
@@ -166,7 +206,9 @@ and troubleshooting guide.
 | [ADRs](docs/decisions/) | Recorded architecture decisions |
 | [Foundation report](PROJECT_FOUNDATION_REPORT.md) | What was built, verification evidence, limitations, next steps |
 
-## API at a glance
+---
+
+## 🔌 API at a glance
 
 ```bash
 curl http://localhost:8000/health/ready
@@ -214,13 +256,9 @@ curl -X POST http://localhost:8000/api/v1/projects/<project-id>/build
 
 See [docs/api.md](docs/api.md) for the plan contract, build artifact, and export formats.
 
-## Static demo
+---
 
-A read-only demo is published to GitHub Pages from precomputed engine output — no API,
-database, or credentials in the bundle. See [docs/demo-site.md](docs/demo-site.md) and run
-`make demo-build` to reproduce it locally.
-
-## Development workflow
+## 🤝 Development workflow
 
 1. Pick an issue from the [Project board](https://github.com/users/Abooubaker/projects/1).
 2. Branch from `main` (`feat/…`, `fix/…`, `docs/…`).
@@ -230,7 +268,9 @@ database, or credentials in the bundle. See [docs/demo-site.md](docs/demo-site.m
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before your first pull request.
 
-## Roadmap summary
+---
+
+## 🗺️ Roadmap summary
 
 | Milestone | Theme | Outcome |
 | --- | --- | --- |
@@ -245,7 +285,9 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before your first pull request.
 | M9 | Export & collaboration | Build bundle, PDF, sharing, revisions, comments |
 | M10 | Production readiness | Deployment, observability, security, accessibility, e2e |
 
-## Limitations
+---
+
+## ⚠️ Limitations
 
 - No authentication or authorization yet; `owner_id` is nullable by design.
 - Agents are deterministic and curated; they do not call an LLM. Identification, part selection,
@@ -262,6 +304,8 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before your first pull request.
 - The Docker Compose file is a convenience for PostgreSQL; the production API image is built in CI.
 - SQLite is supported for tests only; PostgreSQL is the supported runtime database.
 
-## License
+---
+
+## 📄 License
 
 [MIT](LICENSE)
