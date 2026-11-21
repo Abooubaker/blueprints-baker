@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, CheckCircle2, CircuitBoard, Code2, Github, Layers, Ruler } from "lucide-react";
+import { ArrowRight, CircuitBoard, Code2, Github, Layers, Ruler } from "lucide-react";
 import Link from "next/link";
 
 import { LanguageToggle } from "@/components/brand/language-toggle";
@@ -44,7 +44,7 @@ type Copy = {
 const COPY: Record<Lang, Copy> = {
   en: {
     github: "GitHub repository",
-    openDemoShort: "Open demo build",
+    openDemoShort: "Open demo",
     startBuild: "Start a build",
     badgeDemo: "Live demo · real engine output",
     badgeFlow: "From idea to build in one flow",
@@ -145,7 +145,7 @@ const COPY: Record<Lang, Copy> = {
   },
 };
 
-const STEP_NUMBERS = ["1", "2", "3"];
+const STEP_NUMBERS = ["01", "02", "03"];
 const RESULT_ICONS = [Layers, CircuitBoard, Code2, Ruler];
 const RESULT_KEYS = ["parts", "schematic", "code", "print"];
 
@@ -157,68 +157,70 @@ export default function LandingPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <header className="bg-canvas/80 border-line-soft/70 fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
+      <header className="bg-canvas/85 border-line-soft/70 fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 sm:px-8">
           <Logo />
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-3">
             <LanguageToggle />
             <a
               href="https://github.com/Abooubaker/blueprints-baker"
               target="_blank"
               rel="noreferrer"
-              className="text-muted hover:text-ink hidden size-9 items-center justify-center rounded-lg transition-colors hover:bg-white/5 sm:flex"
+              className="text-faint hover:text-ink hidden font-mono text-[10px] tracking-[0.12em] uppercase transition-colors sm:inline"
               aria-label={c.github}
             >
-              <Github className="size-4" />
+              {c.github}
             </a>
             <ButtonLink href={primaryHref} size="sm" variant="secondary">
               {DEMO_MODE ? c.openDemoShort : c.startBuild}
+              <ArrowRight className="size-3.5" />
             </ButtonLink>
           </div>
         </div>
       </header>
 
-      <main>
-        <section className="border-line-soft relative border-b pt-28 pb-20 sm:pt-32 sm:pb-24">
-          <div className="bg-blueprint mask-fade-b pointer-events-none absolute inset-0 opacity-50" />
-          <div className="bg-signal/[0.06] pointer-events-none absolute top-0 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full blur-[120px]" />
-          <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
+      <main className="pt-14">
+        <section className="border-line-soft relative border-b">
+          <div className="bg-blueprint mask-fade-b pointer-events-none absolute inset-0 opacity-70" />
+          <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[1.05fr_0.95fr]">
             <div className="fade-up">
-              <div className="border-signal/20 bg-signal/[0.06] mb-6 inline-flex items-center gap-2 rounded-full border px-3 py-1.5">
-                <span className="bg-signal pulse-dot size-1.5 rounded-full" />
-                <span className="text-signal font-mono text-[10px] tracking-[0.16em] uppercase">
-                  {DEMO_MODE ? c.badgeDemo : c.badgeFlow}
-                </span>
+              <div className="mb-7 flex items-center gap-3 font-mono text-[10px] tracking-[0.16em] uppercase">
+                <span className="text-signal">{"// 01"}</span>
+                <span className="bg-line h-px w-10" />
+                <span className="text-faint">{DEMO_MODE ? c.badgeDemo : c.badgeFlow}</span>
               </div>
 
-              <h1 className="text-ink max-w-xl text-[42px] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-[54px]">
+              <h1 className="text-ink max-w-xl text-[44px] leading-[1.05] font-semibold tracking-[-0.04em] sm:text-[58px]">
                 {c.heroLead}
-                <span className="text-gradient block">{c.heroAccent}</span>
+                <span className="text-signal block">{c.heroAccent}</span>
               </h1>
 
               <p className="text-muted mt-6 max-w-lg text-[15px] leading-relaxed">{c.heroBody}</p>
 
-              <div className="mt-8">
+              <div className="mt-8 flex flex-col items-start gap-4">
                 <ButtonLink href={primaryHref} size="lg">
-                  {DEMO_MODE ? c.openDemo : c.describe}{" "}
+                  {DEMO_MODE ? c.openDemo : c.describe}
                   <ArrowRight className="size-4 rtl:rotate-180" />
                 </ButtonLink>
                 <Link
                   href={DEMO_MODE ? `/projects/${DEMO_PROJECT_ID}/programming` : "/dashboard"}
-                  className="text-muted hover:text-ink mt-4 inline-flex items-center gap-1.5 text-[13px] transition-colors"
+                  className="text-muted hover:text-ink inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.14em] uppercase transition-colors"
                 >
                   {DEMO_MODE ? c.seeCode : c.openWorkspace}
                   <ArrowRight className="size-3.5 rtl:rotate-180" />
                 </Link>
               </div>
 
-              <div className="text-faint mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px]">
-                {c.checks.map((check) => (
-                  <span key={check} className="flex items-center gap-1.5">
-                    <CheckCircle2 className="text-signal/70 size-3" /> {check}
-                  </span>
+              <dl className="border-line-soft divide-line-soft mt-10 grid max-w-lg grid-cols-3 divide-x border-t pt-4 font-mono">
+                {c.checks.map((check, index) => (
+                  <div key={check} className="px-3 first:pl-0">
+                    <dt className="text-faint text-[8px] tracking-[0.14em] uppercase">
+                      {String(index + 1).padStart(2, "0")}
+                    </dt>
+                    <dd className="text-muted mt-1.5 text-[10px] leading-snug">{check}</dd>
+                  </div>
                 ))}
-              </div>
+              </dl>
             </div>
 
             <div dir="ltr" className="fade-up [animation-delay:120ms]">
@@ -227,49 +229,56 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="border-line-soft bg-surface/30 border-b py-20">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8">
-            <div className="grid gap-3 md:grid-cols-3">
+        <section className="border-line-soft bg-canvas/40 border-b">
+          <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
+            <div className="mb-8 flex items-baseline gap-3 font-mono text-[10px] tracking-[0.16em] uppercase">
+              <span className="text-signal">{"// flow"}</span>
+              <span className="text-faint">idea → verified build</span>
+            </div>
+            <div className="border-line-soft grid gap-px border-t md:grid-cols-3">
               {c.steps.map((step, index) => (
-                <div key={STEP_NUMBERS[index]} className="relative">
-                  <div className="rounded-panel border-line-soft bg-surface h-full border p-7">
-                    <span className="border-line bg-elevated text-signal flex size-7 items-center justify-center rounded-full border font-mono text-[11px]">
-                      {STEP_NUMBERS[index]}
-                    </span>
-                    <h2 className="text-ink mt-5 text-[17px] font-medium">{step.title}</h2>
-                    <p className="text-muted mt-2 text-sm leading-relaxed">{step.description}</p>
+                <div
+                  key={STEP_NUMBERS[index]}
+                  className="border-line-soft py-7 md:border-r md:px-7 md:first:pl-0 md:last:border-r-0 md:last:pr-0"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-signal font-mono text-xl">{STEP_NUMBERS[index]}</span>
+                    <span className="bg-line-soft h-px flex-1" />
                   </div>
-                  {index < c.steps.length - 1 ? (
-                    <ArrowRight className="text-faint/40 absolute top-1/2 -right-4 hidden size-4 -translate-y-1/2 md:block rtl:rotate-180" />
-                  ) : null}
+                  <h2 className="text-ink mt-4 text-[17px] font-medium">{step.title}</h2>
+                  <p className="text-muted mt-2 text-sm leading-relaxed">{step.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="py-20">
-          <div className="mx-auto max-w-6xl px-5 sm:px-8">
-            <div className="mb-10 max-w-xl">
-              <p className="text-signal mb-3 font-mono text-[11px] tracking-[0.2em] uppercase">
+        <section className="border-line-soft border-b">
+          <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
+            <div className="mb-10 max-w-2xl">
+              <p className="text-signal mb-3 font-mono text-[10px] tracking-[0.18em] uppercase">
+                {"// "}
                 {c.eyebrow}
               </p>
-              <h2 className="text-ink text-3xl font-semibold tracking-[-0.025em] sm:text-4xl">
+              <h2 className="text-ink text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
                 {c.resultsTitle}
               </h2>
               <p className="text-muted mt-3 text-sm leading-relaxed">{c.resultsBody}</p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="border-line-soft grid gap-px border-t sm:grid-cols-2 lg:grid-cols-4">
               {c.results.map((item, index) => {
                 const Icon = RESULT_ICONS[index];
                 if (!Icon) return null;
                 return (
                   <div
                     key={RESULT_KEYS[index]}
-                    className="rounded-panel border-line-soft bg-surface border p-5"
+                    className="border-line-soft py-6 pr-5 sm:border-r sm:px-6 sm:first:pl-0 lg:last:border-r-0"
                   >
-                    <div className="border-line bg-elevated text-signal flex size-9 items-center justify-center rounded-lg border">
-                      <Icon className="size-4" strokeWidth={1.6} />
+                    <div className="flex items-center justify-between">
+                      <Icon className="text-signal size-4" strokeWidth={1.5} />
+                      <span className="text-faint font-mono text-[9px]">
+                        R{String(index + 1).padStart(2, "0")}
+                      </span>
                     </div>
                     <h3 className="text-ink mt-4 text-sm font-medium">{item.title}</h3>
                     <p className="text-faint mt-1.5 text-[11px] leading-relaxed">
@@ -279,36 +288,33 @@ export default function LandingPage() {
                 );
               })}
             </div>
-            <p className="text-faint mt-5 text-[11px]">{c.resultsNote}</p>
+            <p className="text-faint border-line-soft mt-6 border-t pt-4 font-mono text-[10px] leading-relaxed">
+              {c.resultsNote}
+            </p>
           </div>
         </section>
 
-        <section className="px-5 pb-24 sm:px-8">
-          <div className="border-signal/20 bg-signal/[0.04] relative mx-auto max-w-6xl overflow-hidden rounded-2xl border px-6 py-14 text-center sm:px-12">
-            <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-30" />
-            <div className="bg-signal/10 pointer-events-none absolute -top-24 left-1/2 h-64 w-[600px] -translate-x-1/2 rounded-full blur-[80px]" />
-            <div className="relative">
-              <h2 className="text-ink mx-auto max-w-xl text-3xl font-semibold tracking-[-0.025em] sm:text-4xl">
-                {c.ctaTitle}
-              </h2>
-              <p className="text-muted mx-auto mt-4 max-w-md text-sm leading-relaxed">
-                {c.ctaBody}
-              </p>
-              <div className="mt-7 flex flex-col items-center justify-center gap-4">
-                <ButtonLink href={primaryHref} size="lg">
-                  {DEMO_MODE ? c.openDemo : c.describe}{" "}
-                  <ArrowRight className="size-4 rtl:rotate-180" />
-                </ButtonLink>
-                <a
-                  href="https://github.com/Abooubaker/blueprints-baker"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-faint hover:text-ink inline-flex items-center gap-1.5 text-[12px] transition-colors"
-                >
-                  <Github className="size-3.5" /> {c.viewGithub}
-                </a>
-              </div>
-            </div>
+        <section className="registration-mark mx-auto max-w-6xl px-5 py-20 sm:px-8">
+          <p className="text-signal font-mono text-[10px] tracking-[0.18em] uppercase">
+            {"// start"}
+          </p>
+          <h2 className="text-ink mt-4 max-w-2xl text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
+            {c.ctaTitle}
+          </h2>
+          <p className="text-muted mt-4 max-w-md text-sm leading-relaxed">{c.ctaBody}</p>
+          <div className="mt-7 flex flex-col items-start gap-4">
+            <ButtonLink href={primaryHref} size="lg">
+              {DEMO_MODE ? c.openDemo : c.describe}
+              <ArrowRight className="size-4 rtl:rotate-180" />
+            </ButtonLink>
+            <a
+              href="https://github.com/Abooubaker/blueprints-baker"
+              target="_blank"
+              rel="noreferrer"
+              className="text-faint hover:text-ink inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.12em] uppercase transition-colors"
+            >
+              <Github className="size-3.5" /> {c.viewGithub}
+            </a>
           </div>
         </section>
       </main>
@@ -317,7 +323,7 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-col gap-5 px-5 py-9 sm:px-8 md:flex-row md:items-center md:justify-between">
           <div>
             <Logo />
-            <p className="text-faint mt-2 text-xs">{c.tagline}</p>
+            <p className="text-faint mt-2 font-mono text-[10px]">{c.tagline}</p>
           </div>
           <div className="text-faint flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[10px] tracking-wide uppercase">
             <Link href="/dashboard" className="hover:text-ink">

@@ -1,14 +1,13 @@
 "use client";
 
 import {
+  Activity,
   ArrowRight,
   ArrowUpRight,
-  Activity,
   DollarSign,
   FolderKanban,
   Plus,
   Search,
-  Sparkles,
   TriangleAlert,
 } from "lucide-react";
 import Link from "next/link";
@@ -27,7 +26,7 @@ function robotMeta(type: string) {
   return ROBOT_TYPES.find((item) => item.value === type) ?? ROBOT_TYPES[ROBOT_TYPES.length - 1]!;
 }
 
-function ProjectCard({ project }: { project: ProjectSummary }) {
+function ProjectRow({ project }: { project: ProjectSummary }) {
   const meta = robotMeta(project.robot_type);
   const status = PROJECT_STATUS_STYLES[project.status] ?? PROJECT_STATUS_STYLES.draft!;
   const Icon = meta.icon;
@@ -35,33 +34,35 @@ function ProjectCard({ project }: { project: ProjectSummary }) {
   return (
     <Link
       href={`/projects/${project.id}`}
-      className="group rounded-panel border-line-soft bg-surface hover:border-signal/40 hover:bg-elevated/40 flex flex-col border p-5 transition-all"
+      className="group grid gap-3 py-5 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:gap-5"
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="border-line bg-elevated text-signal group-hover:border-signal/30 group-hover:bg-signal/5 flex size-10 items-center justify-center rounded-lg border transition-colors">
-          <Icon className="size-4.5" strokeWidth={1.6} />
+      <div className="flex items-center gap-4">
+        <Icon className="text-signal size-5" strokeWidth={1.5} />
+        <div className="sm:hidden">
+          <Badge variant={status.variant}>{status.label}</Badge>
         </div>
-        <Badge variant={status.variant}>{status.label}</Badge>
       </div>
 
-      <h3 className="text-ink group-hover:text-signal mt-4 text-[15px] font-medium">
-        {project.name}
-      </h3>
-      <p className="text-muted mt-1.5 line-clamp-2 min-h-10 text-[13px] leading-relaxed">
-        {project.description || "No description yet."}
-      </p>
-
-      <div className="border-line-soft mt-5 flex items-center justify-between border-t pt-3.5">
-        <div className="text-faint flex items-center gap-2.5 font-mono text-[10px] tracking-wide">
-          <span>{titleCase(project.robot_type)}</span>
-          <span className="bg-faint size-0.5 rounded-full" />
-          <span>{project.budget_max_usd ? formatMoney(project.budget_max_usd) : "No budget"}</span>
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <h3 className="text-ink group-hover:text-signal text-[15px] font-medium transition-colors">
+            {project.name}
+          </h3>
+          <span className="hidden sm:inline">
+            <Badge variant={status.variant}>{status.label}</Badge>
+          </span>
         </div>
-        <span className="text-faint text-[10px]">{formatRelative(project.updated_at)}</span>
+        <p className="text-muted mt-1 line-clamp-1 text-[13px] leading-relaxed">
+          {project.description || "No description yet."}
+        </p>
       </div>
-      <span className="text-signal/80 mt-3 inline-flex items-center gap-1.5 text-[11px] font-medium opacity-0 transition-opacity group-hover:opacity-100">
-        Open build <ArrowUpRight className="size-3.5" />
-      </span>
+
+      <div className="text-faint flex items-center justify-between gap-6 font-mono text-[10px] tracking-wide sm:justify-end">
+        <span>{titleCase(project.robot_type)}</span>
+        <span>{project.budget_max_usd ? formatMoney(project.budget_max_usd) : "no budget"}</span>
+        <span className="hidden lg:inline">{formatRelative(project.updated_at)}</span>
+        <ArrowUpRight className="text-signal size-4 opacity-0 transition-opacity group-hover:opacity-100" />
+      </div>
     </Link>
   );
 }
@@ -91,21 +92,24 @@ export function DashboardView() {
   );
 
   return (
-    <div className="space-y-7">
+    <div className="space-y-8">
       {loading ? (
-        <div className="rounded-panel border-line-soft bg-surface h-28 animate-pulse border" />
+        <div className="border-line-soft border-y py-10">
+          <Skeleton className="h-3 w-32" />
+          <Skeleton className="mt-4 h-7 w-72" />
+          <Skeleton className="mt-3 h-3 w-full max-w-lg" />
+        </div>
       ) : projects.length > 0 && latest ? (
-        <section className="border-signal/25 bg-signal/[0.05] rounded-panel relative overflow-hidden border p-6">
-          <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-30" />
-          <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <section className="bg-blueprint border-line-soft relative border-y py-9">
+          <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
-              <p className="text-signal font-mono text-[10px] tracking-[0.16em] uppercase">
-                Continue where you left off
+              <p className="text-signal font-mono text-[10px] tracking-[0.18em] uppercase">
+                {"// resume build"}
               </p>
-              <h1 className="text-ink mt-2 truncate text-xl font-medium tracking-tight sm:text-2xl">
+              <h1 className="text-ink mt-4 truncate text-3xl font-semibold tracking-[-0.03em]">
                 {latest.name}
               </h1>
-              <p className="text-muted mt-1.5 max-w-xl text-[13px] leading-relaxed">
+              <p className="text-muted mt-2 max-w-xl text-[13px] leading-relaxed">
                 {latest.description || "Pick up your build from the last step you were on."}
               </p>
             </div>
@@ -115,29 +119,25 @@ export function DashboardView() {
           </div>
         </section>
       ) : (
-        <section className="panel-sheen rounded-panel border-line-soft border p-6">
-          <div className="flex items-start gap-4">
-            <div className="border-signal/25 bg-signal/10 text-signal flex size-11 shrink-0 items-center justify-center rounded-xl border">
-              <Sparkles className="size-5" />
-            </div>
-            <div>
-              <h1 className="text-ink text-xl font-medium tracking-tight sm:text-2xl">
-                Describe your first robot
-              </h1>
-              <p className="text-muted mt-2 max-w-xl text-[13px] leading-relaxed">
-                Albayraq starts with a sentence, not a parts list. Tell us what you want to build
-                and get a full, documented plan.
-              </p>
-              <ButtonLink href="/projects/new" size="md" className="mt-5">
-                <Plus className="size-4" /> New robot project
-              </ButtonLink>
-            </div>
-          </div>
+        <section className="border-line-soft border-y py-10">
+          <p className="text-signal font-mono text-[10px] tracking-[0.18em] uppercase">
+            {"// new project"}
+          </p>
+          <h1 className="text-ink mt-4 text-3xl font-semibold tracking-[-0.03em]">
+            Describe your first robot
+          </h1>
+          <p className="text-muted mt-3 max-w-xl text-[13px] leading-relaxed">
+            Albayraq starts with a sentence, not a parts list. Tell us what you want to build and
+            get a full, documented plan.
+          </p>
+          <ButtonLink href="/projects/new" size="md" className="mt-6">
+            <Plus className="size-4" /> New robot project
+          </ButtonLink>
         </section>
       )}
 
       {!loading && total > 0 ? (
-        <div className="text-faint flex flex-wrap items-center gap-x-6 gap-y-2 text-[11px]">
+        <div className="text-faint flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[10px] tracking-[0.1em] uppercase">
           <span className="inline-flex items-center gap-1.5">
             <FolderKanban className="size-3.5" /> {active} active
           </span>
@@ -152,11 +152,10 @@ export function DashboardView() {
 
       <section>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <h2 className="text-ink text-sm font-medium">All projects</h2>
-            {!loading && total > 0 ? (
-              <span className="text-faint font-mono text-[10px]">{total}</span>
-            ) : null}
+          <div className="flex items-baseline gap-3 font-mono text-[10px] tracking-[0.16em] uppercase">
+            <span className="text-signal">{"// index"}</span>
+            <h2 className="text-ink font-medium">All projects</h2>
+            {!loading && total > 0 ? <span className="text-faint">[{total}]</span> : null}
           </div>
           <div className="flex items-center gap-2">
             <div className="relative">
@@ -165,7 +164,7 @@ export function DashboardView() {
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Filter projects…"
-                className="h-9 w-[190px] pl-8 text-xs"
+                className="h-9 w-[190px] pl-8 font-mono text-xs"
                 aria-label="Filter projects"
               />
             </div>
@@ -178,13 +177,13 @@ export function DashboardView() {
         </div>
 
         {error ? (
-          <div className="rounded-panel border-warn/20 bg-warn/[0.05] flex flex-col items-start gap-3 border p-5">
-            <div className="text-warn flex items-center gap-2 text-sm">
+          <div className="border-warn/30 bg-warn/[0.04] flex flex-col items-start gap-3 border-l-2 p-5">
+            <div className="text-warn flex items-center gap-2 font-mono text-xs uppercase">
               <TriangleAlert className="size-4" />
               Backend unavailable
             </div>
             <p className="text-muted max-w-lg text-xs leading-relaxed">{error}</p>
-            <code className="border-line bg-canvas text-muted rounded border px-2 py-1 font-mono text-[10px]">
+            <code className="border-line bg-canvas text-muted rounded-sm border px-2 py-1 font-mono text-[10px]">
               cd apps/api && uv run uvicorn app.main:app --reload
             </code>
             <Button variant="secondary" size="sm" onClick={() => void reload()}>
@@ -192,21 +191,18 @@ export function DashboardView() {
             </Button>
           </div>
         ) : loading ? (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="space-y-4">
             {[0, 1, 2].map((item) => (
-              <div key={item} className="rounded-panel border-line-soft bg-surface border p-5">
-                <Skeleton className="size-10" />
-                <Skeleton className="mt-4 h-4 w-40" />
-                <Skeleton className="mt-2.5 h-3 w-full" />
-                <Skeleton className="mt-1.5 h-3 w-2/3" />
-                <Skeleton className="mt-5 h-3 w-1/2" />
+              <div key={item} className="border-line-soft border-b pb-4">
+                <Skeleton className="h-4 w-48" />
+                <Skeleton className="mt-3 h-3 w-full max-w-xl" />
               </div>
             ))}
           </div>
         ) : filtered.length > 0 ? (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="divide-line-soft border-line-soft divide-y border-t">
             {filtered.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+              <ProjectRow key={project.id} project={project} />
             ))}
           </div>
         ) : projects.length > 0 ? (

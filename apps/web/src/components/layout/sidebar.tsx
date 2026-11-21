@@ -32,7 +32,7 @@ function isActive(pathname: string, href: string) {
   return pathname === href;
 }
 
-type ApiStatusState = "checking" | "waking" | "online" | "offline";
+type ApiStatusState = "checking" | "waking" | "online" | "unreachable";
 
 function ApiStatus() {
   const [state, setState] = useState<ApiStatusState>("checking");
@@ -40,12 +40,16 @@ function ApiStatus() {
   useEffect(() => {
     // The static Pages demo has no live API; its status probe would always fail.
     if (DEMO_MODE) return;
-    let cancelled = false;
+
+    let stopped = false;
+    let timer: number | undefined;
+    let failures = 0;
+    let failingSince: number | null = null;
 
     async function probe(): Promise<boolean> {
       const controller = new AbortController();
-      // A sleeping Render service can take ~30–60s to answer the first request.
-      const timeout = window.setTimeout(() => controller.abort(), 45_000);
+      // Render free-tier cold starts can take a minute or more. Never cut one short.
+      const timeout = window.setTimeout(() => controller.abort(), 90_000);
       try {
         const response = await fetch(`${API_BASE_URL}/health`, {
           cache: "no-store",
@@ -59,31 +63,36 @@ function ApiStatus() {
       }
     }
 
-    async function check() {
-      // Don't flash "checking" on every background poll while already online.
+    // One serialized loop: no overlapping probes, no stale label from an old run.
+    async function cycle() {
+      if (stopped) return;
       setState((current) => (current === "online" ? current : "checking"));
-      const waits: readonly number[] = [0, 2_000, 6_000, 12_000];
-      for (const wait of waits) {
-        if (cancelled) return;
-        if (wait > 0) {
-          setState((current) => (current === "online" ? current : "waking"));
-          await new Promise((resolve) => window.setTimeout(resolve, wait));
-        }
-        if (cancelled) return;
-        if (await probe()) {
-          if (!cancelled) setState("online");
-          return;
-        }
+
+      const ok = await probe();
+      if (stopped) return;
+
+      if (ok) {
+        failures = 0;
+        failingSince = null;
+        setState("online");
+        timer = window.setTimeout(() => void cycle(), 60_000);
+        return;
       }
-      if (!cancelled) setState("offline");
+
+      failures += 1;
+      failingSince ??= Date.now();
+      // Only call it unreachable after four minutes of continuous failure.
+      const longOutage = Date.now() - failingSince > 4 * 60_000;
+      setState(longOutage ? "unreachable" : "waking");
+
+      const delay = Math.min(30_000, 2_000 * 2 ** Math.min(failures, 4));
+      timer = window.setTimeout(() => void cycle(), delay);
     }
 
-    void check();
-    // Keep probing in the background so the badge recovers after a cold start.
-    const interval = window.setInterval(() => void check(), 60_000);
+    void cycle();
     return () => {
-      cancelled = true;
-      window.clearInterval(interval);
+      stopped = true;
+      if (timer !== undefined) window.clearTimeout(timer);
     };
   }, []);
 
@@ -103,7 +112,7 @@ function ApiStatus() {
           "size-1.5 rounded-full",
           state === "online" && "bg-signal",
           (state === "checking" || state === "waking") && "bg-warn",
-          state === "offline" && "bg-danger",
+          state === "unreachable" && "bg-danger",
         )}
       />
       {state === "online"
@@ -112,7 +121,7 @@ function ApiStatus() {
           ? "Waking API…"
           : state === "checking"
             ? "Checking API"
-            : "API offline"}
+            : "API unreachable"}
     </div>
   );
 }
@@ -140,7 +149,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                     href={item.href}
                     onClick={onNavigate}
                     className={cn(
-                      "group flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] transition-colors",
+                      "group flex items-center gap-2.5 rounded-sm px-2.5 py-2 font-mono text-[11px] tracking-[0.08em] uppercase transition-colors",
                       active
                         ? "bg-signal/10 text-signal"
                         : "text-muted hover:text-ink hover:bg-white/[0.04]",
@@ -169,7 +178,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
                   href={item.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-muted hover:text-ink flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] transition-colors hover:bg-white/[0.04]"
+                  className="text-muted hover:text-ink flex items-center gap-2.5 rounded-sm px-2.5 py-2 font-mono text-[11px] tracking-[0.08em] uppercase transition-colors hover:bg-white/[0.04]"
                 >
                   <item.icon className="size-4" strokeWidth={1.7} />
                   {item.label}
@@ -201,7 +210,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
 export function Sidebar() {
   return (
-    <aside className="border-line-soft bg-surface/70 fixed inset-y-0 left-0 z-30 hidden w-[248px] border-r backdrop-blur-xl lg:block">
+    <aside className="border-line-soft bg-canvas/85 fixed inset-y-0 left-0 z-30 hidden w-[248px] border-r backdrop-blur-xl lg:block">
       <SidebarContent />
     </aside>
   );

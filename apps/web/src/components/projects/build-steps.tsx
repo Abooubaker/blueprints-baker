@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Check, Circle } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 
 import { PROJECT_MODULES } from "@/lib/constants";
@@ -42,8 +42,7 @@ export function adjacentSteps(slug?: string): { previous?: string; next?: string
 }
 
 /**
- * A compact, ordered view of the six build steps. Highlights where the user is
- * and what comes next so there is never any guesswork about the next action.
+ * An ordered, ruled list of the six build steps — a drawing index, not a card grid.
  */
 export function BuildSteps({
   projectId,
@@ -63,15 +62,15 @@ export function BuildSteps({
 
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between">
-        <p className="text-faint font-mono text-[10px] tracking-[0.14em] uppercase">Build steps</p>
+      <div className="mb-3 flex items-center justify-between font-mono text-[10px] tracking-[0.14em] uppercase">
+        <span className="text-faint">{"// build steps"}</span>
         {stepNumber > 0 ? (
-          <span className="text-faint font-mono text-[10px]">
+          <span className="text-faint">
             {stepNumber} / {PROJECT_MODULES.length}
           </span>
         ) : null}
       </div>
-      <ol className="space-y-1.5">
+      <ol className="divide-line-soft border-line-soft divide-y border-t">
         {PROJECT_MODULES.map((module, index) => {
           const isActive = module.slug === activeSlug;
           const isNext = module.slug === nextSlug;
@@ -81,28 +80,22 @@ export function BuildSteps({
             <li key={module.slug}>
               <Link
                 href={`/projects/${projectId}/${module.slug}`}
-                className={cn(
-                  "group border-line-soft flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors",
-                  isActive
-                    ? "border-signal/50 bg-signal/[0.08]"
-                    : isNext
-                      ? "border-signal/30 bg-elevated/60 hover:border-signal/50"
-                      : "bg-surface/60 hover:border-line hover:bg-elevated/40",
-                )}
+                className="group flex items-center gap-3 py-3"
               >
+                <span className="text-faint w-5 shrink-0 font-mono text-[9px]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
                 <span
                   className={cn(
-                    "flex size-6 shrink-0 items-center justify-center rounded-full border font-mono text-[10px]",
+                    "flex size-5 shrink-0 items-center justify-center rounded-full border font-mono text-[9px]",
                     isActive
                       ? "border-signal bg-signal text-signal-ink"
                       : isDone
-                        ? "border-signal/40 bg-signal/10 text-signal"
-                        : isNext
-                          ? "border-signal/50 text-signal"
-                          : "border-line text-faint",
+                        ? "border-signal/50 text-signal"
+                        : "border-line text-faint",
                   )}
                 >
-                  {isDone ? <Check className="size-3" /> : index + 1}
+                  {isDone ? <Check className="size-2.5" /> : index + 1}
                 </span>
                 <span className="min-w-0 flex-1">
                   <span
@@ -114,15 +107,19 @@ export function BuildSteps({
                     {module.label}
                   </span>
                   {isNext ? (
-                    <span className="text-faint mt-0.5 block truncate text-[11px]">Next step</span>
+                    <span className="text-signal mt-0.5 block font-mono text-[9px] tracking-wider uppercase">
+                      next
+                    </span>
                   ) : null}
                 </span>
-                {(isActive || isNext) && !isDone ? (
-                  <ArrowRight className="text-signal/70 size-3.5 shrink-0 rtl:rotate-180" />
-                ) : null}
-                {isDone && !isActive ? (
-                  <Circle className="text-signal/30 size-2.5 shrink-0" />
-                ) : null}
+                <ArrowRight
+                  className={cn(
+                    "size-3.5 shrink-0 rtl:rotate-180",
+                    isActive || isNext
+                      ? "text-signal/70"
+                      : "text-faint opacity-0 transition-opacity group-hover:opacity-100",
+                  )}
+                />
               </Link>
             </li>
           );

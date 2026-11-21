@@ -1,15 +1,4 @@
-import {
-  ArrowRight,
-  Bot,
-  Check,
-  ChevronRight,
-  CircuitBoard,
-  Coins,
-  Cpu,
-  Layers,
-  Ruler,
-  Sparkles,
-} from "lucide-react";
+import { Bot, Check, ChevronRight, CircuitBoard, Coins, Cpu, Layers, Ruler } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 
@@ -19,82 +8,68 @@ const NODES = [
   { label: "Wiring", detail: "5V · 2.1A", icon: CircuitBoard, state: "queued" },
   { label: "Firmware", detail: "Arduino", icon: Cpu, state: "queued" },
   { label: "Mechanical", detail: "4WD chassis", icon: Ruler, state: "queued" },
-  { label: "Cost", detail: "$182 est.", icon: Coins, state: "queued" },
+  { label: "Cost", detail: "182 JD est.", icon: Coins, state: "queued" },
 ] as const;
 
 export function BlueprintCard() {
   return (
     <div className="relative">
-      <div className="bg-signal/[0.04] absolute -inset-6 rounded-[2rem] blur-2xl" aria-hidden />
-      <div className="border-line bg-surface relative overflow-hidden rounded-2xl border shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]">
-        <div className="border-line-soft flex items-center justify-between border-b px-4 py-3">
-          <div className="flex items-center gap-2">
-            <span className="bg-signal/80 size-2 rounded-full" />
-            <span className="bg-warn/60 size-2 rounded-full" />
-            <span className="bg-line size-2 rounded-full" />
-            <span className="text-faint ml-2 font-mono text-[10px] tracking-[0.14em] uppercase">
-              project / line-follower
-            </span>
-          </div>
-          <Badge variant="signal">
-            <Sparkles className="size-2.5" /> planning
-          </Badge>
+      <span className="bg-canvas text-faint absolute -top-2 left-3 px-1.5 font-mono text-[9px] tracking-[0.18em] uppercase">
+        Drawing 01
+      </span>
+      <div className="registration-mark border-line-soft bg-canvas/50 relative overflow-hidden border">
+        <div className="border-line-soft flex items-center justify-between border-b px-4 py-2.5">
+          <span className="text-faint font-mono text-[9px] tracking-[0.16em] uppercase">
+            Fig. 01 / project schematic
+          </span>
+          <Badge variant="outline">Rev 0.1</Badge>
         </div>
 
-        <div className="bg-blueprint relative p-5 sm:p-6">
-          <div className="mb-5 flex items-start justify-between gap-4">
-            <div>
+        <div className="bg-blueprint p-5 sm:p-6">
+          <div className="flex items-start justify-between gap-5">
+            <div className="min-w-0">
               <p className="text-faint font-mono text-[9px] tracking-[0.18em] uppercase">
-                Robot specification
+                Spec / line-follower
               </p>
-              <h3 className="text-ink mt-1 text-lg font-medium tracking-tight">
+              <h3 className="text-ink mt-1.5 text-lg font-medium tracking-tight">
                 Classroom line follower
               </h3>
-              <p className="text-muted mt-1 max-w-xs text-xs leading-relaxed">
-                Follow a taped track, stop for obstacles, 30 min runtime. Budget $60.
+              <p className="text-muted mt-1.5 max-w-xs text-xs leading-relaxed">
+                Follow a taped track, stop for obstacles, 30 min runtime. Budget 60 JD.
               </p>
             </div>
-            <div className="border-line bg-canvas/60 hidden shrink-0 rounded-lg border px-3 py-2 text-right sm:block">
+            <div className="border-line-soft shrink-0 border-l pl-4 text-right">
               <p className="text-faint font-mono text-[9px] tracking-wider uppercase">Target</p>
-              <p className="text-signal mt-0.5 font-mono text-sm">$58.40</p>
+              <p className="text-signal mt-1 font-mono text-base">58.40 JD</p>
             </div>
           </div>
 
-          <div className="border-line-soft bg-canvas/50 relative mb-5 overflow-hidden rounded-xl border p-4">
-            <p className="text-faint mb-3 font-mono text-[9px] tracking-[0.18em] uppercase">
-              Agent pipeline
-            </p>
-            <div className="space-y-2">
+          <div className="border-line-soft mt-6 border-t pt-4">
+            <div className="flex items-center justify-between">
+              <p className="text-faint font-mono text-[9px] tracking-[0.18em] uppercase">
+                Agent pipeline
+              </p>
+              <p className="text-faint font-mono text-[9px]">06 nodes</p>
+            </div>
+            <div className="divide-line-soft mt-3 divide-y">
               {NODES.map((node, index) => (
-                <div key={node.label} className="flex items-center gap-2.5">
-                  <div
-                    className={`flex size-7 shrink-0 items-center justify-center rounded-md border ${
-                      index === 0
-                        ? "border-signal/30 bg-signal/10 text-signal"
-                        : "border-line bg-elevated text-faint"
-                    }`}
+                <div key={node.label} className="flex items-center gap-3 py-2">
+                  <span className="text-faint w-5 shrink-0 font-mono text-[9px]">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <node.icon
+                    className={index === 0 ? "text-signal size-3.5" : "text-faint size-3.5"}
+                  />
+                  <span
+                    className={
+                      index === 0 ? "text-ink flex-1 text-xs" : "text-muted flex-1 text-xs"
+                    }
                   >
-                    <node.icon className="size-3.5" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between gap-3">
-                      <span className={index === 0 ? "text-ink text-xs" : "text-muted text-xs"}>
-                        {node.label}
-                      </span>
-                      <span className="text-faint font-mono text-[9px] tracking-wide">
-                        {node.detail}
-                      </span>
-                    </div>
-                    <div className="bg-raised mt-1 h-1 overflow-hidden rounded-full">
-                      <div
-                        className={
-                          index === 0
-                            ? "bg-signal h-full w-[68%] rounded-full"
-                            : "bg-aqua h-full w-0 rounded-full"
-                        }
-                      />
-                    </div>
-                  </div>
+                    {node.label}
+                  </span>
+                  <span className="text-faint font-mono text-[9px] tracking-wide">
+                    {node.detail}
+                  </span>
                   {index === 0 ? (
                     <Check className="text-signal size-3 shrink-0" />
                   ) : (
@@ -105,41 +80,29 @@ export function BlueprintCard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="divide-line-soft border-line-soft mt-6 grid grid-cols-3 divide-x border-t pt-4">
             {[
               ["Platform", "Arduino"],
               ["Drive", "Differential"],
               ["Parts", "12 items"],
             ].map(([label, value]) => (
-              <div
-                key={label}
-                className="border-line-soft bg-canvas/40 rounded-lg border px-2.5 py-2"
-              >
+              <div key={label} className="px-3 first:pl-0 last:pr-0">
                 <p className="text-faint font-mono text-[8px] tracking-[0.14em] uppercase">
                   {label}
                 </p>
-                <p className="text-ink mt-1 truncate text-[11px]">{value}</p>
+                <p className="text-ink mt-1 truncate font-mono text-[11px]">{value}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="border-line-soft flex items-center justify-between border-t px-4 py-3">
-          <div className="text-faint flex items-center gap-1.5 font-mono text-[9px] tracking-wide">
+        <div className="border-line-soft flex items-center justify-between border-t px-4 py-2.5">
+          <span className="text-faint flex items-center gap-2 font-mono text-[9px] tracking-wide uppercase">
             <span className="bg-signal pulse-dot size-1.5 rounded-full" />
             orchestration ready
-          </div>
-          <span className="text-muted flex items-center gap-1 font-mono text-[9px]">
-            open workspace <ArrowRight className="size-3" />
           </span>
+          <span className="text-muted font-mono text-[9px]">open workspace →</span>
         </div>
-      </div>
-
-      <div className="border-aqua/25 bg-canvas/90 text-aqua absolute -top-3 -right-2 hidden rotate-2 items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[9px] shadow-xl backdrop-blur sm:flex">
-        <Sparkles className="size-3" /> agent contracts v1
-      </div>
-      <div className="border-line bg-canvas/90 text-muted absolute -bottom-4 -left-3 hidden -rotate-2 items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[9px] shadow-xl backdrop-blur sm:flex">
-        Build output · demo
       </div>
     </div>
   );

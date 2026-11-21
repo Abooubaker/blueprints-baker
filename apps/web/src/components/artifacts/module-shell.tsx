@@ -79,53 +79,55 @@ export function ModuleShell({
 
   return (
     <div>
-      <div className="mb-5 flex items-center justify-between gap-3">
+      <div className="mb-6 flex items-center justify-between gap-3 font-mono text-[10px] tracking-[0.12em] uppercase">
         <Link
           href={`/projects/${projectId}`}
-          className="text-faint hover:text-ink inline-flex items-center gap-1.5 text-xs transition-colors"
+          className="text-faint hover:text-ink inline-flex items-center gap-1.5 transition-colors"
         >
           <ArrowLeft className="size-3.5" /> {build.project_name}
         </Link>
         {stepNumber > 0 ? (
-          <span className="text-faint font-mono text-[10px] tracking-[0.12em] uppercase">
-            Step {stepNumber} of {PROJECT_MODULES.length}
+          <span className="text-faint">
+            step {String(stepNumber).padStart(2, "0")} / {PROJECT_MODULES.length}
           </span>
         ) : null}
       </div>
 
-      <div className="mb-6">
-        <h1 className="text-ink text-2xl font-medium tracking-[-0.02em] sm:text-[28px]">{title}</h1>
-        <p className="text-muted mt-1.5 max-w-2xl text-sm leading-relaxed">{description}</p>
+      <div className="border-line-soft mb-8 border-b pb-6">
+        <h1 className="text-ink text-2xl font-semibold tracking-[-0.03em] sm:text-[30px]">
+          {title}
+        </h1>
+        <p className="text-muted mt-2 max-w-2xl text-sm leading-relaxed">{description}</p>
         {stepNumber > 0 ? (
-          <Progress className="mt-4 max-w-md" value={(stepNumber / PROJECT_MODULES.length) * 100} />
+          <Progress className="mt-5 max-w-xs" value={(stepNumber / PROJECT_MODULES.length) * 100} />
         ) : null}
       </div>
 
       {children}
 
-      <nav className="border-line-soft mt-8 flex flex-wrap items-center justify-between gap-3 border-t pt-5">
-        <div>
-          {previousModule ? (
-            <ButtonLink
-              href={`/projects/${projectId}/${previousModule.slug}`}
-              size="sm"
-              variant="ghost"
-            >
-              <ArrowLeft className="size-3.5" /> {previousModule.label}
-            </ButtonLink>
-          ) : (
-            <ButtonLink href={`/projects/${projectId}`} size="sm" variant="ghost">
-              <ArrowLeft className="size-3.5" /> Project overview
-            </ButtonLink>
-          )}
-        </div>
-        <ButtonLink
+      <nav className="border-line-soft mt-10 flex items-center justify-between border-t pt-5 font-mono text-[10px] tracking-[0.12em] uppercase">
+        {previousModule ? (
+          <Link
+            href={`/projects/${projectId}/${previousModule.slug}`}
+            className="text-faint hover:text-ink inline-flex items-center gap-2 transition-colors"
+          >
+            <ArrowLeft className="size-3.5" /> {previousModule.label}
+          </Link>
+        ) : (
+          <Link
+            href={`/projects/${projectId}`}
+            className="text-faint hover:text-ink inline-flex items-center gap-2 transition-colors"
+          >
+            <ArrowLeft className="size-3.5" /> Project overview
+          </Link>
+        )}
+        <Link
           href={nextModule ? `/projects/${projectId}/${nextModule.slug}` : `/projects/${projectId}`}
-          size="md"
+          className="text-signal hover:text-ink inline-flex items-center gap-2 transition-colors"
         >
-          {nextModule ? `Next: ${nextModule.label}` : "Finish · Back to project"}
-          <ArrowRight className="size-4 rtl:rotate-180" />
-        </ButtonLink>
+          {nextModule ? `Next · ${nextModule.label}` : "Finish · overview"}
+          <ArrowRight className="size-3.5 rtl:rotate-180" />
+        </Link>
       </nav>
     </div>
   );
@@ -134,7 +136,7 @@ export function ModuleShell({
 export function MissingArtifacts({ build }: { build: BuildArtifact }) {
   if (build.missing.length === 0) return null;
   return (
-    <div className="rounded-panel border-warn/20 bg-warn/[0.05] text-warn mt-4 border px-4 py-3 text-xs">
+    <div className="border-warn/30 bg-warn/[0.04] text-warn mt-4 border-l-2 px-4 py-3 text-xs">
       Missing artifacts: {build.missing.join(", ")}. Regenerate the build to fill them in.
     </div>
   );

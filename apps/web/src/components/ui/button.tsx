@@ -7,15 +7,14 @@ import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm text-sm font-medium transition-colors duration-150 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        primary:
-          "bg-signal text-signal-ink shadow-[0_0_24px_-6px_rgba(243,231,213,0.45)] hover:bg-white active:bg-signal-dim",
-        secondary: "border border-line bg-elevated text-ink hover:border-signal/40 hover:bg-raised",
-        outline:
-          "border border-line bg-transparent text-ink hover:border-signal/40 hover:bg-signal/5",
+        primary: "bg-signal text-signal-ink hover:bg-ink",
+        secondary:
+          "border border-line bg-transparent text-ink hover:border-signal hover:bg-signal/5",
+        outline: "border border-line bg-transparent text-ink hover:border-signal hover:bg-signal/5",
         ghost: "text-muted hover:bg-white/5 hover:text-ink",
         danger: "bg-danger/10 text-danger hover:bg-danger/20",
       },
