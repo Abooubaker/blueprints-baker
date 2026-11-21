@@ -32,22 +32,58 @@ function isActive(pathname: string, href: string) {
   return pathname === href;
 }
 
+type ApiStatusState = "checking" | "waking" | "online" | "offline";
+
 function ApiStatus() {
-  const [state, setState] = useState<"checking" | "online" | "offline">("checking");
+  const [state, setState] = useState<ApiStatusState>("checking");
 
   useEffect(() => {
     // The static Pages demo has no live API; its status probe would always fail.
     if (DEMO_MODE) return;
     let cancelled = false;
-    fetch(`${API_BASE_URL}/health`, { cache: "no-store" })
-      .then((response) => {
-        if (!cancelled) setState(response.ok ? "online" : "offline");
-      })
-      .catch(() => {
-        if (!cancelled) setState("offline");
-      });
+
+    async function probe(): Promise<boolean> {
+      const controller = new AbortController();
+      // A sleeping Render service can take ~30–60s to answer the first request.
+      const timeout = window.setTimeout(() => controller.abort(), 45_000);
+      try {
+        const response = await fetch(`${API_BASE_URL}/health`, {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        return response.ok;
+      } catch {
+        return false;
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    }
+
+    async function check() {
+      // Don't flash "checking" on every background poll while already online.
+      setState((current) => (current === "online" ? current : "checking"));
+      const waits: readonly number[] = [0, 2_000, 6_000, 12_000];
+      for (const wait of waits) {
+        if (cancelled) return;
+        if (wait > 0) {
+          setState((current) => (current === "online" ? current : "waking"));
+          await new Promise((resolve) => window.setTimeout(resolve, wait));
+        }
+        if (cancelled) return;
+        if (await probe()) {
+          if (!cancelled) setState("online");
+          return;
+        }
+      }
+      if (!cancelled) setState("offline");
+    }
+
+    void check();
+    // Keep probing in the background so the badge recovers after a cold start.
+    const interval = window.setInterval(() => void check(), 60_000);
     return () => {
       cancelled = true;
+      window.clearInterval(interval);
     };
   }, []);
 
@@ -66,11 +102,17 @@ function ApiStatus() {
         className={cn(
           "size-1.5 rounded-full",
           state === "online" && "bg-signal",
-          state === "checking" && "bg-warn",
+          (state === "checking" || state === "waking") && "bg-warn",
           state === "offline" && "bg-danger",
         )}
       />
-      {state === "online" ? "API online" : state === "checking" ? "Checking API" : "API offline"}
+      {state === "online"
+        ? "API online"
+        : state === "waking"
+          ? "Waking API…"
+          : state === "checking"
+            ? "Checking API"
+            : "API offline"}
     </div>
   );
 }

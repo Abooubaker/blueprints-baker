@@ -5,7 +5,6 @@ import Link from "next/link";
 
 import { LanguageToggle } from "@/components/brand/language-toggle";
 import { Logo } from "@/components/brand/logo";
-import { ScrollCompanion } from "@/components/brand/scroll-companion";
 import { BlueprintCard } from "@/components/marketing/blueprint-card";
 import { ButtonLink } from "@/components/ui/button";
 import { DEMO_MODE, DEMO_PROJECT_ID } from "@/lib/constants";
@@ -146,7 +145,7 @@ const COPY: Record<Lang, Copy> = {
   },
 };
 
-const STEP_NUMBERS = ["01", "02", "03"];
+const STEP_NUMBERS = ["1", "2", "3"];
 const RESULT_ICONS = [Layers, CircuitBoard, Code2, Ruler];
 const RESULT_KEYS = ["parts", "schematic", "code", "print"];
 
@@ -157,12 +156,11 @@ export default function LandingPage() {
   const primaryHref = DEMO_MODE ? `/projects/${DEMO_PROJECT_ID}` : "/projects/new";
 
   return (
-    <div className="mc-theme relative overflow-hidden">
-      <ScrollCompanion />
-      <header className="bg-canvas/75 fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] backdrop-blur-xl">
+    <div className="relative overflow-hidden">
+      <header className="bg-canvas/80 border-line-soft/70 fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
           <Logo />
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <LanguageToggle />
             <a
               href="https://github.com/Abooubaker/blueprints-baker"
@@ -173,7 +171,7 @@ export default function LandingPage() {
             >
               <Github className="size-4" />
             </a>
-            <ButtonLink href={primaryHref} size="sm" variant="secondary" className="mc-btn">
+            <ButtonLink href={primaryHref} size="sm" variant="secondary">
               {DEMO_MODE ? c.openDemoShort : c.startBuild}
             </ButtonLink>
           </div>
@@ -181,29 +179,19 @@ export default function LandingPage() {
       </header>
 
       <main>
-        <section className="border-line-soft relative border-b pt-32 pb-20 sm:pt-40 sm:pb-24">
-          <div className="bg-blueprint mask-fade-b pointer-events-none absolute inset-0 opacity-60" />
-          <div className="bg-signal/[0.07] pointer-events-none absolute top-0 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full blur-[120px]" />
-          <div aria-hidden="true" className="voxel-field">
-            <span className="voxel voxel-gold" />
-            <span className="voxel voxel-burgundy" />
-            <span className="voxel voxel-champagne" />
-            <span className="voxel voxel-gold" />
-            <span className="voxel voxel-burgundy" />
-            <span className="voxel voxel-champagne" />
-            <span className="voxel voxel-gold" />
-          </div>
-          <div aria-hidden="true" className="mc-terrain" />
-          <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
+        <section className="border-line-soft relative border-b pt-28 pb-20 sm:pt-32 sm:pb-24">
+          <div className="bg-blueprint mask-fade-b pointer-events-none absolute inset-0 opacity-50" />
+          <div className="bg-signal/[0.06] pointer-events-none absolute top-0 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full blur-[120px]" />
+          <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
             <div className="fade-up">
               <div className="border-signal/20 bg-signal/[0.06] mb-6 inline-flex items-center gap-2 rounded-full border px-3 py-1.5">
                 <span className="bg-signal pulse-dot size-1.5 rounded-full" />
-                <span className="pixel text-signal font-mono text-[10px] tracking-[0.16em] uppercase">
+                <span className="text-signal font-mono text-[10px] tracking-[0.16em] uppercase">
                   {DEMO_MODE ? c.badgeDemo : c.badgeFlow}
                 </span>
               </div>
 
-              <h1 className="mc-title text-ink max-w-xl text-[42px] leading-[1.04] font-medium tracking-[-0.035em] sm:text-[54px]">
+              <h1 className="text-ink max-w-xl text-[42px] leading-[1.08] font-semibold tracking-[-0.035em] sm:text-[54px]">
                 {c.heroLead}
                 <span className="text-gradient block">{c.heroAccent}</span>
               </h1>
@@ -211,7 +199,7 @@ export default function LandingPage() {
               <p className="text-muted mt-6 max-w-lg text-[15px] leading-relaxed">{c.heroBody}</p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href={primaryHref} size="lg" className="mc-btn">
+                <ButtonLink href={primaryHref} size="lg">
                   {DEMO_MODE ? c.openDemo : c.describe}{" "}
                   <ArrowRight className="size-4 rtl:rotate-180" />
                 </ButtonLink>
@@ -219,7 +207,6 @@ export default function LandingPage() {
                   href={DEMO_MODE ? `/projects/${DEMO_PROJECT_ID}/programming` : "/dashboard"}
                   variant="secondary"
                   size="lg"
-                  className="mc-btn"
                 >
                   {DEMO_MODE ? c.seeCode : c.openWorkspace}
                 </ButtonLink>
@@ -244,8 +231,8 @@ export default function LandingPage() {
           <div className="mx-auto max-w-6xl px-5 sm:px-8">
             <div className="rounded-panel border-line-soft bg-line-soft grid gap-px overflow-hidden border md:grid-cols-3">
               {c.steps.map((step, index) => (
-                <div key={STEP_NUMBERS[index]} className="bg-surface p-7">
-                  <span className="pixel text-signal font-mono text-[11px] tracking-[0.16em]">
+                <div key={STEP_NUMBERS[index]} className="bg-surface rounded-panel p-7">
+                  <span className="border-line bg-elevated text-signal flex size-7 items-center justify-center rounded-full border font-mono text-[11px]">
                     {STEP_NUMBERS[index]}
                   </span>
                   <h2 className="text-ink mt-5 text-[17px] font-medium">{step.title}</h2>
@@ -259,10 +246,10 @@ export default function LandingPage() {
         <section className="py-20">
           <div className="mx-auto max-w-6xl px-5 sm:px-8">
             <div className="mb-10 max-w-xl">
-              <p className="pixel text-signal mb-3 font-mono text-[11px] tracking-[0.2em] uppercase">
+              <p className="text-signal mb-3 font-mono text-[11px] tracking-[0.2em] uppercase">
                 {c.eyebrow}
               </p>
-              <h2 className="pixel-title text-ink text-3xl font-medium tracking-[-0.025em] sm:text-4xl">
+              <h2 className="text-ink text-3xl font-semibold tracking-[-0.025em] sm:text-4xl">
                 {c.resultsTitle}
               </h2>
               <p className="text-muted mt-3 text-sm leading-relaxed">{c.resultsBody}</p>
@@ -274,7 +261,7 @@ export default function LandingPage() {
                 return (
                   <div
                     key={RESULT_KEYS[index]}
-                    className="block-bevel rounded-panel border-line-soft bg-surface border p-5"
+                    className="rounded-panel border-line-soft bg-surface border p-5"
                   >
                     <div className="border-line bg-elevated text-signal flex size-9 items-center justify-center rounded-lg border">
                       <Icon className="size-4" strokeWidth={1.6} />
@@ -292,18 +279,18 @@ export default function LandingPage() {
         </section>
 
         <section className="px-5 pb-24 sm:px-8">
-          <div className="block-bevel border-signal/20 bg-signal/[0.04] relative mx-auto max-w-6xl overflow-hidden rounded-2xl border px-6 py-14 text-center sm:px-12">
+          <div className="border-signal/20 bg-signal/[0.04] relative mx-auto max-w-6xl overflow-hidden rounded-2xl border px-6 py-14 text-center sm:px-12">
             <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-30" />
             <div className="bg-signal/10 pointer-events-none absolute -top-24 left-1/2 h-64 w-[600px] -translate-x-1/2 rounded-full blur-[80px]" />
             <div className="relative">
-              <h2 className="pixel-title text-ink mx-auto max-w-xl text-3xl font-medium tracking-[-0.025em] sm:text-4xl">
+              <h2 className="text-ink mx-auto max-w-xl text-3xl font-semibold tracking-[-0.025em] sm:text-4xl">
                 {c.ctaTitle}
               </h2>
               <p className="text-muted mx-auto mt-4 max-w-md text-sm leading-relaxed">
                 {c.ctaBody}
               </p>
               <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-                <ButtonLink href={primaryHref} size="lg" className="mc-btn">
+                <ButtonLink href={primaryHref} size="lg">
                   {DEMO_MODE ? c.openDemo : c.describe}{" "}
                   <ArrowRight className="size-4 rtl:rotate-180" />
                 </ButtonLink>
@@ -313,7 +300,6 @@ export default function LandingPage() {
                   rel="noreferrer"
                   variant="outline"
                   size="lg"
-                  className="mc-btn"
                 >
                   <Github className="size-4" /> {c.viewGithub}
                 </ButtonLink>
@@ -322,8 +308,6 @@ export default function LandingPage() {
           </div>
         </section>
       </main>
-
-      <div aria-hidden="true" className="ground-strip" />
 
       <footer className="border-line-soft border-t">
         <div className="mx-auto flex max-w-6xl flex-col gap-5 px-5 py-9 sm:px-8 md:flex-row md:items-center md:justify-between">

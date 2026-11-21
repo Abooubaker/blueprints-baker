@@ -1,25 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  /* Blueprint palette: white ink, cyan accents, deep drafting-paper blue. */
-  --color-canvas: #2b0716;
-  --color-surface: #3a0b1d;
-  --color-elevated: #4a1025;
-  --color-raised: #5a1a33;
-  --color-line: #8a6b45;
-  --color-line-soft: #5a2a3e;
-  --color-ink: #f3e7d5;
-  --color-muted: #d8b99b;
-  --color-faint: #a98b70;
-  --color-signal: #f3e7d5;
-  --color-signal-dim: #d8b99b;
-  --color-signal-ink: #2b0716;
-  --color-aqua: #c6a477;
+  /* Refined dark palette: warm ink on deep wine, champagne accent, soft teal secondary. */
+  --color-canvas: #120b10;
+  --color-surface: #1b1119;
+  --color-elevated: #251822;
+  --color-raised: #30202c;
+  --color-line: #5c443c;
+  --color-line-soft: #33242c;
+  --color-ink: #f5efe6;
+  --color-muted: #cdb9a8;
+  --color-faint: #9d8578;
+  --color-signal: #e8c08a;
+  --color-signal-dim: #cba06a;
+  --color-signal-ink: #120b10;
+  --color-aqua: #8fc7c2;
   --color-warn: #e8b96a;
-  --color-danger: #ff9b9b;
+  --color-danger: #f09a9a;
 
-  --font-sans:
-    "Inter", "Cairo", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "Inter", "Cairo", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Code", "Roboto Mono", Menlo, monospace;
 
   --radius-panel: 1rem;
@@ -43,7 +42,7 @@
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--color-aqua) 35%, transparent);
+    background: color-mix(in srgb, var(--color-signal) 32%, transparent);
     color: var(--color-ink);
   }
 
@@ -60,34 +59,34 @@
     background: var(--color-canvas);
   }
   ::-webkit-scrollbar-thumb {
-    background: #8a6b45;
+    background: #5c443c;
     border: 2px solid var(--color-canvas);
     border-radius: 999px;
   }
 }
 
 @layer utilities {
+  /* Faint drafting grid — texture without noise. */
   .bg-blueprint,
   .bg-dot-grid {
-    background-image: none;
+    background-image:
+      linear-gradient(to right, rgb(232 192 138 / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(232 192 138 / 0.035) 1px, transparent 1px);
+    background-size: 32px 32px;
   }
 
   .mask-fade-b {
-    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
-  }
-
-  .mask-fade-edges {
-    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+    mask-image: linear-gradient(to bottom, black 45%, transparent 100%);
   }
 
   .panel-sheen {
     background:
-      radial-gradient(120% 120% at 0% 0%, rgb(198 164 119 / 0.1) 0%, transparent 45%),
+      radial-gradient(120% 120% at 0% 0%, rgb(232 192 138 / 0.07) 0%, transparent 50%),
       var(--color-surface);
   }
 
   .text-gradient {
-    background: linear-gradient(100deg, #f3e7d5 20%, #d8b99b 55%, #c6a477 100%);
+    background: linear-gradient(100deg, #f5efe6 20%, #e8c08a 65%, #cba06a 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -95,8 +94,8 @@
 
   .glow-signal {
     box-shadow:
-      0 0 0 1px rgb(243 231 213 / 0.3),
-      0 12px 48px -12px rgb(198 164 119 / 0.4);
+      0 0 0 1px rgb(232 192 138 / 0.25),
+      0 16px 48px -20px rgb(232 192 138 / 0.28);
   }
 
   .fade-up {
@@ -110,26 +109,13 @@
   .pulse-dot {
     animation: pulse-dot 2.4s ease-in-out infinite;
   }
-}
-
-@layer utilities {
-  .pixel {
-    font-family: "Press Start 2P", "Cairo", ui-monospace, monospace !important;
-  }
-
-  .block-bevel {
-    box-shadow:
-      inset 3px 3px 0 rgb(198 164 119 / 0.3),
-      inset -3px -3px 0 rgb(0 0 0 / 0.35),
-      6px 6px 0 #1a040d;
-  }
 
   .lang-toggle {
     display: inline-flex;
     height: 2rem;
     align-items: center;
     gap: 0.4rem;
-    padding: 0 0.7rem;
+    padding: 0 0.75rem;
     border: 1px solid var(--color-line);
     border-radius: 0.5rem;
     background: var(--color-elevated);
@@ -144,182 +130,7 @@
 
   .lang-toggle:hover {
     background: var(--color-raised);
-    border-color: var(--color-aqua);
-  }
-
-  .voxel-field {
-    position: absolute;
-    inset: 0;
-    display: none;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .voxel {
-    position: absolute;
-    width: 44px;
-    height: 44px;
-    --c: #c6a477;
-    --l: #e4cba0;
-    --d: #9c7c4f;
-    background: var(--c);
-    border: 2px solid #1a040d;
-    box-shadow:
-      inset 6px 6px 0 var(--l),
-      inset -6px -6px 0 var(--d);
-    animation: float-block 7s ease-in-out infinite;
-  }
-
-  .voxel-burgundy {
-    --c: #7a1f42;
-    --l: #9a3158;
-    --d: #55132e;
-  }
-
-  .voxel-champagne {
-    --c: #d8b99b;
-    --l: #f3e7d5;
-    --d: #b89a7c;
-  }
-
-  .voxel-field > .voxel:nth-child(1) {
-    top: 22%;
-    inset-inline-end: 3%;
-    width: 56px;
-    height: 56px;
-  }
-
-  .voxel-field > .voxel:nth-child(2) {
-    top: 66%;
-    inset-inline-end: 2%;
-    width: 36px;
-    height: 36px;
-    animation-delay: -2s;
-  }
-
-  .voxel-field > .voxel:nth-child(3) {
-    top: 12%;
-    inset-inline-end: 47%;
-    width: 28px;
-    height: 28px;
-    animation-delay: -4s;
-  }
-
-  .voxel-field > .voxel:nth-child(4) {
-    top: 58%;
-    inset-inline-end: 47%;
-    width: 40px;
-    height: 40px;
-    animation-delay: -1s;
-  }
-
-  .voxel-field > .voxel:nth-child(5) {
-    top: 30%;
-    inset-inline-start: 2%;
-    width: 48px;
-    height: 48px;
-    animation-delay: -3s;
-  }
-
-  .voxel-field > .voxel:nth-child(6) {
-    top: 74%;
-    inset-inline-start: 5%;
-    width: 30px;
-    height: 30px;
-    animation-delay: -5s;
-  }
-
-  .voxel-field > .voxel:nth-child(7) {
-    top: 8%;
-    inset-inline-start: 6%;
-    width: 24px;
-    height: 24px;
-    animation-delay: -6s;
-  }
-
-  .pixel-title {
-    font-family: "Press Start 2P", "Cairo", ui-monospace, monospace !important;
-    font-size: clamp(18px, 2.3vw, 26px) !important;
-    line-height: 1.55 !important;
-    letter-spacing: 0 !important;
-    filter: drop-shadow(3px 3px 0 #1a040d);
-  }
-
-  .mc-title {
-    filter: drop-shadow(4px 4px 0 #1a040d);
-  }
-
-  .mc-btn {
-    border: 3px solid #1a040d !important;
-    border-radius: 0 !important;
-    font-family: "Press Start 2P", "Cairo", ui-monospace, monospace !important;
-    font-size: 11px !important;
-    letter-spacing: 0 !important;
-    box-shadow:
-      inset 3px 3px 0 rgb(255 255 255 / 0.3),
-      inset -3px -3px 0 rgb(0 0 0 / 0.3),
-      4px 4px 0 #1a040d !important;
-    transition:
-      transform 0.1s,
-      box-shadow 0.1s !important;
-  }
-
-  .mc-btn:hover {
-    transform: translate(-1px, -1px);
-  }
-
-  .mc-btn:active {
-    transform: translate(3px, 3px);
-    box-shadow:
-      inset 3px 3px 0 rgb(0 0 0 / 0.3),
-      inset -3px -3px 0 rgb(255 255 255 / 0.2),
-      1px 1px 0 #1a040d !important;
-  }
-
-  .mc-terrain {
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0;
-    height: 96px;
-    pointer-events: none;
-    background:
-      repeating-linear-gradient(90deg, rgb(0 0 0 / 0.22) 0 2px, transparent 2px 32px),
-      linear-gradient(#c6a477 0 12px, #7a5c3a 12px 36px, #4a1025 36px);
-    clip-path: polygon(
-      0 40%,
-      8% 40%,
-      8% 20%,
-      16% 20%,
-      16% 40%,
-      30% 40%,
-      30% 0,
-      38% 0,
-      38% 20%,
-      52% 20%,
-      52% 40%,
-      64% 40%,
-      64% 20%,
-      76% 20%,
-      76% 0,
-      86% 0,
-      86% 40%,
-      100% 40%,
-      100% 100%,
-      0 100%
-    );
-  }
-
-  .ground-strip {
-    height: 28px;
-    border-top: 6px solid #c6a477;
-    background: repeating-linear-gradient(90deg, #4a1025 0 28px, #3a0b1d 28px 56px);
-    box-shadow: inset 0 10px 0 #7a5c3a;
-  }
-}
-
-@media (min-width: 1024px) {
-  .voxel-field {
-    display: block;
+    border-color: var(--color-signal);
   }
 }
 
@@ -327,13 +138,15 @@ html[lang="ar"] body * {
   letter-spacing: normal !important;
 }
 
-@keyframes float-block {
+@keyframes pulse-dot {
   0%,
   100% {
-    transform: translateY(0);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgb(232 192 138 / 0.45);
   }
   50% {
-    transform: translateY(-14px);
+    opacity: 0.75;
+    box-shadow: 0 0 0 5px rgb(232 192 138 / 0);
   }
 }
 
@@ -357,18 +170,6 @@ html[lang="ar"] body * {
   }
 }
 
-@keyframes pulse-dot {
-  0%,
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 0 0 rgba(111, 214, 255, 0.45);
-  }
-  50% {
-    opacity: 0.75;
-    box-shadow: 0 0 0 5px rgba(111, 214, 255, 0);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -376,107 +177,5 @@ html[lang="ar"] body * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-.mc-theme .rounded-panel,
-.mc-theme .rounded-lg,
-.mc-theme .rounded-2xl,
-.mc-theme .rounded-full:not([class*="blur"]),
-.mc-theme .lang-toggle {
-  border-radius: 0 !important;
-}
-
-.companion-bird {
-  position: fixed;
-  top: 0;
-  inset-inline-end: 2.5%;
-  z-index: 40;
-  width: clamp(56px, 7vw, 104px);
-  aspect-ratio: 1;
-  pointer-events: none;
-  transform: translate3d(0, 14vh, 0);
-  transition: transform 0.22s ease-out;
-  filter: drop-shadow(0 10px 18px rgb(0 0 0 / 0.45));
-}
-
-.companion-bird-art {
-  width: 100%;
-  height: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  animation: bird-bob 2.4s ease-in-out infinite;
-}
-
-.companion-trail {
-  position: fixed;
-  top: 0;
-  inset-inline-end: 2.5%;
-  z-index: 39;
-  pointer-events: none;
-  animation: none;
-  transition-property: transform;
-  transition-timing-function: ease-out;
-}
-
-.xp-wrap {
-  position: fixed;
-  inset-inline: 0;
-  bottom: 14px;
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  pointer-events: none;
-}
-
-.xp-level {
-  font-family: "Press Start 2P", ui-monospace, monospace;
-  font-size: 14px;
-  color: #c6a477;
-  text-shadow:
-    2px 0 #1a040d,
-    -2px 0 #1a040d,
-    0 2px #1a040d,
-    0 -2px #1a040d;
-}
-
-.xp-bar {
-  position: relative;
-  width: min(420px, 70vw);
-  height: 14px;
-  border: 3px solid #1a040d;
-  background: #14030a;
-}
-
-.xp-fill {
-  width: 0;
-  height: 100%;
-  background: linear-gradient(#e4cba0 0 40%, #c6a477 40%);
-}
-
-.xp-bar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(90deg, transparent 0 18px, rgb(0 0 0 / 0.55) 18px 20px);
-}
-
-@keyframes bird-bob {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-2deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(2deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .companion-bird-art,
-  .voxel {
-    animation: none;
   }
 }
