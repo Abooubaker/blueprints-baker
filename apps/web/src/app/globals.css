@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  /* Refined dark palette: warm ink on deep wine, champagne accent, soft teal secondary. */
-  --color-canvas: #120b10;
-  --color-surface: #1b1119;
-  --color-elevated: #251822;
-  --color-raised: #30202c;
-  --color-line: #5c443c;
-  --color-line-soft: #33242c;
+  /* Refined dark palette: warm ink on burgundy, champagne accent, soft teal secondary. */
+  --color-canvas: #200a13;
+  --color-surface: #2b101c;
+  --color-elevated: #371524;
+  --color-raised: #451c2e;
+  --color-line: #7a4a55;
+  --color-line-soft: #3a1a26;
   --color-ink: #f5efe6;
   --color-muted: #cdb9a8;
   --color-faint: #9d8578;
   --color-signal: #e8c08a;
   --color-signal-dim: #cba06a;
-  --color-signal-ink: #120b10;
+  --color-signal-ink: #200a13;
   --color-aqua: #8fc7c2;
   --color-warn: #e8b96a;
   --color-danger: #f09a9a;
@@ -59,7 +59,7 @@
     background: var(--color-canvas);
   }
   ::-webkit-scrollbar-thumb {
-    background: #5c443c;
+    background: #7a4a55;
     border: 2px solid var(--color-canvas);
     border-radius: 999px;
   }
