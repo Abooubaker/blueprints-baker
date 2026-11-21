@@ -198,18 +198,18 @@ export default function LandingPage() {
 
               <p className="text-muted mt-6 max-w-lg text-[15px] leading-relaxed">{c.heroBody}</p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-8">
                 <ButtonLink href={primaryHref} size="lg">
                   {DEMO_MODE ? c.openDemo : c.describe}{" "}
                   <ArrowRight className="size-4 rtl:rotate-180" />
                 </ButtonLink>
-                <ButtonLink
+                <Link
                   href={DEMO_MODE ? `/projects/${DEMO_PROJECT_ID}/programming` : "/dashboard"}
-                  variant="secondary"
-                  size="lg"
+                  className="text-muted hover:text-ink mt-4 inline-flex items-center gap-1.5 text-[13px] transition-colors"
                 >
                   {DEMO_MODE ? c.seeCode : c.openWorkspace}
-                </ButtonLink>
+                  <ArrowRight className="size-3.5 rtl:rotate-180" />
+                </Link>
               </div>
 
               <div className="text-faint mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px]">
@@ -229,14 +229,19 @@ export default function LandingPage() {
 
         <section className="border-line-soft bg-surface/30 border-b py-20">
           <div className="mx-auto max-w-6xl px-5 sm:px-8">
-            <div className="rounded-panel border-line-soft bg-line-soft grid gap-px overflow-hidden border md:grid-cols-3">
+            <div className="grid gap-3 md:grid-cols-3">
               {c.steps.map((step, index) => (
-                <div key={STEP_NUMBERS[index]} className="bg-surface rounded-panel p-7">
-                  <span className="border-line bg-elevated text-signal flex size-7 items-center justify-center rounded-full border font-mono text-[11px]">
-                    {STEP_NUMBERS[index]}
-                  </span>
-                  <h2 className="text-ink mt-5 text-[17px] font-medium">{step.title}</h2>
-                  <p className="text-muted mt-2 text-sm leading-relaxed">{step.description}</p>
+                <div key={STEP_NUMBERS[index]} className="relative">
+                  <div className="rounded-panel border-line-soft bg-surface h-full border p-7">
+                    <span className="border-line bg-elevated text-signal flex size-7 items-center justify-center rounded-full border font-mono text-[11px]">
+                      {STEP_NUMBERS[index]}
+                    </span>
+                    <h2 className="text-ink mt-5 text-[17px] font-medium">{step.title}</h2>
+                    <p className="text-muted mt-2 text-sm leading-relaxed">{step.description}</p>
+                  </div>
+                  {index < c.steps.length - 1 ? (
+                    <ArrowRight className="text-faint/40 absolute top-1/2 -right-4 hidden size-4 -translate-y-1/2 md:block rtl:rotate-180" />
+                  ) : null}
                 </div>
               ))}
             </div>
@@ -289,20 +294,19 @@ export default function LandingPage() {
               <p className="text-muted mx-auto mt-4 max-w-md text-sm leading-relaxed">
                 {c.ctaBody}
               </p>
-              <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+              <div className="mt-7 flex flex-col items-center justify-center gap-4">
                 <ButtonLink href={primaryHref} size="lg">
                   {DEMO_MODE ? c.openDemo : c.describe}{" "}
                   <ArrowRight className="size-4 rtl:rotate-180" />
                 </ButtonLink>
-                <ButtonLink
+                <a
                   href="https://github.com/Abooubaker/blueprints-baker"
                   target="_blank"
                   rel="noreferrer"
-                  variant="outline"
-                  size="lg"
+                  className="text-faint hover:text-ink inline-flex items-center gap-1.5 text-[12px] transition-colors"
                 >
-                  <Github className="size-4" /> {c.viewGithub}
-                </ButtonLink>
+                  <Github className="size-3.5" /> {c.viewGithub}
+                </a>
               </div>
             </div>
           </div>

@@ -1,11 +1,9 @@
 "use client";
 
 import {
-  ArrowUpRight,
+  ArrowRight,
   CheckCircle2,
-  CircuitBoard,
-  Clock3,
-  Code2,
+  DollarSign,
   FileText,
   Layers,
   Loader2,
@@ -17,6 +15,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { BuildSteps, nextStepSlug, readySlugs } from "@/components/projects/build-steps";
 import { Badge } from "@/components/ui/badge";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -83,8 +82,8 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
       <div className="space-y-6">
         <div className="bg-raised h-4 w-32 animate-pulse rounded" />
         <div className="rounded-panel bg-raised h-28 animate-pulse" />
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {[0, 1, 2, 3].map((key) => (
+        <div className="grid gap-4 sm:grid-cols-3">
+          {[0, 1, 2].map((key) => (
             <div key={key} className="rounded-panel bg-raised h-24 animate-pulse" />
           ))}
         </div>
@@ -111,12 +110,11 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
   const status = PROJECT_STATUS_STYLES[project.status] ?? PROJECT_STATUS_STYLES.draft!;
   const research = build?.research ?? null;
   const mechanical = build?.mechanical ?? null;
-  const programming = build?.programming ?? null;
   const cost = build?.cost ?? null;
   const cheapestPrint = mechanical?.material_quotes.find((quote) => quote.is_cheapest);
-  const completedSteps = [research, build?.electrical, programming, mechanical, cost].filter(
-    Boolean,
-  ).length;
+  const nextSlug = build ? nextStepSlug(build) : undefined;
+  const nextModule = PROJECT_MODULES.find((module) => module.slug === nextSlug);
+  const readyCount = build ? readySlugs(build).size : 0;
 
   return (
     <div>
@@ -148,33 +146,6 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
             {project.description || build?.specification?.summary || "No description yet."}
           </p>
         </div>
-
-        <div className="flex shrink-0 flex-wrap items-center gap-2">
-          {DEMO_MODE ? (
-            <Badge variant="outline">Read-only demo · real engine output</Badge>
-          ) : (
-            <Button
-              size="md"
-              onClick={() => void generate()}
-              disabled={building}
-              variant={build ? "secondary" : "primary"}
-            >
-              {building ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" /> Building…
-                </>
-              ) : build ? (
-                <>
-                  <RefreshCw className="size-4" /> Regenerate build
-                </>
-              ) : (
-                <>
-                  <Play className="size-4" /> Generate build
-                </>
-              )}
-            </Button>
-          )}
-        </div>
       </div>
 
       {buildError ? (
@@ -185,266 +156,226 @@ export function ProjectWorkspace({ projectId }: { projectId: string }) {
       ) : null}
 
       {!build || build.status === "empty" ? (
-        <Card className="mb-6">
-          <CardContent className="flex flex-col items-start gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-start gap-3">
-              <div className="border-signal/25 bg-signal/10 text-signal flex size-10 shrink-0 items-center justify-center rounded-lg border">
-                <Sparkles className="size-4.5" />
+        <Card className="panel-sheen">
+          <CardContent className="flex flex-col items-start gap-5 p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-4">
+              <div className="border-signal/25 bg-signal/10 text-signal flex size-11 shrink-0 items-center justify-center rounded-xl border">
+                <Sparkles className="size-5" />
               </div>
               <div>
-                <p className="text-ink text-sm font-medium">
-                  This build has not been generated yet.
+                <p className="text-ink text-base font-medium">
+                  {DEMO_MODE ? "This is the demo build" : "Your build is ready to generate"}
                 </p>
-                <p className="text-muted mt-1 max-w-xl text-xs leading-relaxed">
-                  Generate it to get parts priced at your stores, a schematic, code bundles, a 3D
-                  print price, a budget, and documentation.
+                <p className="text-muted mt-1.5 max-w-xl text-[13px] leading-relaxed">
+                  {DEMO_MODE
+                    ? "Explore the six steps using real engine output. Nothing here can be changed."
+                    : "One click produces parts priced at your stores, a schematic, code, a 3D print price, a budget, and documentation."}
                 </p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               {DEMO_MODE ? (
-                <Badge variant="outline">Read-only demo</Badge>
+                <ButtonLink href={`/projects/${projectId}/components`} size="md">
+                  Explore the build <ArrowRight className="size-4 rtl:rotate-180" />
+                </ButtonLink>
               ) : (
-                <Button size="sm" onClick={() => void generate()} disabled={building}>
+                <Button size="md" onClick={() => void generate()} disabled={building}>
                   {building ? (
-                    <Loader2 className="size-3.5 animate-spin" />
+                    <Loader2 className="size-4 animate-spin" />
                   ) : (
-                    <Play className="size-3.5" />
+                    <Play className="size-4" />
                   )}
-                  Generate
+                  {building ? "Building…" : "Generate build"}
                 </Button>
               )}
             </div>
           </CardContent>
         </Card>
-      ) : null}
-
-      <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {[
-          {
-            label: "Total estimate",
-            value: formatJod(cost?.total_jod),
-            hint: "parts + cheapest print",
-          },
-          {
-            label: "Parts compared",
-            value: String(research?.bill_of_materials.length ?? 0),
-            hint: research?.selected_shops?.length
-              ? `across ${research.selected_shops.length} stores`
-              : "no stores selected",
-          },
-          {
-            label: "Cheapest print",
-            value: cheapestPrint ? formatJod(cheapestPrint.total_jod) : "—",
-            hint: cheapestPrint
-              ? `${cheapestPrint.material} · ${cheapestPrint.weight_g} g`
-              : "not generated",
-          },
-          {
-            label: "Code bundles",
-            value: String(programming?.bundles.length ?? 0),
-            hint:
-              programming?.bundles.map((item) => item.display_name).join(", ") || "not generated",
-          },
-        ].map((item) => (
-          <Card key={item.label} className="p-4">
-            <p className="text-faint font-mono text-[9px] tracking-[0.16em] uppercase">
-              {item.label}
-            </p>
-            <p className="text-ink mt-2.5 text-xl font-medium tracking-tight">{item.value}</p>
-            <p className="text-faint mt-1 truncate text-[10px]">{item.hint}</p>
-          </Card>
-        ))}
-      </div>
-
-      <div className="grid items-start gap-6 xl:grid-cols-[1fr_320px]">
-        <div className="space-y-6">
-          <section>
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-ink text-sm font-medium">Your build</h2>
-              <span className="text-faint font-mono text-[9px] tracking-wider uppercase">
-                {completedSteps}/5 artifacts ready
-              </span>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {PROJECT_MODULES.map((module) => (
-                <Link
-                  key={module.slug}
-                  href={`/projects/${project.id}/${module.slug}`}
-                  className="group rounded-panel border-line-soft bg-surface hover:border-signal/30 flex flex-col border p-4 transition-colors"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="border-signal/25 bg-signal/10 text-signal flex size-8 items-center justify-center rounded-md border">
-                      <module.icon className="size-4" strokeWidth={1.7} />
-                    </div>
-                    <ArrowUpRight className="text-faint size-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
-                  </div>
-                  <h3 className="text-ink mt-3 text-[13px] font-medium">{module.label}</h3>
-                  <p className="text-faint mt-1 text-[11px] leading-relaxed">
-                    {module.description}
-                  </p>
-                </Link>
-              ))}
-            </div>
-          </section>
-
-          <Card>
-            <CardHeader className="flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="flex items-center gap-2 text-sm">
-                <FileText className="text-signal/80 size-4" /> Specification
-              </CardTitle>
-              <Badge variant={project.specification?.status === "approved" ? "signal" : "outline"}>
-                {project.specification?.status ?? "draft"} · v{project.specification?.version ?? 1}
-              </Badge>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-muted text-[13px] leading-relaxed">
-                {build?.specification?.summary ||
-                  project.specification?.summary ||
-                  project.description ||
-                  "No specification summary yet."}
-              </p>
-              <dl className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {[
-                  [
-                    "Platform",
-                    titleCase(
-                      build?.specification?.target_platform ??
-                        project.specification?.target_platform ??
-                        "undecided",
-                    ),
-                  ],
-                  [
-                    "Drive",
-                    titleCase(
-                      build?.specification?.drive_type ??
-                        project.specification?.drive_type ??
-                        "none",
-                    ),
-                  ],
-                  ["Difficulty", titleCase(project.difficulty)],
-                  ["Stores", String(research?.selected_shops?.length ?? 0)],
-                  ["Languages", String(programming?.bundles.length ?? 0)],
-                  ["Custom PCB", build?.preferences.custom_pcb ? "Yes" : "No"],
-                ].map(([label, value]) => (
-                  <div
-                    key={label}
-                    className="border-line-soft bg-surface/60 rounded-lg border px-3 py-2.5"
-                  >
-                    <dt className="text-faint font-mono text-[8px] tracking-[0.14em] uppercase">
-                      {label}
-                    </dt>
-                    <dd className="text-ink mt-1 truncate text-xs">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-              {build?.specification?.requirements.length ? (
+      ) : (
+        <div className="grid items-start gap-6 xl:grid-cols-[1fr_300px]">
+          <div className="space-y-6">
+            <section className="border-signal/30 bg-signal/[0.06] rounded-panel relative overflow-hidden border p-6">
+              <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-30" />
+              <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-faint mb-2 font-mono text-[9px] tracking-[0.16em] uppercase">
-                    Requirements
+                  <p className="text-signal font-mono text-[10px] tracking-[0.16em] uppercase">
+                    Next step · {readyCount} of {PROJECT_MODULES.length} ready
                   </p>
-                  <ul className="space-y-1.5">
-                    {build.specification.requirements.map((requirement) => (
-                      <li key={requirement} className="text-muted flex items-start gap-2 text-xs">
-                        <CheckCircle2 className="text-signal/70 mt-0.5 size-3 shrink-0" />
-                        {requirement}
-                      </li>
-                    ))}
-                  </ul>
+                  <h2 className="text-ink mt-2 text-xl font-medium tracking-tight">
+                    {nextModule?.label ?? "Review your build"}
+                  </h2>
+                  <p className="text-muted mt-1.5 max-w-lg text-[13px] leading-relaxed">
+                    {nextModule?.description ?? "Everything is ready. Review the artifacts below."}
+                  </p>
                 </div>
-              ) : null}
-            </CardContent>
-          </Card>
-        </div>
-
-        <aside className="space-y-4">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm">Pipeline</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-3 flex items-center justify-between text-[10px]">
-                <span className="text-faint">Build freshness</span>
-                <span className="text-muted font-mono">
-                  {build ? formatRelative(build.generated_at) : "not built"}
-                </span>
-              </div>
-              <Progress value={(completedSteps / 5) * 100} />
-              <div className="mt-4 space-y-1.5">
-                {[
-                  ["Parts & prices", Boolean(research)],
-                  ["Schematic", Boolean(build?.electrical)],
-                  ["Code", Boolean(programming)],
-                  ["3D & print price", Boolean(mechanical)],
-                  ["Documentation", Boolean(build?.documentation.files.length)],
-                ].map(([label, done]) => (
-                  <div
-                    key={String(label)}
-                    className="flex items-center justify-between gap-2 text-xs"
+                {nextModule ? (
+                  <ButtonLink
+                    href={`/projects/${projectId}/${nextModule.slug}`}
+                    size="md"
+                    className="shrink-0"
                   >
-                    <span className="text-muted">{label}</span>
-                    {done ? (
-                      <CheckCircle2 className="text-signal size-3.5" />
-                    ) : (
-                      <Clock3 className="text-faint size-3.5" />
-                    )}
-                  </div>
-                ))}
+                    Continue <ArrowRight className="size-4 rtl:rotate-180" />
+                  </ButtonLink>
+                ) : null}
               </div>
-              {build?.missing.length ? (
-                <p className="text-warn mt-3 text-[10px] leading-relaxed">
-                  Missing: {build.missing.join(", ")}
-                </p>
-              ) : null}
-            </CardContent>
-          </Card>
+            </section>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm">Stores</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {research?.selected_shops?.length ? (
-                <div className="flex flex-wrap gap-1.5">
-                  {research.selected_shops.map((store) => (
-                    <Badge key={store} variant="outline">
-                      {store}
-                    </Badge>
-                  ))}
+            <div className="grid gap-3 sm:grid-cols-3">
+              <Card className="p-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-faint font-mono text-[9px] tracking-[0.16em] uppercase">
+                    Total estimate
+                  </p>
+                  <DollarSign className="text-faint size-3.5" />
                 </div>
-              ) : (
-                <p className="text-faint text-xs">No stores selected.</p>
-              )}
-              <p className="text-faint mt-3 text-[10px] leading-relaxed">
-                Every part is sorted cheapest → most expensive per selected store. Prices are
-                estimates, not live quotes.
-              </p>
-            </CardContent>
-          </Card>
-
-          <div className="rounded-panel border-line-soft bg-surface border p-4">
-            <div className="text-aqua flex items-center gap-2 text-[11px]">
-              <CircuitBoard className="size-3.5" /> Shared build artifact
+                <p className="text-ink mt-3 text-xl font-medium tracking-tight">
+                  {formatJod(cost?.total_jod)}
+                </p>
+                <p className="text-faint mt-1 text-[10px]">parts + cheapest print</p>
+              </Card>
+              <Card className="p-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-faint font-mono text-[9px] tracking-[0.16em] uppercase">
+                    Parts compared
+                  </p>
+                  <Layers className="text-faint size-3.5" />
+                </div>
+                <p className="text-ink mt-3 text-xl font-medium tracking-tight">
+                  {research?.bill_of_materials.length ?? 0}
+                </p>
+                <p className="text-faint mt-1 truncate text-[10px]">
+                  {research?.selected_shops?.length
+                    ? `across ${research.selected_shops.length} stores`
+                    : "no stores selected"}
+                </p>
+              </Card>
+              <Card className="p-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-faint font-mono text-[9px] tracking-[0.16em] uppercase">
+                    Cheapest print
+                  </p>
+                  <Sparkles className="text-faint size-3.5" />
+                </div>
+                <p className="text-ink mt-3 text-xl font-medium tracking-tight">
+                  {cheapestPrint ? formatJod(cheapestPrint.total_jod) : "—"}
+                </p>
+                <p className="text-faint mt-1 truncate text-[10px]">
+                  {cheapestPrint
+                    ? `${cheapestPrint.material} · ${cheapestPrint.weight_g} g`
+                    : "not generated"}
+                </p>
+              </Card>
             </div>
-            <p className="text-faint mt-2 text-[11px] leading-relaxed">
-              Prices, schematic, code, 3D pricing, budget, and documents are all derived from the
-              same confirmed answers and validated pin map.
-            </p>
-          </div>
-        </aside>
-      </div>
 
-      <div className="mt-6 flex flex-wrap gap-2">
-        <ButtonLink href={`/projects/${project.id}/components`} variant="secondary" size="sm">
-          <Layers className="size-3.5" /> Parts & prices
-        </ButtonLink>
-        <ButtonLink href={`/projects/${project.id}/wiring`} variant="secondary" size="sm">
-          <CircuitBoard className="size-3.5" /> Schematic
-        </ButtonLink>
-        <ButtonLink href={`/projects/${project.id}/programming`} variant="secondary" size="sm">
-          <Code2 className="size-3.5" /> Code
-        </ButtonLink>
-      </div>
+            <Card>
+              <CardHeader className="flex-row items-center justify-between space-y-0 pb-3">
+                <CardTitle className="flex items-center gap-2 text-sm">
+                  <FileText className="text-signal/80 size-4" /> Specification
+                </CardTitle>
+                <Badge
+                  variant={project.specification?.status === "approved" ? "signal" : "outline"}
+                >
+                  {project.specification?.status ?? "draft"} · v
+                  {project.specification?.version ?? 1}
+                </Badge>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted text-[13px] leading-relaxed">
+                  {build.specification?.summary ||
+                    project.specification?.summary ||
+                    project.description ||
+                    "No specification summary yet."}
+                </p>
+                <dl className="grid gap-2 sm:grid-cols-3">
+                  {[
+                    [
+                      "Platform",
+                      titleCase(
+                        build.specification?.target_platform ??
+                          project.specification?.target_platform ??
+                          "undecided",
+                      ),
+                    ],
+                    [
+                      "Drive",
+                      titleCase(
+                        build.specification?.drive_type ??
+                          project.specification?.drive_type ??
+                          "none",
+                      ),
+                    ],
+                    ["Custom PCB", build.preferences.custom_pcb ? "Yes" : "No"],
+                  ].map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="border-line-soft bg-surface/60 rounded-lg border px-3 py-2.5"
+                    >
+                      <dt className="text-faint font-mono text-[8px] tracking-[0.14em] uppercase">
+                        {label}
+                      </dt>
+                      <dd className="text-ink mt-1 truncate text-xs">{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                {build.specification?.requirements.length ? (
+                  <div>
+                    <p className="text-faint mb-2 font-mono text-[9px] tracking-[0.16em] uppercase">
+                      Requirements
+                    </p>
+                    <ul className="space-y-1.5">
+                      {build.specification.requirements.map((requirement) => (
+                        <li key={requirement} className="text-muted flex items-start gap-2 text-xs">
+                          <CheckCircle2 className="text-signal/70 mt-0.5 size-3 shrink-0" />
+                          {requirement}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </CardContent>
+            </Card>
+          </div>
+
+          <aside className="space-y-4">
+            <Card className="panel-sheen p-4">
+              <BuildSteps projectId={projectId} build={build} nextSlug={nextSlug} />
+              <div className="border-line-soft mt-5 border-t pt-4">
+                <div className="mb-2 flex items-center justify-between text-[10px]">
+                  <span className="text-faint">Progress</span>
+                  <span className="text-muted font-mono">
+                    {readyCount}/{PROJECT_MODULES.length}
+                  </span>
+                </div>
+                <Progress value={(readyCount / PROJECT_MODULES.length) * 100} />
+                <p className="text-faint mt-3 text-[10px] leading-relaxed">
+                  Built {formatRelative(build.generated_at)}. Prices are estimates, not live quotes.
+                </p>
+                {build.missing.length ? (
+                  <p className="text-warn mt-2 text-[10px] leading-relaxed">
+                    Missing: {build.missing.join(", ")}
+                  </p>
+                ) : null}
+              </div>
+            </Card>
+            {!DEMO_MODE ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full"
+                onClick={() => void generate()}
+                disabled={building}
+              >
+                {building ? (
+                  <Loader2 className="size-3.5 animate-spin" />
+                ) : (
+                  <RefreshCw className="size-3.5" />
+                )}
+                Regenerate build
+              </Button>
+            ) : null}
+          </aside>
+        </div>
+      )}
     </div>
   );
 }

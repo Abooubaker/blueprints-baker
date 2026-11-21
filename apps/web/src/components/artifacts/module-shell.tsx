@@ -2,10 +2,13 @@
 
 import { ArrowLeft, ArrowRight, Loader2, TriangleAlert } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { adjacentSteps } from "@/components/projects/build-steps";
 import { ButtonLink } from "@/components/ui/button";
-import { EmptyState } from "@/components/ui/misc";
+import { EmptyState, Progress } from "@/components/ui/misc";
+import { PROJECT_MODULES } from "@/lib/constants";
 import type { BuildArtifact } from "@/lib/types";
 
 export function ModuleShell({
@@ -27,6 +30,11 @@ export function ModuleShell({
   requirement?: (build: BuildArtifact) => boolean;
   children: ReactNode;
 }) {
+  const pathname = usePathname();
+  const slug = pathname.split("/").filter(Boolean).pop();
+  const { index, previous, next } = adjacentSteps(slug);
+  const stepNumber = index + 1;
+
   if (loading) {
     return (
       <div className="flex items-center gap-2 py-16 text-sm">
@@ -66,19 +74,59 @@ export function ModuleShell({
     );
   }
 
+  const previousModule = PROJECT_MODULES.find((module) => module.slug === previous);
+  const nextModule = PROJECT_MODULES.find((module) => module.slug === next);
+
   return (
     <div>
-      <Link
-        href={`/projects/${projectId}`}
-        className="text-faint hover:text-ink mb-5 inline-flex items-center gap-1.5 text-xs transition-colors"
-      >
-        <ArrowLeft className="size-3.5" /> {build.project_name}
-      </Link>
+      <div className="mb-5 flex items-center justify-between gap-3">
+        <Link
+          href={`/projects/${projectId}`}
+          className="text-faint hover:text-ink inline-flex items-center gap-1.5 text-xs transition-colors"
+        >
+          <ArrowLeft className="size-3.5" /> {build.project_name}
+        </Link>
+        {stepNumber > 0 ? (
+          <span className="text-faint font-mono text-[10px] tracking-[0.12em] uppercase">
+            Step {stepNumber} of {PROJECT_MODULES.length}
+          </span>
+        ) : null}
+      </div>
+
       <div className="mb-6">
         <h1 className="text-ink text-2xl font-medium tracking-[-0.02em] sm:text-[28px]">{title}</h1>
         <p className="text-muted mt-1.5 max-w-2xl text-sm leading-relaxed">{description}</p>
+        {stepNumber > 0 ? (
+          <Progress className="mt-4 max-w-md" value={(stepNumber / PROJECT_MODULES.length) * 100} />
+        ) : null}
       </div>
+
       {children}
+
+      <nav className="border-line-soft mt-8 flex flex-wrap items-center justify-between gap-3 border-t pt-5">
+        <div>
+          {previousModule ? (
+            <ButtonLink
+              href={`/projects/${projectId}/${previousModule.slug}`}
+              size="sm"
+              variant="ghost"
+            >
+              <ArrowLeft className="size-3.5" /> {previousModule.label}
+            </ButtonLink>
+          ) : (
+            <ButtonLink href={`/projects/${projectId}`} size="sm" variant="ghost">
+              <ArrowLeft className="size-3.5" /> Project overview
+            </ButtonLink>
+          )}
+        </div>
+        <ButtonLink
+          href={nextModule ? `/projects/${projectId}/${nextModule.slug}` : `/projects/${projectId}`}
+          size="md"
+        >
+          {nextModule ? `Next: ${nextModule.label}` : "Finish · Back to project"}
+          <ArrowRight className="size-4 rtl:rotate-180" />
+        </ButtonLink>
+      </nav>
     </div>
   );
 }
